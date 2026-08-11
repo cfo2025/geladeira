@@ -74,7 +74,9 @@ export function ReviewPaymentDialog({
             <Label>Decisão</Label>
             <Select value={decision} onValueChange={(value) => setDecision(value ?? "approved")}>
               <SelectTrigger>
-                <SelectValue />
+                <SelectValue>
+                  {(value: string) => DECISIONS.find((d) => d.value === value)?.label}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {DECISIONS.map((d) => (

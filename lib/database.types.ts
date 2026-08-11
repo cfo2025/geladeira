@@ -327,6 +327,10 @@ export interface Database {
         Args: Record<string, never>;
         Returns: number;
       };
+      get_spending_ranking: {
+        Args: Record<string, never>;
+        Returns: { user_id: string; full_name: string; total_spent: number }[];
+      };
       create_withdrawal: {
         Args: { p_product_id: string; p_location_id: string; p_quantity?: number };
         Returns: WithdrawalsRow;

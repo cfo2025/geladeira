@@ -32,6 +32,7 @@ export async function createLocation(
 
   revalidatePath("/admin/locais");
   revalidatePath("/loja");
+  revalidatePath("/dashboard");
   return { success: true };
 }
 
@@ -54,6 +55,7 @@ export async function updateLocation(
 
   revalidatePath("/admin/locais");
   revalidatePath("/loja");
+  revalidatePath("/dashboard");
   return { success: true };
 }
 
@@ -98,6 +100,7 @@ export async function renameProduct(
   revalidatePath("/admin/produtos");
   revalidatePath("/admin/estoque");
   revalidatePath("/loja");
+  revalidatePath("/dashboard");
   return { success: true };
 }
 
@@ -107,6 +110,7 @@ export async function toggleProductActive(id: string, isActive: boolean) {
   await supabase.from("products").update({ is_active: isActive }).eq("id", id);
   revalidatePath("/admin/produtos");
   revalidatePath("/loja");
+  revalidatePath("/dashboard");
 }
 
 // ---- Estoque (preço/quantidade por local) ----
@@ -146,5 +150,6 @@ export async function upsertInventory(
 
   revalidatePath("/admin/estoque");
   revalidatePath("/loja");
+  revalidatePath("/dashboard");
   return { success: true };
 }

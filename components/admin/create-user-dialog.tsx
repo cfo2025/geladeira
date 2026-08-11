@@ -59,7 +59,9 @@ export function CreateUserDialog() {
             <input type="hidden" name="role" value={role} />
             <Select value={role} onValueChange={(value) => setRole(value ?? "user")}>
               <SelectTrigger id="role">
-                <SelectValue />
+                <SelectValue>
+                  {(value: string) => (value === "admin" ? "Administrador" : "Usuário")}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="user">Usuário</SelectItem>

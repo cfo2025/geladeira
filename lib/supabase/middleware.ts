@@ -59,7 +59,7 @@ export async function updateSession(request: NextRequest) {
 
   if (isPublic) {
     const url = request.nextUrl.clone();
-    url.pathname = "/loja";
+    url.pathname = "/dashboard";
     return NextResponse.redirect(url);
   }
 
@@ -71,13 +71,13 @@ export async function updateSession(request: NextRequest) {
 
   if (!profile.must_change_password && path === "/trocar-senha") {
     const url = request.nextUrl.clone();
-    url.pathname = "/loja";
+    url.pathname = "/dashboard";
     return NextResponse.redirect(url);
   }
 
   if (path.startsWith("/admin") && profile.role !== "admin") {
     const url = request.nextUrl.clone();
-    url.pathname = "/loja";
+    url.pathname = "/dashboard";
     return NextResponse.redirect(url);
   }
 

@@ -41,6 +41,7 @@ export async function createWithdrawal(
   }
 
   revalidatePath("/loja");
+  revalidatePath("/dashboard");
   revalidatePath("/extrato");
   return { success: true };
 }

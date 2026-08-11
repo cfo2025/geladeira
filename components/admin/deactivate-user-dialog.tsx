@@ -42,7 +42,9 @@ export function DeactivateUserDialog({ userId, userName }: { userId: string; use
             <Label>Motivo</Label>
             <Select value={reason} onValueChange={(value) => setReason(value ?? "desligamento")}>
               <SelectTrigger>
-                <SelectValue />
+                <SelectValue>
+                  {(value: string) => DEACTIVATION_REASON_LABELS[value]}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {Object.entries(DEACTIVATION_REASON_LABELS).map(([value, label]) => (

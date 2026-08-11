@@ -61,5 +61,6 @@ export async function applyStockAudit(auditId: string): Promise<ActionResult> {
   revalidatePath(`/admin/auditoria/${auditId}`);
   revalidatePath("/admin/estoque");
   revalidatePath("/loja");
+  revalidatePath("/dashboard");
   return { success: true };
 }

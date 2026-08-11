@@ -1,6 +1,7 @@
 "use client";
 
-import { LogOut, User } from "lucide-react";
+import Link from "next/link";
+import { LogOut, User, UserCircle } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,12 +26,19 @@ export function UserMenu({ fullName }: { fullName: string }) {
     <DropdownMenu>
       <DropdownMenuTrigger render={<Button variant="ghost" className="gap-2 px-2" />}>
         <Avatar className="h-7 w-7">
-          <AvatarFallback className="text-xs">{initials || <User className="h-4 w-4" />}</AvatarFallback>
+          <AvatarFallback className="bg-primary text-xs text-primary-foreground">
+            {initials || <User className="h-4 w-4" />}
+          </AvatarFallback>
         </Avatar>
         <span className="hidden text-sm font-medium sm:inline">{fullName}</span>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>{fullName}</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem render={<Link href="/perfil" />}>
+          <UserCircle className="h-4 w-4" />
+          Perfil
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <form action={signOut}>
           <DropdownMenuItem render={<button type="submit" className="flex w-full items-center gap-2" />}>

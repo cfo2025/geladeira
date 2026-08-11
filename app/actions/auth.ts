@@ -29,7 +29,7 @@ export async function signIn(_prevState: ActionState, formData: FormData): Promi
     return { error: "E-mail ou senha incorretos" };
   }
 
-  redirect("/loja");
+  redirect("/dashboard");
 }
 
 export async function signOut() {
@@ -83,5 +83,5 @@ export async function changePassword(
       .eq("id", user.id);
   }
 
-  redirect("/loja");
+  redirect("/dashboard");
 }
