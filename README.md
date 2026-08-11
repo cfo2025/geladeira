@@ -1,36 +1,105 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Loja Honesta
 
-## Getting Started
+Sistema interno de "loja honesta": catálogo por local, retiradas em conta corrente,
+conferência manual de pagamentos Pix, cancelamentos, balanço de estoque com PDF e
+notificações. Next.js (App Router + Server Actions) + Supabase (Postgres, Auth, RLS) +
+Resend + Tailwind/shadcn.
 
-First, run the development server:
+## 1. Pré-requisitos
+
+- Node.js 20+
+- Uma conta [Supabase](https://supabase.com) (gratuita) e um projeto criado
+- Uma conta [Resend](https://resend.com) (opcional para começar — sem ela o app funciona,
+  só não envia e-mails)
+- Uma conta [Vercel](https://vercel.com) para deploy
+
+## 2. Configurar o Supabase
+
+1. Crie um projeto em [supabase.com](https://supabase.com/dashboard).
+2. Em **SQL Editor**, cole e execute o conteúdo de
+   [`supabase/migrations/20260101000000_init_schema.sql`](supabase/migrations/20260101000000_init_schema.sql).
+   Isso cria as tabelas, políticas de RLS, funções de negócio e já popula os locais
+   iniciais (Rancho, Alojamento Masculino, Antessala).
+3. Em **Project Settings > API**, copie:
+   - `Project URL` → `NEXT_PUBLIC_SUPABASE_URL`
+   - `anon public` key → `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `service_role` key → `SUPABASE_SERVICE_ROLE_KEY` (fique atento: essa chave nunca deve
+     ir para o cliente/navegador — ela só é usada em Server Actions administrativas)
+4. Em **Authentication > Providers**, mantenha só e-mail/senha habilitado (não há
+   cadastro público: contas só são criadas pelo admin).
+
+### Criar o primeiro administrador (bootstrap)
+
+Não existe tela de cadastro público — a criação normal de usuários é feita pelo próprio
+admin logado, em `/admin/usuarios`. Para o *primeiro* admin, crie manualmente:
+
+1. Em **Authentication > Users**, clique em "Add user" (defina e-mail e senha).
+2. Em **SQL Editor**, rode (troque o UUID pelo `id` do usuário criado):
+
+   ```sql
+   insert into public.profiles (id, full_name, document, role, must_change_password)
+   values ('COLE-O-UUID-DO-USUARIO-AQUI', 'Nome do Admin', '000.000.000-00', 'admin', false);
+   ```
+
+Depois disso, esse admin pode criar todos os outros usuários (inclusive outros admins)
+pela própria interface.
+
+## 3. Variáveis de ambiente
+
+Copie `.env.example` para `.env.local` e preencha:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cp .env.example .env.local
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Variável | Descrição |
+| --- | --- |
+| `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` | do painel do Supabase |
+| `SUPABASE_SERVICE_ROLE_KEY` | do painel do Supabase — **secreta** |
+| `RESEND_API_KEY` | do painel do Resend (opcional — sem ela, e-mails só ficam logados no console) |
+| `RESEND_FROM_EMAIL` | remetente verificado no Resend, ex: `Loja Honesta <noreply@seudominio.com>` |
+| `NEXT_PUBLIC_PIX_KEY` | chave Pix estática exibida na tela de pagamento |
+| `NEXT_PUBLIC_PIX_RECEIVER_NAME` | nome exibido junto à chave Pix |
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 4. Rodar localmente
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm install
+npm run dev
+```
 
-## Learn More
+Abra [http://localhost:3000](http://localhost:3000).
 
-To learn more about Next.js, take a look at the following resources:
+## 5. Deploy (Vercel + Cloudflare)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Suba o repositório para o GitHub e importe o projeto na Vercel.
+2. Configure as mesmas variáveis de ambiente do `.env.local` em **Project Settings >
+   Environment Variables** na Vercel.
+3. Para domínio próprio via Cloudflare: aponte um registro `CNAME` do seu domínio para
+   `cname.vercel-dns.com` (ou siga o passo a passo que a Vercel mostra ao adicionar o
+   domínio), e na Vercel adicione o domínio em **Project Settings > Domains**. Deixe o
+   proxy da Cloudflare ("nuvem laranja") ativo normalmente; a Vercel já emite o SSL.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 6. Regras de negócio implementadas (leia antes de usar em produção)
 
-## Deploy on Vercel
+Algumas regras não estavam 100% especificadas e foram implementadas da seguinte forma —
+revise se fizer sentido para o seu caso:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Conta corrente / pagamento**: toda retirada com `payment_id = null` conta como saldo
+  em aberto. Ao declarar um pagamento, todas as retiradas em aberto são "travadas" nesse
+  pagamento (`payment_id` preenchido). Se o admin rejeitar o pagamento (divergente ou não
+  identificado), essas retiradas voltam a ficar em aberto automaticamente.
+- **Janela de 5 dias da divergência**: começa a contar no primeiro instante em que o
+  usuário *visualiza* a tela de pagamento após a rejeição (`divergence_notified_at`). O
+  sistema mostra a contagem regressiva, mas nenhuma ação automática acontece quando o
+  prazo expira — isso fica a critério da administração.
+- **Cancelamento de retirada**: só é possível solicitar cancelamento de retiradas ainda
+  não vinculadas a um pagamento. Ao aprovar, o item volta ao estoque automaticamente.
+- **Balanço de estoque**: "Aplicar contagem ao estoque" é uma ação manual e separada —
+  registrar um balanço não altera o estoque sozinho, o admin decide se aplica o ajuste.
+- **Login**: por e-mail/senha (Supabase Auth). O campo `document` (CPF) é só um dado de
+  cadastro, não é usado para autenticação.
+- **Ambiente de desenvolvimento**: se você também guarda este projeto no Google Drive,
+  não rode `npm install`/`next dev` diretamente numa pasta sincronizada — o Google Drive
+  (assim como OneDrive) não lida bem com as milhares de operações de arquivo pequenas que
+  `node_modules`/`.next` geram. Desenvolva numa pasta local e sincronize só o código-fonte.
