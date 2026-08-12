@@ -63,7 +63,17 @@ export async function updateLocation(
 
 const productSchema = z.object({
   name: z.string().min(2, "Nome muito curto").max(120),
+  category: z.string().max(60).optional(),
+  image_url: z.union([z.string().url("URL de imagem inválida"), z.literal("")]).optional(),
 });
+
+function normalizeProductInput(data: z.infer<typeof productSchema>) {
+  return {
+    name: data.name,
+    category: data.category || null,
+    image_url: data.image_url || null,
+  };
+}
 
 export async function createProduct(
   _prevState: ActionResult,
@@ -71,30 +81,43 @@ export async function createProduct(
 ): Promise<ActionResult> {
   await requireAdmin();
 
-  const parsed = productSchema.safeParse({ name: formData.get("name") });
+  const parsed = productSchema.safeParse({
+    name: formData.get("name"),
+    category: formData.get("category") || undefined,
+    image_url: formData.get("image_url") || undefined,
+  });
   if (!parsed.success) return { error: parsed.error.issues[0]?.message };
 
   const supabase = await createClient();
-  const { error } = await supabase.from("products").insert(parsed.data);
+  const { error } = await supabase.from("products").insert(normalizeProductInput(parsed.data));
   if (error) return { error: error.message };
 
   revalidatePath("/admin/produtos");
   revalidatePath("/admin/estoque");
+  revalidatePath("/loja");
+  revalidatePath("/dashboard");
   return { success: true };
 }
 
-export async function renameProduct(
+export async function updateProduct(
   _prevState: ActionResult,
   formData: FormData
 ): Promise<ActionResult> {
   await requireAdmin();
 
   const id = formData.get("id") as string;
-  const parsed = productSchema.safeParse({ name: formData.get("name") });
+  const parsed = productSchema.safeParse({
+    name: formData.get("name"),
+    category: formData.get("category") || undefined,
+    image_url: formData.get("image_url") || undefined,
+  });
   if (!parsed.success) return { error: parsed.error.issues[0]?.message };
 
   const supabase = await createClient();
-  const { error } = await supabase.from("products").update(parsed.data).eq("id", id);
+  const { error } = await supabase
+    .from("products")
+    .update(normalizeProductInput(parsed.data))
+    .eq("id", id);
   if (error) return { error: error.message };
 
   revalidatePath("/admin/produtos");

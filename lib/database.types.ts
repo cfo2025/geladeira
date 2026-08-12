@@ -42,6 +42,8 @@ type ProductsRow = {
   id: string;
   name: string;
   is_active: boolean;
+  category: string | null;
+  image_url: string | null;
   created_at: string;
 };
 

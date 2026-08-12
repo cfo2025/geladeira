@@ -87,7 +87,7 @@ export function QuickWithdrawDialog({
                     {formatCurrency(item.price)} &middot; {item.quantity} em estoque
                   </p>
                 </div>
-                <div className="w-40 shrink-0">
+                <div className="w-28 shrink-0">
                   <WithdrawForm
                     productId={item.product.id}
                     locationId={locationId}

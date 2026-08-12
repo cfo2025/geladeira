@@ -1,54 +1,40 @@
 "use client";
 
-import { useActionState, useEffect, useRef } from "react";
-import { toast } from "sonner";
+import { useActionState } from "react";
 import { createWithdrawal, type ActionResult } from "@/app/actions/withdrawals";
+import { useActionFeedback } from "@/hooks/use-action-feedback";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
 export function WithdrawForm({
   productId,
   locationId,
   maxQuantity,
+  className,
 }: {
   productId: string;
   locationId: string;
   maxQuantity: number;
+  className?: string;
 }) {
   const [state, formAction, pending] = useActionState<ActionResult, FormData>(createWithdrawal, {});
-  const formRef = useRef<HTMLFormElement>(null);
 
-  useEffect(() => {
-    if (state.success) {
-      toast.success("Retirada registrada");
-      formRef.current?.reset();
-    } else if (state.error) {
-      toast.error(state.error);
-    }
-  }, [state]);
+  useActionFeedback(state, { successMessage: "Retirada registrada" });
 
   if (maxQuantity <= 0) {
     return (
-      <Button size="sm" disabled className="w-full">
+      <Button size="sm" disabled className={className}>
         Sem estoque
       </Button>
     );
   }
 
   return (
-    <form ref={formRef} action={formAction} className="flex items-center gap-2">
+    <form action={formAction} className={className}>
       <input type="hidden" name="productId" value={productId} />
       <input type="hidden" name="locationId" value={locationId} />
-      <Input
-        type="number"
-        name="quantity"
-        defaultValue={1}
-        min={1}
-        max={maxQuantity}
-        className="w-16"
-      />
-      <Button type="submit" size="sm" disabled={pending} className="flex-1">
-        {pending ? "Retirando..." : "Retirar"}
+      <input type="hidden" name="quantity" value={1} />
+      <Button type="submit" size="sm" disabled={pending} className="w-full">
+        {pending ? "Retirando..." : "Retirar (+1)"}
       </Button>
     </form>
   );

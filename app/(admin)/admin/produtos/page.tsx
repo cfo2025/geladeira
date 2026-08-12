@@ -28,6 +28,7 @@ export default async function AdminProdutosPage() {
             <TableHeader>
               <TableRow>
                 <TableHead>Nome</TableHead>
+                <TableHead>Categoria</TableHead>
                 <TableHead>Ativo</TableHead>
                 <TableHead className="w-12" />
               </TableRow>
@@ -36,17 +37,23 @@ export default async function AdminProdutosPage() {
               {(products ?? []).map((product) => (
                 <TableRow key={product.id}>
                   <TableCell className="font-medium">{product.name}</TableCell>
+                  <TableCell className="text-muted-foreground">{product.category ?? "—"}</TableCell>
                   <TableCell>
                     <ProductActiveSwitch id={product.id} isActive={product.is_active ?? true} />
                   </TableCell>
                   <TableCell>
-                    <EditProductDialog id={product.id} name={product.name} />
+                    <EditProductDialog
+                      id={product.id}
+                      name={product.name}
+                      category={product.category}
+                      imageUrl={product.image_url}
+                    />
                   </TableCell>
                 </TableRow>
               ))}
               {(!products || products.length === 0) && (
                 <TableRow>
-                  <TableCell colSpan={3} className="text-center text-muted-foreground">
+                  <TableCell colSpan={4} className="text-center text-muted-foreground">
                     Nenhum produto cadastrado.
                   </TableCell>
                 </TableRow>

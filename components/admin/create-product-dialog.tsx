@@ -39,6 +39,14 @@ export function CreateProductDialog() {
             <Label htmlFor="name">Nome</Label>
             <Input id="name" name="name" required />
           </div>
+          <div className="space-y-2">
+            <Label htmlFor="category">Categoria (opcional)</Label>
+            <Input id="category" name="category" placeholder="Ex: Bebida" />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="image_url">URL da foto (opcional)</Label>
+            <Input id="image_url" name="image_url" type="url" placeholder="https://..." />
+          </div>
           <DialogFooter>
             <Button type="submit" disabled={pending}>
               {pending ? "Salvando..." : "Criar"}
