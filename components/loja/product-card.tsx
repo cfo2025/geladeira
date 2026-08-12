@@ -25,20 +25,26 @@ export function ProductCard({
   quantity: number;
 }) {
   return (
-    <Card className="overflow-hidden pt-0">
-      <div className="relative flex aspect-square items-center justify-center bg-muted/50">
+    <Card className="w-full overflow-hidden pt-0">
+      <div className="relative flex h-36 w-full items-center justify-center overflow-hidden rounded-t-lg bg-muted/50 sm:h-40">
         {imageUrl ? (
-          <Image src={imageUrl} alt={name} fill className="object-cover" unoptimized />
+          <Image
+            src={imageUrl}
+            alt={name}
+            fill
+            className="object-contain p-2"
+            unoptimized
+          />
         ) : (
           <Package className="h-10 w-10 text-muted-foreground/40" />
         )}
       </div>
-      <CardContent className="space-y-2.5 pt-4">
+      <CardContent className="space-y-2 pt-4">
         <div>
-          <p className="truncate text-sm font-semibold">{name}</p>
-          <p className="truncate text-xs text-muted-foreground">{category || " "}</p>
+          <p className="line-clamp-1 text-sm font-semibold">{name}</p>
+          <p className="line-clamp-1 text-xs text-muted-foreground">{category || " "}</p>
         </div>
-        <div className="flex items-center justify-between gap-2">
+        <div className="my-2 flex items-center justify-between gap-2">
           <span className="text-base font-bold">{formatCurrency(price)}</span>
           {quantity > 0 ? (
             <Badge className="border-transparent bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-400">

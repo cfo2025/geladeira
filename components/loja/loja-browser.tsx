@@ -37,9 +37,9 @@ export function LojaBrowser({
 
   return (
     <CartProvider>
-      <div className="grid grid-cols-1 gap-6 pb-20 lg:grid-cols-[1fr_20rem] lg:pb-0">
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <div className="flex flex-col gap-6 pb-20 md:flex-row md:items-start md:pb-0">
+        <div className="min-w-0 flex-1 space-y-6">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             {locations.map((loc) => (
               <LocationCard
                 key={loc.id}
@@ -54,7 +54,7 @@ export function LojaBrowser({
           {items.length === 0 ? (
             <LojaEmptyState />
           ) : (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
               {items.map((item) => (
                 <ProductCard
                   key={item.id}
@@ -72,7 +72,9 @@ export function LojaBrowser({
           )}
         </div>
 
-        <SessionCartPanel />
+        <div className="w-full shrink-0 md:w-80 lg:w-96">
+          <SessionCartPanel />
+        </div>
       </div>
       <MobileCartBar />
     </CartProvider>

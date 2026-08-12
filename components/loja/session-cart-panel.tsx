@@ -9,8 +9,8 @@ export function SessionCartPanel() {
   const cart = useCart();
 
   return (
-    <Card className="sticky top-28 hidden h-fit lg:block">
-      <CardHeader>
+    <Card className="sticky top-28 hidden max-h-[calc(100vh-8rem)] min-h-[20rem] md:flex md:flex-col">
+      <CardHeader className="shrink-0">
         <CardTitle className="flex items-center gap-2 text-base">
           <ShoppingBasket className="h-4 w-4 text-gold" />
           Cesta de Retirada
@@ -21,7 +21,7 @@ export function SessionCartPanel() {
           )}
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex max-h-[26rem] flex-col">
+      <CardContent className="flex min-h-0 flex-1 flex-col">
         <CartContents />
       </CardContent>
     </Card>

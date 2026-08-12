@@ -16,7 +16,7 @@ export function MobileCartBar() {
 
   return (
     <>
-      <div className="fixed inset-x-4 bottom-4 z-40 lg:hidden">
+      <div className="fixed inset-x-4 bottom-4 z-40 md:hidden">
         <Button size="lg" className="w-full justify-between shadow-lg" onClick={() => setOpen(true)}>
           <span className="flex items-center gap-2">
             <ShoppingBasket className="h-4 w-4" />
