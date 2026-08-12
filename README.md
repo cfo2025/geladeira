@@ -85,16 +85,19 @@ Abra [http://localhost:3000](http://localhost:3000).
 Algumas regras não estavam 100% especificadas e foram implementadas da seguinte forma —
 revise se fizer sentido para o seu caso:
 
-- **Conta corrente / pagamento**: toda retirada com `payment_id = null` conta como saldo
-  em aberto. Ao declarar um pagamento, todas as retiradas em aberto são "travadas" nesse
-  pagamento (`payment_id` preenchido). Se o admin rejeitar o pagamento (divergente ou não
-  identificado), essas retiradas voltam a ficar em aberto automaticamente.
+- **Conta corrente / pagamento**: o saldo devedor é um razão (ledger) puro —
+  `Saldo = SUM(retiradas ativas) - SUM(pagamentos aprovados)`, recalculado a cada
+  consulta (`get_my_balance()` / `compute_user_balance()`). Retiradas não ficam mais
+  "travadas" a um pagamento específico: um pagamento parcial aprovado abate só o valor
+  conferido pelo admin, e o restante continua aparecendo como saldo em aberto.
 - **Janela de 5 dias da divergência**: começa a contar no primeiro instante em que o
   usuário *visualiza* a tela de pagamento após a rejeição (`divergence_notified_at`). O
   sistema mostra a contagem regressiva, mas nenhuma ação automática acontece quando o
   prazo expira — isso fica a critério da administração.
-- **Cancelamento de retirada**: só é possível solicitar cancelamento de retiradas ainda
-  não vinculadas a um pagamento. Ao aprovar, o item volta ao estoque automaticamente.
+- **Cancelamento de retirada**: qualquer retirada com status `completed` pode ter
+  cancelamento solicitado, independente de já estar refletida em algum pagamento — o
+  razão recalcula o saldo puramente a partir do estado atual. Ao aprovar o cancelamento,
+  o item volta ao estoque automaticamente.
 - **Balanço de estoque**: "Aplicar contagem ao estoque" é uma ação manual e separada —
   registrar um balanço não altera o estoque sozinho, o admin decide se aplica o ajuste.
 - **Login**: por e-mail/senha (Supabase Auth). O campo `document` (CPF) é só um dado de
