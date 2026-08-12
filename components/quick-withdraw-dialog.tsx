@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import {
   Dialog,
   DialogContent,
@@ -26,9 +27,13 @@ type InventoryItem = {
 export function QuickWithdrawDialog({
   locations,
   inventory,
+  size = "lg",
+  className,
 }: {
   locations: { id: string; name: string }[];
   inventory: InventoryItem[];
+  size?: "default" | "sm" | "lg";
+  className?: string;
 }) {
   const [open, setOpen] = useState(false);
   const [locationId, setLocationId] = useState(locations[0]?.id ?? "");
@@ -39,9 +44,9 @@ export function QuickWithdrawDialog({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger render={<Button size="lg" className="gap-2" />}>
+      <DialogTrigger render={<Button size={size} className={cn("gap-1.5", className)} />}>
         <Plus className="h-4 w-4" />
-        Novo lançamento
+        Novo Lançamento
       </DialogTrigger>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>

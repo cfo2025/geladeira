@@ -1,13 +1,11 @@
+import { Trophy, Medal, Award } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatCurrency } from "@/lib/format";
 
 type RankingRow = { user_id: string; full_name: string; total_spent: number };
 
-const MEDAL_STYLES = [
-  "bg-gold/15 text-gold border-gold/30",
-  "bg-muted text-foreground border-border",
-  "bg-amber-900/10 text-amber-700 border-amber-700/20 dark:text-amber-500",
-];
+const MEDAL_ICONS = [Trophy, Medal, Award];
+const MEDAL_COLORS = ["text-gold", "text-slate-400", "text-amber-700 dark:text-amber-600"];
 
 export function SpendingRanking({
   ranking,
@@ -16,10 +14,21 @@ export function SpendingRanking({
   ranking: RankingRow[];
   currentUserId: string;
 }) {
+  const total = ranking.reduce((sum, r) => sum + r.total_spent, 0);
+
   return (
     <div className="divide-y">
       {ranking.map((row, idx) => {
         const isMe = row.user_id === currentUserId;
+        const share = total > 0 ? (row.total_spent / total) * 100 : 0;
+        const initials = row.full_name
+          .split(" ")
+          .filter(Boolean)
+          .slice(0, 2)
+          .map((n) => n[0]?.toUpperCase())
+          .join("");
+        const MedalIcon = MEDAL_ICONS[idx];
+
         return (
           <div
             key={row.user_id}
@@ -28,19 +37,21 @@ export function SpendingRanking({
               isMe && "rounded-md bg-accent px-2"
             )}
           >
-            <span
-              className={cn(
-                "flex h-7 w-7 shrink-0 items-center justify-center rounded-full border text-xs font-semibold",
-                idx < 3 ? MEDAL_STYLES[idx] : "border-border text-muted-foreground"
-              )}
-            >
+            <span className="w-5 shrink-0 text-center text-sm font-semibold text-muted-foreground">
               {idx + 1}
             </span>
-            <span className="min-w-0 flex-1 truncate text-sm font-medium">
-              {row.full_name}
-              {isMe && <span className="ml-1.5 text-xs font-normal text-muted-foreground">(você)</span>}
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">
+              {initials}
             </span>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-sm font-medium">
+                {row.full_name}
+                {isMe && <span className="ml-1.5 text-xs font-normal text-muted-foreground">(você)</span>}
+              </p>
+              <p className="text-xs text-muted-foreground">{share.toFixed(1)}% do total da turma</p>
+            </div>
             <span className="text-sm font-semibold tabular-nums">{formatCurrency(row.total_spent)}</span>
+            {MedalIcon && <MedalIcon className={cn("h-4 w-4 shrink-0", MEDAL_COLORS[idx])} />}
           </div>
         );
       })}

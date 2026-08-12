@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { GeistSans } from "geist/font/sans";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="pt-BR" className="h-full antialiased">
+    <html lang="pt-BR" className={`${GeistSans.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <TooltipProvider>
           {children}

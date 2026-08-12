@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { QuickWithdrawDialog } from "@/components/quick-withdraw-dialog";
 import { StockOverview } from "@/components/stock-overview";
 import { SpendingRanking } from "@/components/spending-ranking";
+import { KpiStrip, type KpiItem } from "@/components/kpi-strip";
 import { formatCurrency } from "@/lib/format";
 import { Wallet, TrendingUp, Trophy, Receipt } from "lucide-react";
 
@@ -48,7 +49,7 @@ export default async function DashboardPage() {
   const rankingRows = ranking ?? [];
   const myPosition = rankingRows.findIndex((r) => r.user_id === userId) + 1;
 
-  const stats = [
+  const stats: KpiItem[] = [
     {
       label: "Saldo em aberto",
       value: formatCurrency(Number(balance ?? 0)),
@@ -60,12 +61,12 @@ export default async function DashboardPage() {
       icon: TrendingUp,
     },
     {
-      label: "Retiradas este mês",
+      label: "Retiradas (mês)",
       value: String(monthWithdrawals),
       icon: Receipt,
     },
     {
-      label: "Posição no ranking",
+      label: "Ranking (turma)",
       value: myPosition > 0 ? `${myPosition}º de ${rankingRows.length}` : "—",
       icon: Trophy,
     },
@@ -73,31 +74,19 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h1 className="font-heading text-2xl font-semibold tracking-tight">
-            Olá, {profile.full_name.split(" ")[0]}
-          </h1>
-          <p className="text-muted-foreground">Aqui está o resumo da sua conta na Loja Honesta.</p>
-        </div>
-        <QuickWithdrawDialog locations={locations ?? []} inventory={inventory ?? []} />
+      <div className="space-y-1">
+        <h1 className="text-2xl font-bold tracking-tight">Olá, {profile.full_name.split(" ")[0]}! 👋</h1>
+        <p className="text-muted-foreground">Aqui está o resumo da sua conta na Loja Honesta.</p>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat) => (
-          <Card key={stat.label}>
-            <CardContent className="flex items-center justify-between pt-6">
-              <div>
-                <p className="text-sm text-muted-foreground">{stat.label}</p>
-                <p className="mt-1 font-heading text-xl font-semibold">{stat.value}</p>
-              </div>
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent">
-                <stat.icon className="h-5 w-5 text-gold" />
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      <KpiStrip items={stats} />
+
+      <QuickWithdrawDialog
+        locations={locations ?? []}
+        inventory={inventory ?? []}
+        size="lg"
+        className="w-full sm:hidden"
+      />
 
       {Number(balance ?? 0) > 0 && (
         <Card className="border-gold/30 bg-gold/5">
@@ -114,13 +103,13 @@ export default async function DashboardPage() {
       )}
 
       <div>
-        <h2 className="mb-3 font-heading text-lg font-semibold">Estoque das geladeiras</h2>
+        <h2 className="mb-3 text-lg font-bold">Estoque das geladeiras</h2>
         <StockOverview locations={locations ?? []} inventory={inventory ?? []} />
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle className="font-heading text-lg">Ranking de gastos da turma</CardTitle>
+          <CardTitle className="text-lg">Ranking de gastos da turma</CardTitle>
         </CardHeader>
         <CardContent>
           <SpendingRanking ranking={rankingRows} currentUserId={userId} />
