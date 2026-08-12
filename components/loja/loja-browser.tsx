@@ -4,6 +4,9 @@ import { useState } from "react";
 import { LocationCard } from "@/components/loja/location-card";
 import { ProductCard } from "@/components/loja/product-card";
 import { LojaEmptyState } from "@/components/loja/empty-state";
+import { CartProvider } from "@/components/loja/cart-context";
+import { SessionCartPanel } from "@/components/loja/session-cart-panel";
+import { MobileCartBar } from "@/components/loja/mobile-cart-bar";
 
 type InventoryItem = {
   id: string;
@@ -27,42 +30,51 @@ export function LojaBrowser({
     totalsByLocation.set(item.location_id, (totalsByLocation.get(item.location_id) ?? 0) + item.quantity);
   }
 
+  const selectedLocation = locations.find((l) => l.id === selectedId);
   const items = inventory
     .filter((i) => i.location_id === selectedId)
     .sort((a, b) => a.product.name.localeCompare(b.product.name));
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        {locations.map((loc) => (
-          <LocationCard
-            key={loc.id}
-            name={loc.name}
-            totalItems={totalsByLocation.get(loc.id) ?? 0}
-            active={loc.id === selectedId}
-            onSelect={() => setSelectedId(loc.id)}
-          />
-        ))}
-      </div>
+    <CartProvider>
+      <div className="grid grid-cols-1 gap-6 pb-20 lg:grid-cols-[1fr_20rem] lg:pb-0">
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            {locations.map((loc) => (
+              <LocationCard
+                key={loc.id}
+                name={loc.name}
+                totalItems={totalsByLocation.get(loc.id) ?? 0}
+                active={loc.id === selectedId}
+                onSelect={() => setSelectedId(loc.id)}
+              />
+            ))}
+          </div>
 
-      {items.length === 0 ? (
-        <LojaEmptyState />
-      ) : (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {items.map((item) => (
-            <ProductCard
-              key={item.id}
-              productId={item.product.id}
-              locationId={selectedId}
-              name={item.product.name}
-              category={item.product.category}
-              imageUrl={item.product.image_url}
-              price={item.price}
-              quantity={item.quantity}
-            />
-          ))}
+          {items.length === 0 ? (
+            <LojaEmptyState />
+          ) : (
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+              {items.map((item) => (
+                <ProductCard
+                  key={item.id}
+                  productId={item.product.id}
+                  locationId={selectedId}
+                  locationName={selectedLocation?.name ?? ""}
+                  name={item.product.name}
+                  category={item.product.category}
+                  imageUrl={item.product.image_url}
+                  price={item.price}
+                  quantity={item.quantity}
+                />
+              ))}
+            </div>
+          )}
         </div>
-      )}
-    </div>
+
+        <SessionCartPanel />
+      </div>
+      <MobileCartBar />
+    </CartProvider>
   );
 }

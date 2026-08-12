@@ -337,6 +337,10 @@ export interface Database {
         Args: { p_product_id: string; p_location_id: string; p_quantity?: number };
         Returns: WithdrawalsRow;
       };
+      checkout_withdrawal_cart: {
+        Args: { p_items: Json };
+        Returns: WithdrawalsRow[];
+      };
       request_withdrawal_cancellation: {
         Args: { p_withdrawal_id: string; p_reason: string };
         Returns: WithdrawalCancellationRequestsRow;

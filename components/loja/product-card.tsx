@@ -2,12 +2,13 @@ import Image from "next/image";
 import { Package } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { WithdrawForm } from "@/components/withdraw-form";
+import { CartQuantityControl } from "@/components/loja/cart-quantity-control";
 import { formatCurrency } from "@/lib/format";
 
 export function ProductCard({
   productId,
   locationId,
+  locationName,
   name,
   category,
   imageUrl,
@@ -16,6 +17,7 @@ export function ProductCard({
 }: {
   productId: string;
   locationId: string;
+  locationName: string;
   name: string;
   category: string | null;
   imageUrl: string | null;
@@ -34,7 +36,7 @@ export function ProductCard({
       <CardContent className="space-y-2.5 pt-4">
         <div>
           <p className="truncate text-sm font-semibold">{name}</p>
-          <p className="truncate text-xs text-muted-foreground">{category || " "}</p>
+          <p className="truncate text-xs text-muted-foreground">{category || " "}</p>
         </div>
         <div className="flex items-center justify-between gap-2">
           <span className="text-base font-bold">{formatCurrency(price)}</span>
@@ -46,11 +48,14 @@ export function ProductCard({
             <Badge variant="destructive">Sem Estoque</Badge>
           )}
         </div>
-        <WithdrawForm
+        <CartQuantityControl
           productId={productId}
           locationId={locationId}
+          locationName={locationName}
+          productName={name}
+          category={category}
+          price={price}
           maxQuantity={quantity}
-          className="w-full"
         />
       </CardContent>
     </Card>

@@ -46,6 +46,41 @@ export async function createWithdrawal(
   return { success: true };
 }
 
+const cartItemSchema = z.object({
+  productId: z.string().uuid(),
+  locationId: z.string().uuid(),
+  quantity: z.coerce.number().int().min(1).max(99),
+});
+
+const cartCheckoutSchema = z.array(cartItemSchema).min(1, "Cesta vazia");
+
+export async function checkoutCart(items: unknown): Promise<ActionResult> {
+  await requireUser();
+
+  const parsed = cartCheckoutSchema.safeParse(items);
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message ?? "Dados inválidos" };
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("checkout_withdrawal_cart", {
+    p_items: parsed.data.map((item) => ({
+      product_id: item.productId,
+      location_id: item.locationId,
+      quantity: item.quantity,
+    })),
+  });
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  revalidatePath("/loja");
+  revalidatePath("/dashboard");
+  revalidatePath("/extrato");
+  return { success: true };
+}
+
 const cancellationSchema = z.object({
   withdrawalId: z.string().uuid(),
   reason: z.string().min(3, "Descreva o motivo do cancelamento").max(500),
