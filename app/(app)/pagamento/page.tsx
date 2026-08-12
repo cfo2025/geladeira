@@ -1,6 +1,7 @@
 import { requireUser } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
 import { Card, CardContent } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { PixInstructionsCard } from "@/components/pagamento/pix-instructions-card";
 import { DeclarePaymentForm } from "@/components/pagamento/declare-payment-form";
 import { PaymentHistoryTable } from "@/components/pagamento/payment-history-table";
@@ -50,10 +51,17 @@ export default async function PagamentoPage() {
           </CardContent>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <PixInstructionsCard pixKey={pixKey} qrCodeUrl={qrCodeUrl} />
-          <DeclarePaymentForm balance={numericBalance} />
-        </div>
+        <>
+          <Alert>
+            <AlertDescription>
+              Você possui um saldo restante em aberto de {formatCurrency(numericBalance)}.
+            </AlertDescription>
+          </Alert>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <PixInstructionsCard pixKey={pixKey} qrCodeUrl={qrCodeUrl} />
+            <DeclarePaymentForm balance={numericBalance} />
+          </div>
+        </>
       )}
 
       <PaymentHistoryTable payments={payments ?? []} />

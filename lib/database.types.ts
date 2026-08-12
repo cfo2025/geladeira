@@ -329,6 +329,14 @@ export interface Database {
         Args: Record<string, never>;
         Returns: number;
       };
+      compute_user_balance: {
+        Args: { p_user_id: string };
+        Returns: number;
+      };
+      get_total_open_balance: {
+        Args: Record<string, never>;
+        Returns: number;
+      };
       get_spending_ranking: {
         Args: Record<string, never>;
         Returns: { user_id: string; full_name: string; total_spent: number }[];

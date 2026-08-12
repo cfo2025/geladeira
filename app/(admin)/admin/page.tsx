@@ -10,7 +10,7 @@ export default async function AdminDashboardPage() {
     { count: pendingPayments },
     { count: pendingCancellations },
     { count: activeUsers },
-    { data: openWithdrawals },
+    { data: totalOwedResult },
   ] = await Promise.all([
     supabase.from("payments").select("id", { count: "exact", head: true }).eq("status", "pending"),
     supabase
@@ -18,17 +18,10 @@ export default async function AdminDashboardPage() {
       .select("id", { count: "exact", head: true })
       .eq("status", "pending"),
     supabase.from("profiles").select("id", { count: "exact", head: true }).eq("is_active", true),
-    supabase
-      .from("withdrawals")
-      .select("unit_price_at_withdrawal, quantity")
-      .eq("status", "completed")
-      .is("payment_id", null),
+    supabase.rpc("get_total_open_balance"),
   ]);
 
-  const totalOwed = (openWithdrawals ?? []).reduce(
-    (sum, w) => sum + w.unit_price_at_withdrawal * w.quantity,
-    0
-  );
+  const totalOwed = Number(totalOwedResult ?? 0);
 
   const cards = [
     {

@@ -17,7 +17,6 @@ type Withdrawal = {
   quantity: number;
   unit_price_at_withdrawal: number;
   status: string;
-  payment_id: string | null;
   created_at: string;
   product: { name: string; image_url: string | null } | null;
   location: { id: string; name: string } | null;
@@ -162,7 +161,7 @@ export function ExtratoTable({
                       <WithdrawalStatusBadge status={w.status} />
                     </TableCell>
                     <TableCell className="text-right">
-                      {w.status === "completed" && !w.payment_id && (
+                      {w.status === "completed" && (
                         <CancellationDialog withdrawalId={w.id} productName={w.product?.name ?? ""} />
                       )}
                     </TableCell>

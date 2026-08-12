@@ -19,7 +19,7 @@ export default async function ExtratoPage() {
     supabase
       .from("withdrawals")
       .select(
-        "id, quantity, unit_price_at_withdrawal, status, payment_id, created_at, product:products(name, image_url), location:locations(id, name)"
+        "id, quantity, unit_price_at_withdrawal, status, created_at, product:products(name, image_url), location:locations(id, name)"
       )
       .eq("user_id", userId)
       .order("created_at", { ascending: false }),
