@@ -5,7 +5,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const { userId, profile } = await requireAdmin();
 
   return (
-    <AppShell userId={userId} fullName={profile.full_name} role={profile.role} variant="admin">
+    <AppShell userId={userId} fullName={profile.full_name} role={profile.role}>
       {children}
     </AppShell>
   );
