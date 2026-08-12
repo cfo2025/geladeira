@@ -95,7 +95,7 @@ export default async function DashboardPage() {
               Você tem <span className="font-semibold">{formatCurrency(Number(balance ?? 0))}</span> em
               aberto. Que tal regularizar via Pix?
             </p>
-            <Button render={<Link href="/pagamento" />} size="sm" variant="outline">
+            <Button render={<Link href="/pagamento" />} nativeButton={false} size="sm" variant="outline">
               Ir para pagamento
             </Button>
           </CardContent>

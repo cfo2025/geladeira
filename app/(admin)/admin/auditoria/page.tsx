@@ -25,7 +25,11 @@ export default async function AdminAuditoriaPage() {
           <p className="text-muted-foreground">Balanços físicos de estoque por local.</p>
         </div>
         {locations && locations.length > 0 && (
-          <Button render={<Link href={`/admin/auditoria/novo?location=${locations[0].id}`} />} size="sm">
+          <Button
+            render={<Link href={`/admin/auditoria/novo?location=${locations[0].id}`} />}
+            nativeButton={false}
+            size="sm"
+          >
             <Plus className="mr-1 h-4 w-4" /> Novo balanço
           </Button>
         )}
@@ -51,7 +55,12 @@ export default async function AdminAuditoriaPage() {
                   <TableCell>{audit.admin?.full_name}</TableCell>
                   <TableCell className="max-w-xs truncate">{audit.notes ?? "—"}</TableCell>
                   <TableCell>
-                    <Button render={<Link href={`/admin/auditoria/${audit.id}`} />} variant="ghost" size="sm">
+                    <Button
+                      render={<Link href={`/admin/auditoria/${audit.id}`} />}
+                      nativeButton={false}
+                      variant="ghost"
+                      size="sm"
+                    >
                       Ver detalhes
                     </Button>
                   </TableCell>

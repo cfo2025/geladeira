@@ -46,6 +46,7 @@ export default async function AuditoriaDetalhePage({
         <div className="flex gap-2">
           <Button
             render={<a href={`/api/admin/auditoria/${id}/pdf`} target="_blank" rel="noreferrer" />}
+            nativeButton={false}
             variant="outline"
           >
             <FileDown className="mr-1 h-4 w-4" /> Baixar PDF
@@ -92,7 +93,7 @@ export default async function AuditoriaDetalhePage({
         </CardContent>
       </Card>
 
-      <Button render={<Link href="/admin/auditoria" />} variant="ghost" size="sm">
+      <Button render={<Link href="/admin/auditoria" />} nativeButton={false} variant="ghost" size="sm">
         Voltar
       </Button>
     </div>
