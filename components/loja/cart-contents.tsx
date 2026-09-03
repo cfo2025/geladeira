@@ -4,11 +4,18 @@ import { useTransition } from "react";
 import { toast } from "sonner";
 import { Minus, Plus, X, ShoppingBasket } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { useCart } from "@/components/loja/cart-context";
 import { checkoutCart } from "@/app/actions/withdrawals";
 import { formatCurrency } from "@/lib/format";
 
-export function CartContents({ onCheckoutSuccess }: { onCheckoutSuccess?: () => void }) {
+export function CartContents({
+  onCheckoutSuccess,
+  compact = false,
+}: {
+  onCheckoutSuccess?: () => void;
+  compact?: boolean;
+}) {
   const cart = useCart();
   const [pending, startTransition] = useTransition();
 
@@ -34,24 +41,37 @@ export function CartContents({ onCheckoutSuccess }: { onCheckoutSuccess?: () => 
 
   if (cart.lines.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center gap-2 py-10 text-center">
-        <ShoppingBasket className="h-8 w-8 text-muted-foreground/40" />
-        <p className="text-sm text-muted-foreground">Sua cesta está vazia.</p>
+      <div
+        className={cn(
+          "flex flex-col items-center justify-center gap-1.5 text-center",
+          compact ? "py-3" : "py-10"
+        )}
+      >
+        <ShoppingBasket className={cn("text-muted-foreground/40", compact ? "h-5 w-5" : "h-8 w-8")} />
+        <p className={cn("text-muted-foreground", compact ? "text-xs" : "text-sm")}>Sua cesta está vazia.</p>
       </div>
     );
   }
 
   return (
     <div className="flex h-full min-h-0 flex-col">
-      <div className="flex-1 space-y-3 overflow-y-auto pr-1">
+      <div className={cn("flex-1 overflow-y-auto pr-1", compact ? "space-y-2" : "space-y-3")}>
         {cart.lines.map((line) => (
-          <div key={line.key} className="flex items-start justify-between gap-2 border-b pb-3 last:border-0">
+          <div
+            key={line.key}
+            className={cn(
+              "flex items-start justify-between gap-2 border-b last:border-0",
+              compact ? "pb-2" : "pb-3"
+            )}
+          >
             <div className="min-w-0">
-              <p className="truncate text-sm font-medium">{line.productName}</p>
-              <p className="truncate text-xs text-muted-foreground">
-                {line.category || line.locationName}
-              </p>
-              <div className="mt-1.5 flex items-center gap-1.5">
+              <p className={cn("truncate font-medium", compact ? "text-xs" : "text-sm")}>{line.productName}</p>
+              {!compact && (
+                <p className="truncate text-xs text-muted-foreground">
+                  {line.category || line.locationName}
+                </p>
+              )}
+              <div className={cn("flex items-center gap-1.5", compact ? "mt-1" : "mt-1.5")}>
                 <Button
                   size="icon-xs"
                   variant="ghost"
@@ -86,12 +106,12 @@ export function CartContents({ onCheckoutSuccess }: { onCheckoutSuccess?: () => 
           </div>
         ))}
       </div>
-      <div className="mt-3 space-y-3 border-t pt-3">
+      <div className={cn("space-y-2 border-t", compact ? "mt-2 pt-2" : "mt-3 space-y-3 pt-3")}>
         <div className="flex items-center justify-between font-semibold">
           <span className="text-sm">Total</span>
-          <span className="text-lg">{formatCurrency(cart.totalValue)}</span>
+          <span className={compact ? "text-base" : "text-lg"}>{formatCurrency(cart.totalValue)}</span>
         </div>
-        <Button className="w-full" size="lg" disabled={pending} onClick={handleCheckout}>
+        <Button className="w-full" size={compact ? "default" : "lg"} disabled={pending} onClick={handleCheckout}>
           {pending ? "Finalizando..." : "Finalizar Retirada"}
         </Button>
       </div>
