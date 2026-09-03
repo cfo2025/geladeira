@@ -7,6 +7,7 @@ import { useActionFeedback } from "@/hooks/use-action-feedback";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { CurrencyInput } from "@/components/ui/currency-input";
 import {
   Dialog,
   DialogContent,
@@ -49,7 +50,8 @@ export function CreateProductDialog() {
             Novo produto
           </DialogTitle>
           <DialogDescription>
-            Cadastro geral do produto. Preço e estoque são definidos por geladeira na aba Estoque.
+            O preço vale para todas as geladeiras. O estoque de cada uma é definido depois, na aba
+            Estoque.
           </DialogDescription>
         </DialogHeader>
         <form action={formAction} className="space-y-4">
@@ -87,6 +89,10 @@ export function CreateProductDialog() {
           <div className="space-y-2">
             <Label htmlFor="category">Categoria (opcional)</Label>
             <Input id="category" name="category" placeholder="Ex: Bebida" />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="price">Preço</Label>
+            <CurrencyInput id="price" name="price" required />
           </div>
           <DialogFooter>
             <Button type="submit" disabled={pending}>

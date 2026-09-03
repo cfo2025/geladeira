@@ -20,18 +20,14 @@ import {
 } from "@/components/ui/dialog";
 
 export function PromoDialog({
-  locationId,
   productId,
   productName,
-  locationName,
   price,
   promoPrice,
   disabled = false,
 }: {
-  locationId: string;
   productId: string;
   productName: string;
-  locationName: string;
   price: number;
   promoPrice: number | null;
   disabled?: boolean;
@@ -48,7 +44,7 @@ export function PromoDialog({
 
   function handleClear() {
     startClearTransition(async () => {
-      const result = await clearPromoPrice(locationId, productId);
+      const result = await clearPromoPrice(productId);
       if (result.error) {
         toast.error(result.error);
       } else {
@@ -75,7 +71,13 @@ export function PromoDialog({
             size="icon-sm"
             variant={isActive ? "default" : "outline"}
             disabled={disabled}
-            title={disabled ? "Defina um preço para este produto antes de criar uma promoção" : isActive ? "Editar promoção" : "Criar promoção"}
+            title={
+              disabled
+                ? "Defina um preço para este produto antes de criar uma promoção"
+                : isActive
+                  ? "Editar promoção"
+                  : "Criar promoção"
+            }
             aria-label="Promoção"
           />
         }
@@ -88,12 +90,9 @@ export function PromoDialog({
             <BadgePercent className="h-4 w-4 text-gold" />
             {isActive ? "Editar promoção" : "Criar promoção"}
           </DialogTitle>
-          <DialogDescription>
-            {productName} &middot; {locationName}
-          </DialogDescription>
+          <DialogDescription>{productName} &middot; vale para todas as geladeiras</DialogDescription>
         </DialogHeader>
         <form action={formAction} className="space-y-4">
-          <input type="hidden" name="locationId" value={locationId} />
           <input type="hidden" name="productId" value={productId} />
 
           <div className="flex items-center justify-between rounded-lg border bg-muted/40 px-3 py-2">

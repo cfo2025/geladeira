@@ -9,7 +9,7 @@ export default async function LojaPage() {
     supabase
       .from("inventory")
       .select(
-        "id, price, promo_price, quantity, location_id, product:products!inner(id, name, category, image_url, is_active)"
+        "id, quantity, location_id, product:products!inner(id, name, category, image_url, is_active, price, promo_price)"
       )
       .eq("product.is_active", true),
   ]);

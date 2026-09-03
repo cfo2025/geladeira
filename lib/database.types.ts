@@ -44,6 +44,8 @@ type ProductsRow = {
   is_active: boolean;
   category: string | null;
   image_url: string | null;
+  price: number;
+  promo_price: number | null;
   created_at: string;
 };
 
@@ -51,8 +53,6 @@ type InventoryRow = {
   id: string;
   location_id: string;
   product_id: string;
-  price: number;
-  promo_price: number | null;
   quantity: number;
 };
 
@@ -150,7 +150,7 @@ export interface Database {
       };
       inventory: {
         Row: InventoryRow;
-        Insert: Partial<InventoryRow> & Pick<InventoryRow, "location_id" | "product_id" | "price">;
+        Insert: Partial<InventoryRow> & Pick<InventoryRow, "location_id" | "product_id">;
         Update: Partial<InventoryRow>;
         Relationships: [
           {

@@ -21,10 +21,15 @@ import { CartContents } from "@/components/loja/cart-contents";
 type InventoryItem = {
   id: string;
   location_id: string;
-  price: number;
-  promo_price: number | null;
   quantity: number;
-  product: { id: string; name: string; category: string | null; image_url: string | null };
+  product: {
+    id: string;
+    name: string;
+    category: string | null;
+    image_url: string | null;
+    price: number;
+    promo_price: number | null;
+  };
 };
 
 const PAGE_SIZE = 6;
@@ -107,8 +112,8 @@ export function QuickWithdrawDialog({
                       name={item.product.name}
                       category={item.product.category}
                       imageUrl={item.product.image_url}
-                      price={item.price}
-                      promoPrice={item.promo_price}
+                      price={item.product.price}
+                      promoPrice={item.product.promo_price}
                       quantity={item.quantity}
                       compact
                     />

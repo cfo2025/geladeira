@@ -114,21 +114,28 @@ function normalizeProductInput(data: z.infer<typeof productSchema>) {
   };
 }
 
+const createProductSchema = productSchema.extend({
+  price: z.coerce.number().min(0, "Preço inválido"),
+});
+
 export async function createProduct(
   _prevState: ActionResult,
   formData: FormData
 ): Promise<ActionResult> {
   await requireAdmin();
 
-  const parsed = productSchema.safeParse({
+  const parsed = createProductSchema.safeParse({
     name: formData.get("name"),
     category: formData.get("category") || undefined,
     image_url: formData.get("image_url") || undefined,
+    price: formData.get("price"),
   });
   if (!parsed.success) return { error: parsed.error.issues[0]?.message };
 
   const supabase = await createClient();
-  const { error } = await supabase.from("products").insert(normalizeProductInput(parsed.data));
+  const { error } = await supabase
+    .from("products")
+    .insert({ ...normalizeProductInput(parsed.data), price: parsed.data.price });
   if (error) return { error: error.message };
 
   revalidatePath("/admin/estoque");
@@ -206,36 +213,15 @@ export async function deleteProduct(id: string): Promise<ActionResult> {
   return { success: true };
 }
 
-// ---- Estoque (preço por local, movimentações de quantidade) ----
+// ---- Preço do produto (único, vale para todas as geladeiras) ----
 
-const priceSchema = z.object({
-  locationId: z.string().uuid(),
-  productId: z.string().uuid(),
-  price: z.coerce.number().min(0, "Preço inválido"),
-});
-
-export async function updateInventoryPrice(
-  _prevState: ActionResult,
-  formData: FormData
-): Promise<ActionResult> {
+export async function updateProductPrice(productId: string, price: number): Promise<ActionResult> {
   await requireAdmin();
 
-  const parsed = priceSchema.safeParse({
-    locationId: formData.get("locationId"),
-    productId: formData.get("productId"),
-    price: formData.get("price"),
-  });
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message };
+  if (!Number.isFinite(price) || price < 0) return { error: "Preço inválido" };
 
   const supabase = await createClient();
-  const { error } = await supabase.from("inventory").upsert(
-    {
-      location_id: parsed.data.locationId,
-      product_id: parsed.data.productId,
-      price: parsed.data.price,
-    },
-    { onConflict: "location_id,product_id", ignoreDuplicates: false }
-  );
+  const { error } = await supabase.from("products").update({ price }).eq("id", productId);
   if (error) {
     if (error.code === CHECK_VIOLATION) {
       return {
@@ -251,10 +237,9 @@ export async function updateInventoryPrice(
   return { success: true };
 }
 
-// ---- Promoções ----
+// ---- Promoções (também únicas por produto, valem para todas as geladeiras) ----
 
 const promoSchema = z.object({
-  locationId: z.string().uuid(),
   productId: z.string().uuid(),
   promoPrice: z.coerce.number().min(0.01, "Informe um valor promocional maior que zero"),
 });
@@ -266,7 +251,6 @@ export async function setPromoPrice(
   const { userId: actorId } = await requireAdmin();
 
   const parsed = promoSchema.safeParse({
-    locationId: formData.get("locationId"),
     productId: formData.get("productId"),
     promoPrice: formData.get("promoPrice"),
   });
@@ -275,26 +259,23 @@ export async function setPromoPrice(
   const supabase = await createClient();
 
   const { data: current } = await supabase
-    .from("inventory")
+    .from("products")
     .select("price")
-    .eq("location_id", parsed.data.locationId)
-    .eq("product_id", parsed.data.productId)
+    .eq("id", parsed.data.productId)
     .maybeSingle();
 
-  if (!current) return { error: "Defina um preço para este produto neste local antes de criar uma promoção" };
+  if (!current) return { error: "Produto não encontrado" };
   if (parsed.data.promoPrice >= current.price) {
     return { error: "O valor promocional precisa ser menor que o preço atual" };
   }
 
   const { error } = await supabase
-    .from("inventory")
+    .from("products")
     .update({ promo_price: parsed.data.promoPrice })
-    .eq("location_id", parsed.data.locationId)
-    .eq("product_id", parsed.data.productId);
+    .eq("id", parsed.data.productId);
   if (error) return { error: error.message };
 
   await logAdminAction(actorId, null, "promo_set", {
-    location_id: parsed.data.locationId,
     product_id: parsed.data.productId,
     price: current.price,
     promo_price: parsed.data.promoPrice,
@@ -306,18 +287,14 @@ export async function setPromoPrice(
   return { success: true };
 }
 
-export async function clearPromoPrice(locationId: string, productId: string): Promise<ActionResult> {
+export async function clearPromoPrice(productId: string): Promise<ActionResult> {
   const { userId: actorId } = await requireAdmin();
   const supabase = await createClient();
 
-  const { error } = await supabase
-    .from("inventory")
-    .update({ promo_price: null })
-    .eq("location_id", locationId)
-    .eq("product_id", productId);
+  const { error } = await supabase.from("products").update({ promo_price: null }).eq("id", productId);
   if (error) return { error: error.message };
 
-  await logAdminAction(actorId, null, "promo_cleared", { location_id: locationId, product_id: productId });
+  await logAdminAction(actorId, null, "promo_cleared", { product_id: productId });
 
   revalidatePath("/admin/estoque");
   revalidatePath("/loja");
