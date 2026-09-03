@@ -17,11 +17,11 @@ export function CancellationReviewButtons({ requestId }: { requestId: string }) 
   }
 
   return (
-    <div className="flex justify-end gap-2">
-      <Button size="sm" variant="outline" disabled={pending} onClick={() => handle(false)}>
+    <div className="flex gap-2">
+      <Button size="sm" variant="outline" className="flex-1" disabled={pending} onClick={() => handle(false)}>
         Rejeitar
       </Button>
-      <Button size="sm" disabled={pending} onClick={() => handle(true)}>
+      <Button size="sm" className="flex-1" disabled={pending} onClick={() => handle(true)}>
         Aprovar
       </Button>
     </div>
