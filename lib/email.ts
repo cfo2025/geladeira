@@ -2,7 +2,7 @@ import "server-only";
 import { Resend } from "resend";
 import { formatCurrency } from "@/lib/format";
 
-const FROM = process.env.RESEND_FROM_EMAIL ?? "Loja Honesta <onboarding@resend.dev>";
+const FROM = process.env.RESEND_FROM_EMAIL ?? "Geladeira Solidária <onboarding@resend.dev>";
 
 function getClient() {
   if (!process.env.RESEND_API_KEY) {
@@ -28,7 +28,7 @@ function wrapper(title: string, body: string) {
     <div style="font-family: -apple-system, Arial, sans-serif; max-width: 480px; margin: 0 auto; padding: 24px; color: #18181b;">
       <h2 style="margin-bottom: 16px;">${title}</h2>
       ${body}
-      <p style="margin-top: 32px; font-size: 12px; color: #71717a;">Loja Honesta</p>
+      <p style="margin-top: 32px; font-size: 12px; color: #71717a;">Geladeira Solidária</p>
     </div>
   `;
 }
@@ -36,10 +36,10 @@ function wrapper(title: string, body: string) {
 export async function sendWelcomeEmail(to: string, fullName: string, tempPassword: string) {
   await sendEmail(
     to,
-    "Bem-vindo(a) à Loja Honesta",
+    "Bem-vindo(a) à Geladeira Solidária",
     wrapper(
       `Olá, ${fullName}!`,
-      `<p>Sua conta na Loja Honesta foi criada.</p>
+      `<p>Sua conta no controle da Geladeira Solidária foi criada.</p>
        <p>E-mail de acesso: <strong>${to}</strong><br/>Senha temporária: <strong>${tempPassword}</strong></p>
        <p>No primeiro acesso você será solicitado(a) a definir uma nova senha.</p>`
     )
@@ -73,13 +73,13 @@ export async function sendPaymentReviewedEmail(
       subject: "Divergência encontrada no seu pagamento",
       body: `<p>Encontramos uma divergência entre o valor declarado e o valor recebido.</p>${
         notes ? `<p>Observações: ${notes}</p>` : ""
-      }<p>Acesse a Loja Honesta para ver os detalhes.</p>`,
+      }<p>Acesse o sistema da Geladeira Solidária para ver os detalhes.</p>`,
     },
     rejected_unpaid: {
       subject: "Pagamento não identificado",
       body: `<p>Não conseguimos identificar o recebimento do seu pagamento.</p>${
         notes ? `<p>Observações: ${notes}</p>` : ""
-      }<p>Acesse a Loja Honesta para ver os detalhes.</p>`,
+      }<p>Acesse o sistema da Geladeira Solidária para ver os detalhes.</p>`,
     },
   };
 

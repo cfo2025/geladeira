@@ -18,12 +18,12 @@ export function AuthLayout({ children }: { children: React.ReactNode }) {
             Confiança que se constrói a cada retirada.
           </p>
           <p className="max-w-sm text-sm text-sidebar-foreground/60">
-            Sistema de loja honesta da CFO Tucum XVII. Registre suas retiradas, acompanhe seu
-            saldo e mantenha as contas em dia com a turma.
+            Controle de uso das geladeiras da CFO Tucum XVII. Registre o que você retirou,
+            acompanhe seu saldo e mantenha as contas em dia com a turma.
           </p>
         </div>
         <p className="relative text-xs text-sidebar-foreground/40">
-          &copy; {new Date().getFullYear()} CFO Tucum XVII &middot; Loja Honesta
+          &copy; {new Date().getFullYear()} CFO Tucum XVII &middot; Geladeira Solidária
         </p>
       </div>
       <div className="flex items-center justify-center bg-muted/20 p-6">{children}</div>

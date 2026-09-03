@@ -50,7 +50,7 @@ export default async function AdminDashboardPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Painel</h1>
-        <p className="text-muted-foreground">Visão geral da Loja Honesta.</p>
+        <p className="text-muted-foreground">Visão geral do controle das geladeiras.</p>
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">

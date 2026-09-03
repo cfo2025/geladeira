@@ -76,7 +76,7 @@ export default async function DashboardPage() {
     <div className="space-y-8">
       <div className="space-y-1">
         <h1 className="text-2xl font-bold tracking-tight">Olá, {profile.full_name.split(" ")[0]}! 👋</h1>
-        <p className="text-muted-foreground">Aqui está o resumo da sua conta na Loja Honesta.</p>
+        <p className="text-muted-foreground">Aqui está o resumo do seu uso das geladeiras.</p>
       </div>
 
       <KpiStrip items={stats} />

@@ -21,8 +21,8 @@ export default async function LojaPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Loja</h1>
-        <p className="text-muted-foreground">Escolha o local e retire seus itens.</p>
+        <h1 className="text-2xl font-bold tracking-tight">Geladeiras</h1>
+        <p className="text-muted-foreground">Escolha a geladeira e registre o que você retirou.</p>
       </div>
 
       <LojaBrowser locations={locations} inventory={inventory ?? []} />

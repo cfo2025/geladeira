@@ -13,7 +13,7 @@ export default async function AdminLocaisPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Locais</h1>
-          <p className="text-muted-foreground">Locais de armazenamento disponíveis na loja.</p>
+          <p className="text-muted-foreground">Geladeiras e locais de armazenamento cadastrados.</p>
         </div>
         <CreateLocationDialog />
       </div>

@@ -26,7 +26,7 @@ export function BrandMark({
             CFO Tucum XVII
           </span>
           <span className="text-[10px] font-semibold tracking-widest text-gold uppercase">
-            Loja Honesta
+            Geladeira Solidária
           </span>
         </span>
       )}

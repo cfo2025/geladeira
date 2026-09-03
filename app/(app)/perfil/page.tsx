@@ -20,7 +20,7 @@ export default async function PerfilPage() {
     <div className="max-w-2xl space-y-6">
       <div>
         <h1 className="font-heading text-2xl font-semibold tracking-tight">Perfil</h1>
-        <p className="text-muted-foreground">Suas informações de cadastro na Loja Honesta.</p>
+        <p className="text-muted-foreground">Suas informações de cadastro no controle das geladeiras.</p>
       </div>
 
       <Card>

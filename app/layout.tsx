@@ -5,8 +5,9 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 export const metadata: Metadata = {
-  title: "Loja Honesta",
-  description: "Sistema de loja honesta com retiradas, pagamentos Pix e controle de estoque.",
+  title: "Geladeira Solidária",
+  description:
+    "Controle de uso das geladeiras da CFO Tucum XVII — retiradas, saldo e pagamentos Pix entre a turma.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

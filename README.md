@@ -1,9 +1,12 @@
-# Loja Honesta
+# Geladeira Solidária
 
-Sistema interno de "loja honesta": catálogo por local, retiradas em conta corrente,
-conferência manual de pagamentos Pix, cancelamentos, balanço de estoque com PDF e
-notificações. Next.js (App Router + Server Actions) + Supabase (Postgres, Auth, RLS) +
-Resend + Tailwind/shadcn.
+Sistema interno de controle de uso das geladeiras da CFO Tucum XVII: catálogo por
+geladeira, retiradas em conta corrente, conferência manual de pagamentos Pix,
+cancelamentos, balanço de estoque com PDF e notificações. Next.js (App Router + Server
+Actions) + Supabase (Postgres, Auth, RLS) + Resend + Tailwind/shadcn.
+
+Não é uma loja: os itens são repostos pela própria turma e o valor cobrado apenas cobre
+o custo, sem fins de lucro.
 
 ## 1. Pré-requisitos
 
