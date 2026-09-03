@@ -1,16 +1,14 @@
 import { createClient } from "@/lib/supabase/server";
-import { Card, CardContent } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { PaymentStatusBadge } from "@/components/status-badge";
-import { ReviewPaymentDialog } from "@/components/admin/review-payment-dialog";
-import { formatCurrency, formatDateTime } from "@/lib/format";
+import { PendingPaymentsCard } from "@/components/admin/pending-payments-card";
+import { PaymentsHistoryTable } from "@/components/admin/payments-history-table";
 
 export default async function AdminPagamentosPage() {
   const supabase = await createClient();
   const { data: payments } = await supabase
     .from("payments")
-    .select("*, profile:profiles(full_name)")
+    .select(
+      "*, profile:profiles!payments_user_id_fkey(full_name), reviewer:profiles!payments_reviewed_by_fkey(full_name)"
+    )
     .order("created_at", { ascending: false });
 
   const pending = (payments ?? []).filter((p) => p.status === "pending");
@@ -23,104 +21,18 @@ export default async function AdminPagamentosPage() {
         <p className="text-muted-foreground">Confira os pagamentos Pix declarados pelos usuários.</p>
       </div>
 
-      <Tabs defaultValue="pending">
-        <TabsList>
-          <TabsTrigger value="pending">Pendentes ({pending.length})</TabsTrigger>
-          <TabsTrigger value="history">Histórico</TabsTrigger>
-        </TabsList>
+      <div className="flex flex-col gap-6 md:flex-row md:items-start">
+        <div className="min-w-0 flex-1 space-y-4">
+          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+            Histórico
+          </h2>
+          <PaymentsHistoryTable payments={reviewed} />
+        </div>
 
-        <TabsContent value="pending">
-          <Card>
-            <CardContent className="pt-6">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Data</TableHead>
-                    <TableHead>Usuário</TableHead>
-                    <TableHead className="text-right">Esperado</TableHead>
-                    <TableHead className="text-right">Declarado</TableHead>
-                    <TableHead />
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {pending.map((p) => (
-                    <TableRow key={p.id}>
-                      <TableCell className="whitespace-nowrap">
-                        {formatDateTime(p.created_at)}
-                      </TableCell>
-                      <TableCell>{p.profile?.full_name}</TableCell>
-                      <TableCell className="text-right">{formatCurrency(p.expected_amount)}</TableCell>
-                      <TableCell className="text-right">
-                        {formatCurrency(p.user_declared_amount)}
-                        {p.is_partial && (
-                          <span className="ml-1 text-xs text-muted-foreground">(parcial)</span>
-                        )}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <ReviewPaymentDialog
-                          paymentId={p.id}
-                          userName={p.profile?.full_name ?? ""}
-                          expectedAmount={p.expected_amount}
-                          userDeclaredAmount={p.user_declared_amount}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                  {pending.length === 0 && (
-                    <TableRow>
-                      <TableCell colSpan={5} className="text-center text-muted-foreground">
-                        Nenhum pagamento pendente.
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="history">
-          <Card>
-            <CardContent className="pt-6">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Data</TableHead>
-                    <TableHead>Usuário</TableHead>
-                    <TableHead className="text-right">Esperado</TableHead>
-                    <TableHead className="text-right">Conferido</TableHead>
-                    <TableHead>Status</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {reviewed.map((p) => (
-                    <TableRow key={p.id}>
-                      <TableCell className="whitespace-nowrap">
-                        {formatDateTime(p.created_at)}
-                      </TableCell>
-                      <TableCell>{p.profile?.full_name}</TableCell>
-                      <TableCell className="text-right">{formatCurrency(p.expected_amount)}</TableCell>
-                      <TableCell className="text-right">
-                        {p.admin_typed_amount !== null ? formatCurrency(p.admin_typed_amount) : "—"}
-                      </TableCell>
-                      <TableCell>
-                        <PaymentStatusBadge status={p.status} />
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                  {reviewed.length === 0 && (
-                    <TableRow>
-                      <TableCell colSpan={5} className="text-center text-muted-foreground">
-                        Nenhum pagamento revisado ainda.
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+        <div className="w-full shrink-0 md:w-80 lg:w-96">
+          <PendingPaymentsCard payments={pending} />
+        </div>
+      </div>
     </div>
   );
 }

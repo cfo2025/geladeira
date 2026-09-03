@@ -8,7 +8,6 @@ import {
   Boxes,
   Users,
   PackageMinus,
-  ClipboardCheck,
   ScrollText,
 } from "lucide-react";
 
@@ -27,6 +26,5 @@ export const adminNavItems: NavItem[] = [
   { href: "/admin/usuarios", label: "Usuários", icon: Users },
   { href: "/admin/pagamentos", label: "Pagamentos", icon: Wallet },
   { href: "/admin/retiradas", label: "Retiradas", icon: PackageMinus },
-  { href: "/admin/auditoria", label: "Auditoria", icon: ClipboardCheck },
   { href: "/admin/logs", label: "Logs", icon: ScrollText },
 ];

@@ -1,12 +1,11 @@
 "use server";
 
 import { z } from "zod";
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/session";
 
-export type ActionResult = { error?: string; success?: boolean };
+export type ActionResult = { error?: string; success?: boolean; auditId?: string };
 
 const itemSchema = z.object({
   product_id: z.string().uuid(),
@@ -47,8 +46,9 @@ export async function createStockAudit(formData: FormData): Promise<ActionResult
 
   if (error) return { error: error.message };
 
-  revalidatePath("/admin/auditoria");
-  redirect(`/admin/auditoria/${auditId}`);
+  revalidatePath("/admin/retiradas");
+  revalidatePath("/admin/estoque");
+  return { success: true, auditId };
 }
 
 export async function applyStockAudit(auditId: string): Promise<ActionResult> {
@@ -59,6 +59,21 @@ export async function applyStockAudit(auditId: string): Promise<ActionResult> {
   if (error) return { error: error.message };
 
   revalidatePath(`/admin/auditoria/${auditId}`);
+  revalidatePath("/admin/retiradas");
+  revalidatePath("/admin/estoque");
+  revalidatePath("/loja");
+  revalidatePath("/dashboard");
+  return { success: true };
+}
+
+export async function applyStockAuditItem(itemId: string): Promise<ActionResult> {
+  await requireAdmin();
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("apply_stock_audit_item", { p_item_id: itemId });
+  if (error) return { error: error.message };
+
+  revalidatePath("/admin/retiradas");
   revalidatePath("/admin/estoque");
   revalidatePath("/loja");
   revalidatePath("/dashboard");

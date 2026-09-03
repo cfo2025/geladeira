@@ -29,7 +29,7 @@ export default async function AuditoriaDetalhePage({
     .select("*, product:products(name)")
     .eq("audit_id", id);
 
-  const hasDifferences = (items ?? []).some((i) => i.difference !== 0);
+  const hasPendingDifferences = (items ?? []).some((i) => i.difference !== 0 && !i.applied_at);
 
   return (
     <div className="space-y-6">
@@ -51,7 +51,7 @@ export default async function AuditoriaDetalhePage({
           >
             <FileDown className="mr-1 h-4 w-4" /> Baixar PDF
           </Button>
-          {hasDifferences && <ApplyAuditButton auditId={id} />}
+          {hasPendingDifferences && <ApplyAuditButton auditId={id} />}
         </div>
       </div>
 
@@ -85,6 +85,9 @@ export default async function AuditoriaDetalhePage({
                     }`}
                   >
                     {item.difference > 0 ? `+${item.difference}` : item.difference}
+                    {item.difference !== 0 && item.applied_at && (
+                      <span className="ml-1.5 text-xs font-normal text-muted-foreground">(aplicado)</span>
+                    )}
                   </TableCell>
                 </TableRow>
               ))}
@@ -93,8 +96,8 @@ export default async function AuditoriaDetalhePage({
         </CardContent>
       </Card>
 
-      <Button render={<Link href="/admin/auditoria" />} nativeButton={false} variant="ghost" size="sm">
-        Voltar
+      <Button render={<Link href="/admin/retiradas" />} nativeButton={false} variant="ghost" size="sm">
+        Voltar para Retiradas
       </Button>
     </div>
   );

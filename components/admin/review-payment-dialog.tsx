@@ -47,7 +47,7 @@ export function ReviewPaymentDialog({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger render={<Button size="sm" />}>Conferir</DialogTrigger>
+      <DialogTrigger render={<Button size="sm" className="w-full" />}>Conferir</DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Conferir pagamento de {userName}</DialogTitle>

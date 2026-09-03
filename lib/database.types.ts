@@ -90,6 +90,7 @@ type PaymentsRow = {
   divergence_notes: string | null;
   divergence_notified_at: string | null;
   created_at: string;
+  reviewed_by: string | null;
   reviewed_at: string | null;
 };
 
@@ -108,6 +109,7 @@ type StockAuditItemsRow = {
   expected_quantity: number;
   physical_quantity: number;
   difference: number;
+  applied_at: string | null;
 };
 
 type NotificationsRow = {
@@ -242,6 +244,13 @@ export interface Database {
           {
             foreignKeyName: "payments_user_id_fkey";
             columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "payments_reviewed_by_fkey";
+            columns: ["reviewed_by"];
             isOneToOne: false;
             referencedRelation: "profiles";
             referencedColumns: ["id"];
@@ -383,6 +392,10 @@ export interface Database {
       };
       apply_stock_audit: {
         Args: { p_audit_id: string };
+        Returns: undefined;
+      };
+      apply_stock_audit_item: {
+        Args: { p_item_id: string };
         Returns: undefined;
       };
       restock_inventory: {
