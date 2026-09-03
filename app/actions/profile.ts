@@ -9,7 +9,8 @@ export type ActionResult = { error?: string; success?: boolean };
 
 const profileSchema = z.object({
   fullName: z.string().min(2, "Nome muito curto").max(150),
-  document: z.string().min(3, "Documento inválido").max(30),
+  courseNumber: z.string().min(1, "Informe o número do curso").max(30),
+  platoon: z.string().min(1, "Informe o pelotão").max(30),
 });
 
 export async function updateOwnProfile(
@@ -20,14 +21,19 @@ export async function updateOwnProfile(
 
   const parsed = profileSchema.safeParse({
     fullName: formData.get("fullName"),
-    document: formData.get("document"),
+    courseNumber: formData.get("courseNumber"),
+    platoon: formData.get("platoon"),
   });
   if (!parsed.success) return { error: parsed.error.issues[0]?.message };
 
   const supabase = await createClient();
   const { error } = await supabase
     .from("profiles")
-    .update({ full_name: parsed.data.fullName, document: parsed.data.document })
+    .update({
+      full_name: parsed.data.fullName,
+      course_number: parsed.data.courseNumber,
+      platoon: parsed.data.platoon,
+    })
     .eq("id", userId);
 
   if (error) return { error: error.message };

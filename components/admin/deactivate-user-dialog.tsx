@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DEACTIVATION_REASON_LABELS } from "@/lib/format";
+import { UserX } from "lucide-react";
 
 export function DeactivateUserDialog({ userId, userName }: { userId: string; userName: string }) {
   const [open, setOpen] = useState(false);
@@ -28,8 +29,18 @@ export function DeactivateUserDialog({ userId, userName }: { userId: string; use
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger render={<Button variant="outline" size="sm" />}>
-        Desativar
+      <DialogTrigger
+        render={
+          <Button
+            variant="outline"
+            size="icon-sm"
+            className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+            title="Desativar usuário"
+            aria-label="Desativar usuário"
+          />
+        }
+      >
+        <UserX className="h-3.5 w-3.5" />
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

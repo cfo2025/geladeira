@@ -12,8 +12,9 @@ import type { DeactivationReason } from "@/lib/database.types";
 export type ActionResult = { error?: string; success?: boolean };
 
 const createUserSchema = z.object({
-  fullName: z.string().min(2, "Nome muito curto"),
-  document: z.string().min(3, "Documento inválido"),
+  fullName: z.string().min(2, "Nome de guerra muito curto"),
+  courseNumber: z.string().min(1, "Informe o número do curso"),
+  platoon: z.string().min(1, "Informe o pelotão"),
   email: z.string().email("E-mail inválido"),
   role: z.enum(["user", "admin"]),
 });
@@ -26,7 +27,8 @@ export async function createUser(
 
   const parsed = createUserSchema.safeParse({
     fullName: formData.get("fullName"),
-    document: formData.get("document"),
+    courseNumber: formData.get("courseNumber"),
+    platoon: formData.get("platoon"),
     email: formData.get("email"),
     role: formData.get("role") || "user",
   });
@@ -48,7 +50,8 @@ export async function createUser(
   const { error: profileError } = await admin.from("profiles").insert({
     id: created.user.id,
     full_name: parsed.data.fullName,
-    document: parsed.data.document,
+    course_number: parsed.data.courseNumber,
+    platoon: parsed.data.platoon,
     role: parsed.data.role,
     must_change_password: true,
   });

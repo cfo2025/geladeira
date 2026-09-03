@@ -23,7 +23,8 @@ export type PaymentStatus =
 type ProfilesRow = {
   id: string;
   full_name: string;
-  document: string;
+  course_number: string;
+  platoon: string;
   role: "user" | "admin";
   is_active: boolean;
   deactivation_reason: DeactivationReason | null;
@@ -132,7 +133,8 @@ export interface Database {
     Tables: {
       profiles: {
         Row: ProfilesRow;
-        Insert: Partial<ProfilesRow> & Pick<ProfilesRow, "id" | "full_name" | "document">;
+        Insert: Partial<ProfilesRow> &
+          Pick<ProfilesRow, "id" | "full_name" | "course_number" | "platoon">;
         Update: Partial<ProfilesRow>;
         Relationships: [];
       };

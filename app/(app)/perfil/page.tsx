@@ -42,7 +42,11 @@ export default async function PerfilPage() {
         </CardHeader>
         <CardContent className="space-y-6">
           <Separator />
-          <EditProfileForm fullName={profile.full_name} document={profile.document} />
+          <EditProfileForm
+            fullName={profile.full_name}
+            courseNumber={profile.course_number}
+            platoon={profile.platoon}
+          />
           <Separator />
           <dl className="grid grid-cols-2 gap-4 text-sm sm:grid-cols-3">
             <div>
