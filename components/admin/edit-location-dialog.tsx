@@ -36,12 +36,15 @@ export function EditLocationDialog({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger render={<Button size="icon" variant="ghost" />}>
-        <Pencil className="h-4 w-4" />
+      <DialogTrigger render={<Button size="icon-sm" variant="ghost" title="Editar local" />}>
+        <Pencil className="h-3.5 w-3.5" />
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Editar local</DialogTitle>
+          <DialogTitle className="flex items-center gap-2">
+            <Pencil className="h-4 w-4 text-gold" />
+            Editar local
+          </DialogTitle>
         </DialogHeader>
         <form action={formAction} className="space-y-4">
           <input type="hidden" name="id" value={id} />

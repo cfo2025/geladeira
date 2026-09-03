@@ -15,9 +15,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus } from "lucide-react";
+import { Plus, MapPinPlus } from "lucide-react";
 
-export function CreateLocationDialog() {
+export function CreateLocationDialog({ iconOnly = false }: { iconOnly?: boolean }) {
   const [open, setOpen] = useState(false);
   const [state, formAction, pending] = useActionState<ActionResult, FormData>(createLocation, {});
 
@@ -28,12 +28,21 @@ export function CreateLocationDialog() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger render={<Button size="sm" />}>
-        <Plus className="mr-1 h-4 w-4" /> Novo local
-      </DialogTrigger>
+      {iconOnly ? (
+        <DialogTrigger render={<Button size="icon-sm" title="Novo local" aria-label="Novo local" />}>
+          <Plus className="h-4 w-4" />
+        </DialogTrigger>
+      ) : (
+        <DialogTrigger render={<Button size="sm" />}>
+          <Plus className="mr-1 h-4 w-4" /> Novo local
+        </DialogTrigger>
+      )}
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Novo local</DialogTitle>
+          <DialogTitle className="flex items-center gap-2">
+            <MapPinPlus className="h-4 w-4 text-gold" />
+            Novo local
+          </DialogTitle>
         </DialogHeader>
         <form action={formAction} className="space-y-4">
           <div className="space-y-2">

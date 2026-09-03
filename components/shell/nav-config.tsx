@@ -5,8 +5,6 @@ import {
   Receipt,
   Wallet,
   LayoutGrid,
-  Package,
-  MapPin,
   Boxes,
   Users,
   PackageMinus,
@@ -25,8 +23,6 @@ export const userNavItems: NavItem[] = [
 
 export const adminNavItems: NavItem[] = [
   { href: "/admin", label: "Painel", icon: LayoutGrid },
-  { href: "/admin/produtos", label: "Produtos", icon: Package },
-  { href: "/admin/locais", label: "Locais", icon: MapPin },
   { href: "/admin/estoque", label: "Estoque", icon: Boxes },
   { href: "/admin/usuarios", label: "Usuários", icon: Users },
   { href: "/admin/pagamentos", label: "Pagamentos", icon: Wallet },

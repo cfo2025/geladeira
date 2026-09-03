@@ -12,6 +12,7 @@ type InventoryItem = {
   id: string;
   location_id: string;
   price: number;
+  promo_price: number | null;
   quantity: number;
   product: { id: string; name: string; category: string | null; image_url: string | null };
 };
@@ -65,6 +66,7 @@ export function LojaBrowser({
                   category={item.product.category}
                   imageUrl={item.product.image_url}
                   price={item.price}
+                  promoPrice={item.promo_price}
                   quantity={item.quantity}
                 />
               ))}

@@ -2,6 +2,7 @@
 
 import { Minus, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { useCart } from "@/components/loja/cart-context";
 
 export function CartQuantityControl({
@@ -12,6 +13,7 @@ export function CartQuantityControl({
   category,
   price,
   maxQuantity,
+  compact = false,
 }: {
   productId: string;
   locationId: string;
@@ -20,13 +22,14 @@ export function CartQuantityControl({
   category: string | null;
   price: number;
   maxQuantity: number;
+  compact?: boolean;
 }) {
   const cart = useCart();
   const qty = cart.quantityFor(locationId, productId);
 
   if (maxQuantity <= 0) {
     return (
-      <Button size="sm" disabled className="w-full">
+      <Button size={compact ? "xs" : "sm"} disabled className="w-full">
         Sem estoque
       </Button>
     );
@@ -35,7 +38,7 @@ export function CartQuantityControl({
   if (qty === 0) {
     return (
       <Button
-        size="sm"
+        size={compact ? "xs" : "sm"}
         className="w-full"
         onClick={() =>
           cart.addOne({ productId, locationId, locationName, productName, category, price, maxQuantity })
@@ -51,22 +54,22 @@ export function CartQuantityControl({
   return (
     <div className="flex items-center justify-between rounded-md border p-0.5">
       <Button
-        size="icon-sm"
+        size={compact ? "icon-xs" : "icon-sm"}
         variant="ghost"
         aria-label="Diminuir quantidade"
         onClick={() => cart.decrement(key)}
       >
-        <Minus className="h-3.5 w-3.5" />
+        <Minus className={compact ? "h-3 w-3" : "h-3.5 w-3.5"} />
       </Button>
-      <span className="text-sm font-semibold tabular-nums">{qty}</span>
+      <span className={cn("font-semibold tabular-nums", compact ? "text-xs" : "text-sm")}>{qty}</span>
       <Button
-        size="icon-sm"
+        size={compact ? "icon-xs" : "icon-sm"}
         variant="ghost"
         aria-label="Aumentar quantidade"
         disabled={qty >= maxQuantity}
         onClick={() => cart.increment(key)}
       >
-        <Plus className="h-3.5 w-3.5" />
+        <Plus className={compact ? "h-3 w-3" : "h-3.5 w-3.5"} />
       </Button>
     </div>
   );

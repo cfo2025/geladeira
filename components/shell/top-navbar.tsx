@@ -18,7 +18,7 @@ export async function TopNavbar({ userId, fullName }: { userId: string; fullName
     supabase
       .from("inventory")
       .select(
-        "id, location_id, price, quantity, product:products!inner(id, name, category, image_url, is_active)"
+        "id, location_id, price, promo_price, quantity, product:products!inner(id, name, category, image_url, is_active)"
       )
       .eq("product.is_active", true),
   ]);

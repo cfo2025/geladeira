@@ -22,6 +22,7 @@ type InventoryItem = {
   id: string;
   location_id: string;
   price: number;
+  promo_price: number | null;
   quantity: number;
   product: { id: string; name: string; category: string | null; image_url: string | null };
 };
@@ -71,15 +72,15 @@ export function QuickWithdrawDialog({
         <Plus className="h-4 w-4" />
         Novo Lançamento
       </DialogTrigger>
-      <DialogContent className="flex max-h-[88vh] flex-col sm:max-w-3xl">
+      <DialogContent className="flex max-h-[88vh] flex-col gap-3 sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>Novo lançamento</DialogTitle>
           <DialogDescription>Escolha a geladeira e o que você retirou.</DialogDescription>
         </DialogHeader>
 
         <CartProvider>
-          <div className="min-h-0 flex-1 space-y-4 overflow-y-auto pr-1">
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <div className="min-h-0 flex-1 space-y-3 overflow-y-auto pr-1">
+            <div className="grid grid-cols-3 gap-2">
               {locations.map((loc) => (
                 <LocationCard
                   key={loc.id}
@@ -87,15 +88,16 @@ export function QuickWithdrawDialog({
                   totalItems={totalsByLocation.get(loc.id) ?? 0}
                   active={loc.id === locationId}
                   onSelect={() => handleSelectLocation(loc.id)}
+                  compact
                 />
               ))}
             </div>
 
             {items.length === 0 ? (
-              <LojaEmptyState />
+              <LojaEmptyState compact />
             ) : (
               <>
-                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
                   {pageItems.map((item) => (
                     <ProductCard
                       key={item.id}
@@ -106,7 +108,9 @@ export function QuickWithdrawDialog({
                       category={item.product.category}
                       imageUrl={item.product.image_url}
                       price={item.price}
+                      promoPrice={item.promo_price}
                       quantity={item.quantity}
+                      compact
                     />
                   ))}
                 </div>
@@ -114,24 +118,24 @@ export function QuickWithdrawDialog({
                   <div className="flex items-center justify-center gap-3 pt-1">
                     <Button
                       variant="outline"
-                      size="icon-sm"
+                      size="icon-xs"
                       disabled={page === 0}
                       onClick={() => setPage((p) => Math.max(0, p - 1))}
                       aria-label="Página anterior"
                     >
-                      <ChevronLeft className="h-4 w-4" />
+                      <ChevronLeft className="h-3.5 w-3.5" />
                     </Button>
                     <span className="text-xs text-muted-foreground">
                       Página {page + 1} de {totalPages}
                     </span>
                     <Button
                       variant="outline"
-                      size="icon-sm"
+                      size="icon-xs"
                       disabled={page >= totalPages - 1}
                       onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
                       aria-label="Próxima página"
                     >
-                      <ChevronRight className="h-4 w-4" />
+                      <ChevronRight className="h-3.5 w-3.5" />
                     </Button>
                   </div>
                 )}
@@ -139,8 +143,8 @@ export function QuickWithdrawDialog({
             )}
           </div>
 
-          <div className="h-64 shrink-0 border-t pt-3">
-            <CartContents onCheckoutSuccess={() => setOpen(false)} />
+          <div className="flex max-h-52 shrink-0 flex-col border-t pt-2">
+            <CartContents onCheckoutSuccess={() => setOpen(false)} compact />
           </div>
         </CartProvider>
       </DialogContent>

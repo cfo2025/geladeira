@@ -34,7 +34,7 @@ export default async function DashboardPage() {
     supabase
       .from("inventory")
       .select(
-        "id, location_id, price, quantity, product:products!inner(id, name, category, image_url, is_active)"
+        "id, location_id, price, promo_price, quantity, product:products!inner(id, name, category, image_url, is_active)"
       )
       .eq("product.is_active", true),
     supabase.rpc("get_spending_ranking"),

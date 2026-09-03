@@ -52,6 +52,7 @@ type InventoryRow = {
   location_id: string;
   product_id: string;
   price: number;
+  promo_price: number | null;
   quantity: number;
 };
 
@@ -380,6 +381,25 @@ export interface Database {
       };
       apply_stock_audit: {
         Args: { p_audit_id: string };
+        Returns: undefined;
+      };
+      restock_inventory: {
+        Args: {
+          p_location_id: string;
+          p_product_id: string;
+          p_quantity: number;
+          p_notes?: string | null;
+        };
+        Returns: undefined;
+      };
+      transfer_inventory: {
+        Args: {
+          p_from_location_id: string;
+          p_to_location_id: string;
+          p_product_id: string;
+          p_quantity: number;
+          p_notes?: string | null;
+        };
         Returns: undefined;
       };
     };
