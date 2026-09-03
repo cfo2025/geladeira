@@ -15,11 +15,11 @@ export function AuthLayout({ children }: { children: React.ReactNode }) {
         <BrandMark tone="dark" />
         <div className="relative space-y-4">
           <p className="font-heading text-3xl leading-tight font-semibold text-balance">
-            Confiança que se constrói a cada retirada.
+            Ajude a manter nossas geladeiras organizadas.
           </p>
           <p className="max-w-sm text-sm text-sidebar-foreground/60">
-            Controle de uso das geladeiras da CFO Tucum XVII. Registre o que você retirou,
-            acompanhe seu saldo e mantenha as contas em dia com a turma.
+            Registre o que você colocou nas geladeiras e o que retirou, para sabermos sempre
+            o que tem e de quem é.
           </p>
         </div>
         <p className="relative text-xs text-sidebar-foreground/40">
