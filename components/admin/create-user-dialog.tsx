@@ -16,7 +16,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus } from "lucide-react";
+import { UserPlus } from "lucide-react";
 
 export function CreateUserDialog() {
   const [open, setOpen] = useState(false);
@@ -25,17 +25,32 @@ export function CreateUserDialog() {
 
   useActionFeedback(state, {
     successMessage: "Usuário criado. Um e-mail com a senha temporária foi enviado.",
-    onSuccess: () => setOpen(false),
+    onSuccess: () => {
+      setOpen(false);
+      setRole("user");
+    },
   });
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger render={<Button size="sm" />}>
-        <Plus className="mr-1 h-4 w-4" /> Novo usuário
+      <DialogTrigger
+        render={
+          <Button
+            size="icon-lg"
+            className="rounded-full shadow-sm"
+            title="Novo usuário"
+            aria-label="Novo usuário"
+          />
+        }
+      >
+        <UserPlus className="h-5 w-5" />
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Novo usuário</DialogTitle>
+          <DialogTitle className="flex items-center gap-2">
+            <UserPlus className="h-4 w-4 text-gold" />
+            Novo usuário
+          </DialogTitle>
           <DialogDescription>
             Uma senha temporária será gerada e enviada por e-mail. O usuário deverá trocá-la no
             primeiro acesso.
@@ -43,12 +58,18 @@ export function CreateUserDialog() {
         </DialogHeader>
         <form action={formAction} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="fullName">Nome completo</Label>
-            <Input id="fullName" name="fullName" required />
+            <Label htmlFor="fullName">Nome de guerra</Label>
+            <Input id="fullName" name="fullName" placeholder="Ex: Cott" required />
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="document">Documento</Label>
-            <Input id="document" name="document" required />
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="courseNumber">Nº de curso</Label>
+              <Input id="courseNumber" name="courseNumber" placeholder="Ex: 03" required />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="platoon">Pelotão</Label>
+              <Input id="platoon" name="platoon" placeholder="Ex: 1º" required />
+            </div>
           </div>
           <div className="space-y-2">
             <Label htmlFor="email">E-mail</Label>
