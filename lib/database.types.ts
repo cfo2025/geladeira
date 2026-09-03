@@ -52,6 +52,7 @@ type InventoryRow = {
   location_id: string;
   product_id: string;
   price: number;
+  promo_price: number | null;
   quantity: number;
 };
 

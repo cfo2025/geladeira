@@ -24,6 +24,7 @@ export function CurrencyInput({
   required,
   className,
   id,
+  onValueChange,
 }: {
   name: string;
   defaultValue?: number;
@@ -31,6 +32,7 @@ export function CurrencyInput({
   required?: boolean;
   className?: string;
   id?: string;
+  onValueChange?: (value: number) => void;
 }) {
   const [cents, setCents] = useState(() => Math.round(defaultValue * 100));
   const autoId = useId();
@@ -48,7 +50,9 @@ export function CurrencyInput({
         value={centsToDisplay(cents)}
         onChange={(e) => {
           const digits = e.target.value.replace(/\D/g, "");
-          setCents(digits ? parseInt(digits, 10) : 0);
+          const next = digits ? parseInt(digits, 10) : 0;
+          setCents(next);
+          onValueChange?.(next / 100);
         }}
         disabled={disabled}
         className={cn("pl-8 text-right tabular-nums", className)}

@@ -7,7 +7,7 @@ export default async function AdminEstoquePage() {
   const [{ data: locations }, { data: products }, { data: inventory }] = await Promise.all([
     supabase.from("locations").select("id, name, description").order("name"),
     supabase.from("products").select("id, name, category, image_url, is_active").order("name"),
-    supabase.from("inventory").select("location_id, product_id, price, quantity"),
+    supabase.from("inventory").select("location_id, product_id, price, promo_price, quantity"),
   ]);
 
   const stockByLocation: Record<string, number> = {};

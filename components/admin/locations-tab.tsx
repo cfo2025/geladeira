@@ -1,7 +1,6 @@
 import { Refrigerator } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { EditLocationDialog } from "@/components/admin/edit-location-dialog";
-import { CreateLocationDialog } from "@/components/admin/create-location-dialog";
 import { ConfirmDeleteDialog } from "@/components/admin/confirm-delete-dialog";
 import { deleteLocation } from "@/app/actions/admin/catalog";
 
@@ -16,12 +15,9 @@ export function LocationsTab({
 }) {
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between gap-3">
-        <p className="text-sm text-muted-foreground">
-          Geladeiras e locais de armazenamento cadastrados.
-        </p>
-        <CreateLocationDialog iconOnly />
-      </div>
+      <p className="text-sm text-muted-foreground">
+        Geladeiras e locais de armazenamento cadastrados.
+      </p>
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {locations.map((loc) => {

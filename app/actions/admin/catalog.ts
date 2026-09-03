@@ -10,6 +10,8 @@ export type ActionResult = { error?: string; success?: boolean };
 
 /** Erro de chave estrangeira do Postgres — algo ainda referencia a linha. */
 const FOREIGN_KEY_VIOLATION = "23503";
+/** Erro de check constraint do Postgres — ex: promo_price >= price. */
+const CHECK_VIOLATION = "23514";
 
 // ---- Locais ----
 
@@ -234,7 +236,88 @@ export async function updateInventoryPrice(
     },
     { onConflict: "location_id,product_id", ignoreDuplicates: false }
   );
+  if (error) {
+    if (error.code === CHECK_VIOLATION) {
+      return {
+        error: "Este preço é menor ou igual à promoção ativa. Remova a promoção antes de baixar o preço.",
+      };
+    }
+    return { error: error.message };
+  }
+
+  revalidatePath("/admin/estoque");
+  revalidatePath("/loja");
+  revalidatePath("/dashboard");
+  return { success: true };
+}
+
+// ---- Promoções ----
+
+const promoSchema = z.object({
+  locationId: z.string().uuid(),
+  productId: z.string().uuid(),
+  promoPrice: z.coerce.number().min(0.01, "Informe um valor promocional maior que zero"),
+});
+
+export async function setPromoPrice(
+  _prevState: ActionResult,
+  formData: FormData
+): Promise<ActionResult> {
+  const { userId: actorId } = await requireAdmin();
+
+  const parsed = promoSchema.safeParse({
+    locationId: formData.get("locationId"),
+    productId: formData.get("productId"),
+    promoPrice: formData.get("promoPrice"),
+  });
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message };
+
+  const supabase = await createClient();
+
+  const { data: current } = await supabase
+    .from("inventory")
+    .select("price")
+    .eq("location_id", parsed.data.locationId)
+    .eq("product_id", parsed.data.productId)
+    .maybeSingle();
+
+  if (!current) return { error: "Defina um preço para este produto neste local antes de criar uma promoção" };
+  if (parsed.data.promoPrice >= current.price) {
+    return { error: "O valor promocional precisa ser menor que o preço atual" };
+  }
+
+  const { error } = await supabase
+    .from("inventory")
+    .update({ promo_price: parsed.data.promoPrice })
+    .eq("location_id", parsed.data.locationId)
+    .eq("product_id", parsed.data.productId);
   if (error) return { error: error.message };
+
+  await logAdminAction(actorId, null, "promo_set", {
+    location_id: parsed.data.locationId,
+    product_id: parsed.data.productId,
+    price: current.price,
+    promo_price: parsed.data.promoPrice,
+  });
+
+  revalidatePath("/admin/estoque");
+  revalidatePath("/loja");
+  revalidatePath("/dashboard");
+  return { success: true };
+}
+
+export async function clearPromoPrice(locationId: string, productId: string): Promise<ActionResult> {
+  const { userId: actorId } = await requireAdmin();
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from("inventory")
+    .update({ promo_price: null })
+    .eq("location_id", locationId)
+    .eq("product_id", productId);
+  if (error) return { error: error.message };
+
+  await logAdminAction(actorId, null, "promo_cleared", { location_id: locationId, product_id: productId });
 
   revalidatePath("/admin/estoque");
   revalidatePath("/loja");

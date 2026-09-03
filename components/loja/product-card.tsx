@@ -14,6 +14,7 @@ export function ProductCard({
   category,
   imageUrl,
   price,
+  promoPrice,
   quantity,
   compact = false,
 }: {
@@ -24,9 +25,13 @@ export function ProductCard({
   category: string | null;
   imageUrl: string | null;
   price: number;
+  promoPrice?: number | null;
   quantity: number;
   compact?: boolean;
 }) {
+  const hasPromo = promoPrice != null && promoPrice < price;
+  const effectivePrice = hasPromo ? promoPrice : price;
+
   return (
     <Card className="w-full overflow-hidden pt-0" size={compact ? "sm" : "default"}>
       <div
@@ -53,7 +58,22 @@ export function ProductCard({
           {!compact && <p className="line-clamp-1 text-xs text-muted-foreground">{category || " "}</p>}
         </div>
         <div className={cn("flex items-center justify-between gap-2", compact ? "my-1" : "my-2")}>
-          <span className={cn("font-bold", compact ? "text-sm" : "text-base")}>{formatCurrency(price)}</span>
+          <div className="flex min-w-0 flex-wrap items-baseline gap-x-1.5">
+            {hasPromo && (
+              <span className={cn("text-muted-foreground line-through", compact ? "text-[10px]" : "text-xs")}>
+                {formatCurrency(price)}
+              </span>
+            )}
+            <span
+              className={cn(
+                "font-bold",
+                compact ? "text-sm" : "text-base",
+                hasPromo && "text-green-600 dark:text-green-400"
+              )}
+            >
+              {formatCurrency(effectivePrice)}
+            </span>
+          </div>
           {quantity > 0 ? (
             <Badge
               className={cn(
@@ -75,7 +95,7 @@ export function ProductCard({
           locationName={locationName}
           productName={name}
           category={category}
-          price={price}
+          price={effectivePrice}
           maxQuantity={quantity}
           compact={compact}
         />

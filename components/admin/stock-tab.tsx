@@ -9,11 +9,12 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { InventoryPriceForm } from "@/components/admin/inventory-price-form";
 import { RestockDialog } from "@/components/admin/restock-dialog";
 import { TransferDialog } from "@/components/admin/transfer-dialog";
-import { CreateProductDialog } from "@/components/admin/create-product-dialog";
+import { PromoDialog } from "@/components/admin/promo-dialog";
 import { EditProductDialog } from "@/components/admin/edit-product-dialog";
 import { ProductActiveSwitch } from "@/components/admin/product-active-switch";
 import { ConfirmDeleteDialog } from "@/components/admin/confirm-delete-dialog";
 import { deleteProduct } from "@/app/actions/admin/catalog";
+import { formatCurrency } from "@/lib/format";
 
 type Product = {
   id: string;
@@ -22,7 +23,13 @@ type Product = {
   image_url: string | null;
   is_active: boolean | null;
 };
-type InventoryRow = { location_id: string; product_id: string; price: number; quantity: number };
+type InventoryRow = {
+  location_id: string;
+  product_id: string;
+  price: number;
+  promo_price: number | null;
+  quantity: number;
+};
 type LocationRow = { id: string; name: string };
 
 export function StockTab({
@@ -72,10 +79,6 @@ export function StockTab({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-end">
-        <CreateProductDialog />
-      </div>
-
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
         {locations.map((loc) => (
           <LocationCard
@@ -95,7 +98,7 @@ export function StockTab({
               <TableHead>Produto</TableHead>
               <TableHead>Preço</TableHead>
               <TableHead>Estoque</TableHead>
-              <TableHead className="text-right">Movimentar</TableHead>
+              <TableHead className="text-right">Ações</TableHead>
               <TableHead className="text-right">Produto</TableHead>
             </TableRow>
           </TableHeader>
@@ -137,11 +140,19 @@ export function StockTab({
                     </div>
                   </TableCell>
                   <TableCell>
-                    <InventoryPriceForm
-                      locationId={locationId}
-                      productId={product.id}
-                      price={inv?.price ?? null}
-                    />
+                    <div className="space-y-1">
+                      <InventoryPriceForm
+                        locationId={locationId}
+                        productId={product.id}
+                        price={inv?.price ?? null}
+                      />
+                      {inv?.promo_price != null && (
+                        <p className="text-xs font-medium text-green-600 dark:text-green-400">
+                          Promoção: {formatCurrency(inv.promo_price)} (
+                          {Math.round((1 - inv.promo_price / inv.price) * 100)}% off)
+                        </p>
+                      )}
+                    </div>
                   </TableCell>
                   <TableCell>
                     <Badge
@@ -174,6 +185,15 @@ export function StockTab({
                         productName={product.name}
                         currentQuantity={quantity}
                         disabled={quantity <= 0 || locations.length < 2}
+                      />
+                      <PromoDialog
+                        locationId={locationId}
+                        locationName={selectedLocation?.name ?? ""}
+                        productId={product.id}
+                        productName={product.name}
+                        price={inv?.price ?? 0}
+                        promoPrice={inv?.promo_price ?? null}
+                        disabled={!inv}
                       />
                     </div>
                   </TableCell>
