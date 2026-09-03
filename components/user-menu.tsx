@@ -5,6 +5,7 @@ import { LogOut, User, UserCircle } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -33,7 +34,9 @@ export function UserMenu({ fullName }: { fullName: string }) {
         <span className="hidden text-sm font-medium sm:inline">{fullName}</span>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuLabel>{fullName}</DropdownMenuLabel>
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>{fullName}</DropdownMenuLabel>
+        </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem render={<Link href="/perfil" />}>
           <UserCircle className="h-4 w-4" />
@@ -41,7 +44,10 @@ export function UserMenu({ fullName }: { fullName: string }) {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <form action={signOut}>
-          <DropdownMenuItem render={<button type="submit" className="flex w-full items-center gap-2" />}>
+          <DropdownMenuItem
+            render={<button type="submit" className="flex w-full items-center gap-2" />}
+            nativeButton
+          >
             <LogOut className="h-4 w-4" />
             Sair
           </DropdownMenuItem>

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuLabel,
@@ -85,42 +86,42 @@ export function NotificationsBell({
           </Badge>
         )}
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-80">
-        <DropdownMenuLabel className="flex items-center justify-between">
-          <span>Notificações</span>
-          {unreadCount > 0 && (
-            <button
-              onClick={handleMarkAllRead}
-              className="text-xs font-normal text-muted-foreground hover:underline"
-            >
-              marcar todas como lidas
-            </button>
-          )}
-        </DropdownMenuLabel>
+      <DropdownMenuContent align="end" className="max-h-96 w-80">
+        <DropdownMenuGroup>
+          <DropdownMenuLabel className="flex items-center justify-between">
+            <span>Notificações</span>
+            {unreadCount > 0 && (
+              <button
+                onClick={handleMarkAllRead}
+                className="text-xs font-normal text-muted-foreground hover:underline"
+              >
+                marcar todas como lidas
+              </button>
+            )}
+          </DropdownMenuLabel>
+        </DropdownMenuGroup>
         <DropdownMenuSeparator />
         {notifications.length === 0 && (
           <p className="px-2 py-4 text-center text-sm text-muted-foreground">
             Nenhuma notificação
           </p>
         )}
-        <div className="max-h-96 overflow-y-auto">
-          {notifications.map((n) => (
-            <DropdownMenuItem
-              key={n.id}
-              className="flex flex-col items-start gap-1 whitespace-normal py-2"
-              onSelect={() => handleOpenNotification(n.id, n.is_read)}
-            >
-              <div className="flex w-full items-center gap-2">
-                {!n.is_read && <span className="h-2 w-2 shrink-0 rounded-full bg-primary" />}
-                <span className="font-medium">{n.title}</span>
-              </div>
-              <span className="text-xs text-muted-foreground">{n.message}</span>
-              <span className="text-[11px] text-muted-foreground">
-                {formatDateTime(n.created_at)}
-              </span>
-            </DropdownMenuItem>
-          ))}
-        </div>
+        {notifications.map((n) => (
+          <DropdownMenuItem
+            key={n.id}
+            className="flex flex-col items-start gap-1 whitespace-normal py-2"
+            onSelect={() => handleOpenNotification(n.id, n.is_read)}
+          >
+            <div className="flex w-full items-center gap-2">
+              {!n.is_read && <span className="h-2 w-2 shrink-0 rounded-full bg-primary" />}
+              <span className="font-medium">{n.title}</span>
+            </div>
+            <span className="text-xs text-muted-foreground">{n.message}</span>
+            <span className="text-[11px] text-muted-foreground">
+              {formatDateTime(n.created_at)}
+            </span>
+          </DropdownMenuItem>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );

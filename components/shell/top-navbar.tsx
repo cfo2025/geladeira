@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { NotificationsBell } from "@/components/notifications-bell";
 import { UserMenu } from "@/components/user-menu";
-import { SearchInput } from "@/components/shell/search-input";
+import { GlobalSearch } from "@/components/shell/global-search";
 import { BrandMark } from "@/components/shell/brand-mark";
 import { QuickWithdrawDialog } from "@/components/quick-withdraw-dialog";
 
@@ -17,7 +17,9 @@ export async function TopNavbar({ userId, fullName }: { userId: string; fullName
     supabase.from("locations").select("id, name").order("name"),
     supabase
       .from("inventory")
-      .select("id, location_id, price, quantity, product:products!inner(id, name, is_active)")
+      .select(
+        "id, location_id, price, quantity, product:products!inner(id, name, category, image_url, is_active)"
+      )
       .eq("product.is_active", true),
   ]);
 
@@ -26,7 +28,7 @@ export async function TopNavbar({ userId, fullName }: { userId: string; fullName
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-4 md:px-8">
         <BrandMark tone="light" className="shrink-0" />
         <div className="flex flex-1 justify-center px-4">
-          <SearchInput />
+          <GlobalSearch locations={locations ?? []} inventory={inventory ?? []} />
         </div>
         <div className="flex shrink-0 items-center gap-2">
           <NotificationsBell initialNotifications={notifications ?? []} userId={userId} />
