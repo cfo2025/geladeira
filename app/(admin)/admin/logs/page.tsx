@@ -13,6 +13,10 @@ const ACTION_LABELS: Record<string, string> = {
   payment_reviewed: "Pagamento revisado",
   stock_audit_created: "Balanço de estoque criado",
   stock_audit_applied: "Balanço aplicado ao estoque",
+  stock_restock: "Reposição de estoque",
+  stock_transfer: "Transferência entre geladeiras",
+  product_deleted: "Produto excluído",
+  location_deleted: "Local excluído",
 };
 
 export default async function AdminLogsPage() {
