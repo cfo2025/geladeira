@@ -6,7 +6,7 @@ import { Package } from "lucide-react";
 import { LocationCard } from "@/components/loja/location-card";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { InventoryPriceForm } from "@/components/admin/inventory-price-form";
+import { ProductPriceForm } from "@/components/admin/product-price-form";
 import { RestockDialog } from "@/components/admin/restock-dialog";
 import { TransferDialog } from "@/components/admin/transfer-dialog";
 import { PromoDialog } from "@/components/admin/promo-dialog";
@@ -22,12 +22,12 @@ type Product = {
   category: string | null;
   image_url: string | null;
   is_active: boolean | null;
+  price: number;
+  promo_price: number | null;
 };
 type InventoryRow = {
   location_id: string;
   product_id: string;
-  price: number;
-  promo_price: number | null;
   quantity: number;
 };
 type LocationRow = { id: string; name: string };
@@ -141,15 +141,11 @@ export function StockTab({
                   </TableCell>
                   <TableCell>
                     <div className="space-y-1">
-                      <InventoryPriceForm
-                        locationId={locationId}
-                        productId={product.id}
-                        price={inv?.price ?? null}
-                      />
-                      {inv?.promo_price != null && (
+                      <ProductPriceForm productId={product.id} price={product.price} />
+                      {product.promo_price != null && (
                         <p className="text-xs font-medium text-green-600 dark:text-green-400">
-                          Promoção: {formatCurrency(inv.promo_price)} (
-                          {Math.round((1 - inv.promo_price / inv.price) * 100)}% off)
+                          Promoção: {formatCurrency(product.promo_price)} (
+                          {Math.round((1 - product.promo_price / product.price) * 100)}% off)
                         </p>
                       )}
                     </div>
@@ -174,7 +170,7 @@ export function StockTab({
                         productId={product.id}
                         productName={product.name}
                         currentQuantity={quantity}
-                        disabled={!inv}
+                        disabled={product.price <= 0}
                       />
                       <TransferDialog
                         locations={locations}
@@ -187,13 +183,11 @@ export function StockTab({
                         disabled={quantity <= 0 || locations.length < 2}
                       />
                       <PromoDialog
-                        locationId={locationId}
-                        locationName={selectedLocation?.name ?? ""}
                         productId={product.id}
                         productName={product.name}
-                        price={inv?.price ?? 0}
-                        promoPrice={inv?.promo_price ?? null}
-                        disabled={!inv}
+                        price={product.price}
+                        promoPrice={product.promo_price}
+                        disabled={product.price <= 0}
                       />
                     </div>
                   </TableCell>

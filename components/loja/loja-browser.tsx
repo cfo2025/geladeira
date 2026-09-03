@@ -11,10 +11,15 @@ import { MobileCartBar } from "@/components/loja/mobile-cart-bar";
 type InventoryItem = {
   id: string;
   location_id: string;
-  price: number;
-  promo_price: number | null;
   quantity: number;
-  product: { id: string; name: string; category: string | null; image_url: string | null };
+  product: {
+    id: string;
+    name: string;
+    category: string | null;
+    image_url: string | null;
+    price: number;
+    promo_price: number | null;
+  };
 };
 
 export function LojaBrowser({
@@ -65,8 +70,8 @@ export function LojaBrowser({
                   name={item.product.name}
                   category={item.product.category}
                   imageUrl={item.product.image_url}
-                  price={item.price}
-                  promoPrice={item.promo_price}
+                  price={item.product.price}
+                  promoPrice={item.product.promo_price}
                   quantity={item.quantity}
                 />
               ))}

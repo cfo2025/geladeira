@@ -14,12 +14,12 @@ type Product = {
   category: string | null;
   image_url: string | null;
   is_active: boolean | null;
+  price: number;
+  promo_price: number | null;
 };
 type InventoryRow = {
   location_id: string;
   product_id: string;
-  price: number;
-  promo_price: number | null;
   quantity: number;
 };
 type LocationRow = { id: string; name: string; description: string | null };

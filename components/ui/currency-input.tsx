@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useId, useState, type KeyboardEvent } from "react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
@@ -25,14 +25,18 @@ export function CurrencyInput({
   className,
   id,
   onValueChange,
+  onBlur,
+  onKeyDown,
 }: {
-  name: string;
+  name?: string;
   defaultValue?: number;
   disabled?: boolean;
   required?: boolean;
   className?: string;
   id?: string;
   onValueChange?: (value: number) => void;
+  onBlur?: () => void;
+  onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
 }) {
   const [cents, setCents] = useState(() => Math.round(defaultValue * 100));
   const autoId = useId();
@@ -54,10 +58,12 @@ export function CurrencyInput({
           setCents(next);
           onValueChange?.(next / 100);
         }}
+        onBlur={onBlur}
+        onKeyDown={onKeyDown}
         disabled={disabled}
         className={cn("pl-8 text-right tabular-nums", className)}
       />
-      <input type="hidden" name={name} value={(cents / 100).toFixed(2)} required={required} />
+      {name && <input type="hidden" name={name} value={(cents / 100).toFixed(2)} required={required} />}
     </div>
   );
 }
