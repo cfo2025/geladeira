@@ -26,7 +26,9 @@ export function AuthLayout({ children }: { children: React.ReactNode }) {
           &copy; {new Date().getFullYear()} CFO Tucum XVII &middot; Geladeira Solidária
         </p>
       </div>
-      <div className="flex items-center justify-center bg-muted/20 p-6">{children}</div>
+      <div className="flex items-start justify-center bg-muted/20 p-6 py-10 lg:items-center lg:py-6">
+        {children}
+      </div>
     </div>
   );
 }
