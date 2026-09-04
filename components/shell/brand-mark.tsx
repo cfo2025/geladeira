@@ -4,10 +4,12 @@ import { cn } from "@/lib/utils";
 export function BrandMark({
   className,
   compact = false,
+  hideLabelOnMobile = false,
   tone = "dark",
 }: {
   className?: string;
   compact?: boolean;
+  hideLabelOnMobile?: boolean;
   tone?: "dark" | "light";
 }) {
   return (
@@ -16,7 +18,7 @@ export function BrandMark({
         <ShieldCheck className="h-4.5 w-4.5 text-gold" strokeWidth={2.25} />
       </span>
       {!compact && (
-        <span className="flex flex-col leading-tight">
+        <span className={cn("flex-col leading-tight", hideLabelOnMobile ? "hidden sm:flex" : "flex")}>
           <span
             className={cn(
               "text-[15px] font-bold tracking-tight",
