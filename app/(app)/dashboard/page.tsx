@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { requireUser } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { QuickWithdrawDialog } from "@/components/quick-withdraw-dialog";
 import { StockOverview } from "@/components/stock-overview";
@@ -109,14 +109,7 @@ export default async function DashboardPage() {
         <StockOverview locations={locations ?? []} inventory={inventory ?? []} />
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">Ranking de gastos da turma</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <SpendingRanking ranking={rankingRows} currentUserId={userId} />
-        </CardContent>
-      </Card>
+      <SpendingRanking ranking={rankingRows} currentUserId={userId} />
     </div>
   );
 }

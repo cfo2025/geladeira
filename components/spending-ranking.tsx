@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Search, ChevronLeft, ChevronRight, Trophy, Medal, Award } from "lucide-react";
+import { Card, CardHeader, CardTitle, CardAction, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { formatCurrency } from "@/lib/format";
@@ -11,7 +12,6 @@ type PositionedRow = { row: RankingRow; position: number };
 
 const MEDAL_ICONS = [Trophy, Medal, Award];
 const MEDAL_COLORS = ["text-gold", "text-slate-400", "text-amber-700 dark:text-amber-600"];
-const TOP_COUNT = 10;
 const PAGE_SIZE = 10;
 
 function RankingRowView({
@@ -75,19 +75,14 @@ export function SpendingRanking({
   );
 
   const q = query.trim().toLowerCase();
-  const isSearching = q.length > 0;
-
-  const searchResults = useMemo(() => {
-    if (!isSearching) return [];
+  const filtered = useMemo(() => {
+    if (!q) return indexed;
     return indexed.filter(({ row }) => row.full_name.toLowerCase().includes(q));
-  }, [indexed, q, isSearching]);
+  }, [indexed, q]);
 
-  const top10 = isSearching ? [] : indexed.slice(0, TOP_COUNT);
-  const paginated = isSearching ? searchResults : indexed.slice(TOP_COUNT);
-
-  const totalPages = Math.max(1, Math.ceil(paginated.length / PAGE_SIZE));
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages - 1);
-  const pageRows = paginated.slice(currentPage * PAGE_SIZE, currentPage * PAGE_SIZE + PAGE_SIZE);
+  const pageRows = filtered.slice(currentPage * PAGE_SIZE, currentPage * PAGE_SIZE + PAGE_SIZE);
 
   function handleQueryChange(value: string) {
     setQuery(value);
@@ -95,77 +90,74 @@ export function SpendingRanking({
   }
 
   return (
-    <div className="space-y-4">
-      <div className="relative max-w-sm">
-        <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-        <input
-          type="search"
-          placeholder="Buscar por nome..."
-          value={query}
-          onChange={(e) => handleQueryChange(e.target.value)}
-          className="h-9 w-full rounded-full border border-input bg-muted/40 pr-3 pl-9 text-sm outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-        />
-      </div>
-
-      <div className="divide-y">
-        {top10.map(({ row, position }) => (
-          <RankingRowView
-            key={row.user_id}
-            row={row}
-            position={position}
-            isMe={row.user_id === currentUserId}
-            total={total}
-          />
-        ))}
-        {pageRows.map(({ row, position }) => (
-          <RankingRowView
-            key={row.user_id}
-            row={row}
-            position={position}
-            isMe={row.user_id === currentUserId}
-            total={total}
-          />
-        ))}
-        {ranking.length === 0 && (
-          <p className="py-6 text-center text-sm text-muted-foreground">Nenhum gasto registrado ainda.</p>
-        )}
-        {isSearching && searchResults.length === 0 && (
-          <p className="py-6 text-center text-sm text-muted-foreground">Ninguém encontrado com esse nome.</p>
-        )}
-      </div>
-
-      {paginated.length > 0 && totalPages > 1 && (
-        <div className="flex items-center justify-between gap-3">
-          <p className="text-xs text-muted-foreground">
-            {isSearching
-              ? `${paginated.length} ${paginated.length === 1 ? "resultado" : "resultados"}`
-              : `Posições ${TOP_COUNT + 1}+`}
-          </p>
-          <div className="flex items-center gap-3">
-            <Button
-              variant="outline"
-              size="icon-sm"
-              disabled={currentPage === 0}
-              onClick={() => setPage((p) => Math.max(0, p - 1))}
-              aria-label="Página anterior"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-            <span className="text-xs text-muted-foreground">
-              Página {currentPage + 1} de {totalPages}
-            </span>
-            <Button
-              variant="outline"
-              size="icon-sm"
-              disabled={currentPage >= totalPages - 1}
-              onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
-              aria-label="Próxima página"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-lg">Ranking de gastos da turma</CardTitle>
+        <CardAction>
+          <div className="relative w-44 sm:w-56">
+            <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <input
+              type="search"
+              placeholder="Buscar por nome..."
+              value={query}
+              onChange={(e) => handleQueryChange(e.target.value)}
+              className="h-8 w-full rounded-full border border-input bg-muted/40 pr-3 pl-9 text-sm outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+            />
           </div>
+        </CardAction>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="divide-y">
+          {pageRows.map(({ row, position }) => (
+            <RankingRowView
+              key={row.user_id}
+              row={row}
+              position={position}
+              isMe={row.user_id === currentUserId}
+              total={total}
+            />
+          ))}
+          {ranking.length === 0 && (
+            <p className="py-6 text-center text-sm text-muted-foreground">Nenhum gasto registrado ainda.</p>
+          )}
+          {ranking.length > 0 && q && filtered.length === 0 && (
+            <p className="py-6 text-center text-sm text-muted-foreground">Ninguém encontrado com esse nome.</p>
+          )}
         </div>
-      )}
-    </div>
+
+        {filtered.length > 0 && totalPages > 1 && (
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-xs text-muted-foreground">
+              {q
+                ? `${filtered.length} ${filtered.length === 1 ? "resultado" : "resultados"}`
+                : `${filtered.length} pessoas com consumo`}
+            </p>
+            <div className="flex items-center gap-3">
+              <Button
+                variant="outline"
+                size="icon-sm"
+                disabled={currentPage === 0}
+                onClick={() => setPage((p) => Math.max(0, p - 1))}
+                aria-label="Página anterior"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <span className="text-xs text-muted-foreground">
+                Página {currentPage + 1} de {totalPages}
+              </span>
+              <Button
+                variant="outline"
+                size="icon-sm"
+                disabled={currentPage >= totalPages - 1}
+                onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+                aria-label="Próxima página"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 }
