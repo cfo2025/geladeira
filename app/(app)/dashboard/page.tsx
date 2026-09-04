@@ -23,7 +23,9 @@ export default async function DashboardPage() {
     { data: myWithdrawals },
     { data: locations },
     { data: inventory },
-    { data: ranking },
+    { data: rankingMonth },
+    { data: rankingYear },
+    { data: rankingAll },
   ] = await Promise.all([
     supabase.rpc("get_my_balance"),
     supabase
@@ -37,7 +39,9 @@ export default async function DashboardPage() {
         "id, location_id, quantity, product:products!inner(id, name, category, image_url, is_active, price, promo_price)"
       )
       .eq("product.is_active", true),
-    supabase.rpc("get_spending_ranking"),
+    supabase.rpc("get_spending_ranking", { p_period: "month" }),
+    supabase.rpc("get_spending_ranking", { p_period: "year" }),
+    supabase.rpc("get_spending_ranking", { p_period: "all" }),
   ]);
 
   const totalSpent = (myWithdrawals ?? [])
@@ -48,7 +52,7 @@ export default async function DashboardPage() {
     (w) => w.status !== "cancelled" && new Date(w.created_at) >= startOfMonth
   ).length;
 
-  const rankingRows = ranking ?? [];
+  const rankingRows = rankingAll ?? [];
   const myPosition = rankingRows.findIndex((r) => r.user_id === userId) + 1;
 
   const stats: KpiItem[] = [
@@ -109,7 +113,10 @@ export default async function DashboardPage() {
         <StockOverview locations={locations ?? []} inventory={inventory ?? []} />
       </div>
 
-      <SpendingRanking ranking={rankingRows} currentUserId={userId} />
+      <SpendingRanking
+        rankingByPeriod={{ month: rankingMonth ?? [], year: rankingYear ?? [], all: rankingRows }}
+        currentUserId={userId}
+      />
     </div>
   );
 }

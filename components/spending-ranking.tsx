@@ -4,11 +4,13 @@ import { useMemo, useState } from "react";
 import { Search, ChevronLeft, ChevronRight, Trophy, Medal, Award } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardAction, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { formatCurrency } from "@/lib/format";
 
 type RankingRow = { user_id: string; full_name: string; total_spent: number };
 type PositionedRow = { row: RankingRow; position: number };
+type Period = "month" | "year" | "all";
 
 const MEDAL_ICONS = [Trophy, Medal, Award];
 const MEDAL_COLORS = ["text-gold", "text-slate-400", "text-amber-700 dark:text-amber-600"];
@@ -49,7 +51,7 @@ function RankingRowView({
           {row.full_name}
           {isMe && <span className="ml-1.5 text-xs font-normal text-muted-foreground">(você)</span>}
         </p>
-        <p className="text-xs text-muted-foreground">{share.toFixed(1)}% do total da turma</p>
+        <p className="text-xs text-muted-foreground">{share.toFixed(1)}% do total do período</p>
       </div>
       <span className="text-sm font-semibold tabular-nums">{formatCurrency(row.total_spent)}</span>
       {MedalIcon && <MedalIcon className={cn("h-4 w-4 shrink-0", MEDAL_COLORS[position - 1])} />}
@@ -58,14 +60,17 @@ function RankingRowView({
 }
 
 export function SpendingRanking({
-  ranking,
+  rankingByPeriod,
   currentUserId,
 }: {
-  ranking: RankingRow[];
+  rankingByPeriod: { month: RankingRow[]; year: RankingRow[]; all: RankingRow[] };
   currentUserId: string;
 }) {
+  const [period, setPeriod] = useState<Period>("month");
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(0);
+
+  const ranking = rankingByPeriod[period];
 
   const total = useMemo(() => ranking.reduce((sum, r) => sum + r.total_spent, 0), [ranking]);
 
@@ -89,6 +94,11 @@ export function SpendingRanking({
     setPage(0);
   }
 
+  function handlePeriodChange(value: Period) {
+    setPeriod(value);
+    setPage(0);
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -107,6 +117,14 @@ export function SpendingRanking({
         </CardAction>
       </CardHeader>
       <CardContent className="space-y-4">
+        <Tabs value={period} onValueChange={(value) => handlePeriodChange(value as Period)}>
+          <TabsList>
+            <TabsTrigger value="month">Mês</TabsTrigger>
+            <TabsTrigger value="year">Ano</TabsTrigger>
+            <TabsTrigger value="all">Total</TabsTrigger>
+          </TabsList>
+        </Tabs>
+
         <div className="divide-y">
           {pageRows.map(({ row, position }) => (
             <RankingRowView
@@ -118,7 +136,9 @@ export function SpendingRanking({
             />
           ))}
           {ranking.length === 0 && (
-            <p className="py-6 text-center text-sm text-muted-foreground">Nenhum gasto registrado ainda.</p>
+            <p className="py-6 text-center text-sm text-muted-foreground">
+              Nenhum gasto registrado neste período.
+            </p>
           )}
           {ranking.length > 0 && q && filtered.length === 0 && (
             <p className="py-6 text-center text-sm text-muted-foreground">Ninguém encontrado com esse nome.</p>
