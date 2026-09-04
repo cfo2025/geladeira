@@ -350,7 +350,7 @@ export interface Database {
         Returns: number;
       };
       get_spending_ranking: {
-        Args: Record<string, never>;
+        Args: { p_period?: "month" | "year" | "all" };
         Returns: { user_id: string; full_name: string; total_spent: number }[];
       };
       create_withdrawal: {
