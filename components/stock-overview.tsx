@@ -21,17 +21,17 @@ export function StockOverview({
   const maxTotal = Math.max(1, ...totalsByLocation.map((l) => l.total));
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
       {totalsByLocation.map((loc) => (
-        <Card key={loc.id}>
-          <CardContent className="flex flex-col items-center gap-3 pt-6 text-center">
+        <Card key={loc.id} size="sm">
+          <CardContent className="flex flex-col items-center gap-2 pt-4 text-center">
             <p className="text-xs font-semibold tracking-widest text-muted-foreground uppercase">
               {loc.name}
             </p>
-            <ProgressRing percent={(loc.total / maxTotal) * 100} size={104} strokeWidth={9}>
+            <ProgressRing percent={(loc.total / maxTotal) * 100} size={76} strokeWidth={7}>
               <div className="flex flex-col items-center">
-                <span className="text-2xl font-bold tabular-nums">{loc.total}</span>
-                <span className="text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
+                <span className="text-lg font-bold tabular-nums">{loc.total}</span>
+                <span className="text-[9px] font-medium tracking-wide text-muted-foreground uppercase">
                   itens
                 </span>
               </div>

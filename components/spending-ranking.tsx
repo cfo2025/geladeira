@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Search, ChevronLeft, ChevronRight, Trophy, Medal, Award } from "lucide-react";
-import { Card, CardHeader, CardTitle, CardAction, CardContent } from "@/components/ui/card";
+import { Card, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
@@ -101,10 +101,17 @@ export function SpendingRanking({
 
   return (
     <Card>
-      <CardHeader>
+      <div className="flex flex-wrap items-center justify-between gap-3 px-(--card-spacing)">
         <CardTitle className="text-lg">Ranking de gastos da turma</CardTitle>
-        <CardAction>
-          <div className="relative w-44 sm:w-56">
+        <div className="flex items-center gap-2">
+          <Tabs value={period} onValueChange={(value) => handlePeriodChange(value as Period)}>
+            <TabsList>
+              <TabsTrigger value="month">Mês</TabsTrigger>
+              <TabsTrigger value="year">Ano</TabsTrigger>
+              <TabsTrigger value="all">Total</TabsTrigger>
+            </TabsList>
+          </Tabs>
+          <div className="relative w-36 sm:w-48">
             <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <input
               type="search"
@@ -114,17 +121,9 @@ export function SpendingRanking({
               className="h-8 w-full rounded-full border border-input bg-muted/40 pr-3 pl-9 text-sm outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
             />
           </div>
-        </CardAction>
-      </CardHeader>
+        </div>
+      </div>
       <CardContent className="space-y-4">
-        <Tabs value={period} onValueChange={(value) => handlePeriodChange(value as Period)}>
-          <TabsList>
-            <TabsTrigger value="month">Mês</TabsTrigger>
-            <TabsTrigger value="year">Ano</TabsTrigger>
-            <TabsTrigger value="all">Total</TabsTrigger>
-          </TabsList>
-        </Tabs>
-
         <div className="divide-y">
           {pageRows.map(({ row, position }) => (
             <RankingRowView
