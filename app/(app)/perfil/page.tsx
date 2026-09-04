@@ -49,10 +49,7 @@ export default async function PerfilPage() {
             platoon={profile.platoon}
           />
           <Separator />
-          <div className="space-y-4">
-            <h2 className="text-sm font-semibold">Alterar senha</h2>
-            <ChangePasswordForm />
-          </div>
+          <ChangePasswordForm />
           <Separator />
           <dl className="grid grid-cols-2 gap-4 text-sm sm:grid-cols-3">
             <div>

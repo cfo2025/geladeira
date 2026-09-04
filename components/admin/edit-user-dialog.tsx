@@ -9,7 +9,6 @@ import { Label } from "@/components/ui/label";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -61,10 +60,6 @@ export function EditUserDialog({
             <Pencil className="h-4 w-4 text-gold" />
             Editar usuário
           </DialogTitle>
-          <DialogDescription>
-            A senha não é alterada aqui — use o botão de redefinir senha na tabela para gerar uma
-            nova e enviar por e-mail.
-          </DialogDescription>
         </DialogHeader>
         <form action={formAction} className="space-y-4">
           <input type="hidden" name="userId" value={userId} />

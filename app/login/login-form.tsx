@@ -16,8 +16,17 @@ export function LoginForm() {
 
   return (
     <div className="w-full max-w-sm space-y-8">
-      <div className="space-y-1 lg:hidden">
+      <div className="space-y-4 lg:hidden">
         <BrandMark tone="light" />
+        <div className="space-y-2">
+          <p className="font-heading text-xl leading-tight font-semibold text-balance">
+            Ajude a manter nossas geladeiras organizadas.
+          </p>
+          <p className="text-sm text-muted-foreground">
+            Registre o que você colocou nas geladeiras e o que retirou, para sabermos sempre o
+            que tem e de quem é.
+          </p>
+        </div>
       </div>
 
       <div className="space-y-1.5">
