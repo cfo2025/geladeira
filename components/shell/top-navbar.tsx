@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { NotificationsBell } from "@/components/notifications-bell";
 import { UserMenu } from "@/components/user-menu";
 import { GlobalSearch } from "@/components/shell/global-search";
+import { MobileSearchDialog } from "@/components/shell/mobile-search-dialog";
 import { BrandMark } from "@/components/shell/brand-mark";
 import { QuickWithdrawDialog } from "@/components/quick-withdraw-dialog";
 
@@ -26,11 +27,12 @@ export async function TopNavbar({ userId, fullName }: { userId: string; fullName
   return (
     <header className="sticky top-0 z-30 h-16 border-b bg-background/95 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-4 md:px-8">
-        <BrandMark tone="light" className="shrink-0" />
+        <BrandMark tone="light" className="shrink-0" hideLabelOnMobile />
         <div className="flex flex-1 justify-center px-4">
           <GlobalSearch locations={locations ?? []} inventory={inventory ?? []} />
         </div>
         <div className="flex shrink-0 items-center gap-2">
+          <MobileSearchDialog locations={locations ?? []} inventory={inventory ?? []} />
           <NotificationsBell initialNotifications={notifications ?? []} userId={userId} />
           <QuickWithdrawDialog
             locations={locations ?? []}
