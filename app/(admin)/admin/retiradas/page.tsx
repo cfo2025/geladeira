@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { PendingCancellationsCard } from "@/components/admin/pending-cancellations-card";
 import { NewAuditDialog } from "@/components/admin/new-audit-dialog";
 import { DivergencesTable } from "@/components/admin/divergences-table";
-import { WithdrawalsHistoryTable } from "@/components/admin/withdrawals-history-table";
+import { WithdrawalsHistoryTable, type ActivityRow } from "@/components/admin/withdrawals-history-table";
 
 export default async function AdminRetiradasPage() {
   const supabase = await createClient();
@@ -13,6 +13,7 @@ export default async function AdminRetiradasPage() {
     { data: locations },
     { data: inventory },
     { data: auditItems },
+    { data: audits },
   ] = await Promise.all([
     supabase
       .from("withdrawal_cancellation_requests")
@@ -38,7 +39,12 @@ export default async function AdminRetiradasPage() {
         "id, audit_id, expected_quantity, physical_quantity, difference, applied_at, product:products(name), audit:stock_audits(created_at, location:locations(name))"
       )
       .neq("difference", 0)
-      .order("id", { ascending: false }),
+      .is("applied_at", null),
+    supabase
+      .from("stock_audits")
+      .select("id, created_at, location:locations(name), admin:profiles(full_name)")
+      .order("created_at", { ascending: false })
+      .limit(200),
   ]);
 
   const pendingRequests = (requests ?? []).filter((r) => r.status === "pending");
@@ -63,6 +69,30 @@ export default async function AdminRetiradasPage() {
       applied_at: item.applied_at,
     }))
     .sort((a, b) => (a.created_at < b.created_at ? 1 : -1));
+
+  const withdrawalRows: ActivityRow[] = (withdrawals ?? []).map((w) => ({
+    kind: "withdrawal",
+    id: w.id,
+    created_at: w.created_at,
+    quantity: w.quantity,
+    unit_price_at_withdrawal: w.unit_price_at_withdrawal,
+    status: w.status,
+    user_name: w.profile?.full_name ?? null,
+    product_name: w.product?.name ?? null,
+    location_name: w.location?.name ?? null,
+  }));
+
+  const auditRows: ActivityRow[] = (audits ?? []).map((a) => ({
+    kind: "audit",
+    id: a.id,
+    created_at: a.created_at,
+    user_name: a.admin?.full_name ?? null,
+    location_name: a.location?.name ?? null,
+  }));
+
+  const activityRows = [...withdrawalRows, ...auditRows].sort((a, b) =>
+    a.created_at < b.created_at ? 1 : -1
+  );
 
   return (
     <div className="space-y-6">
@@ -93,7 +123,7 @@ export default async function AdminRetiradasPage() {
         <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
           Histórico geral de retiradas
         </h2>
-        <WithdrawalsHistoryTable withdrawals={withdrawals ?? []} locations={locations ?? []} />
+        <WithdrawalsHistoryTable rows={activityRows} locations={locations ?? []} />
       </div>
     </div>
   );

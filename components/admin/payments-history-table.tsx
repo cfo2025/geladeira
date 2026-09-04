@@ -80,7 +80,7 @@ export function PaymentsHistoryTable({ payments }: { payments: PaymentRow[] }) {
               <TableHead className="text-right">Esperado</TableHead>
               <TableHead className="text-right">Conferido</TableHead>
               <TableHead>Aprovado por</TableHead>
-              <TableHead>Status</TableHead>
+              <TableHead className="text-center">Status</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -93,8 +93,10 @@ export function PaymentsHistoryTable({ payments }: { payments: PaymentRow[] }) {
                   {p.admin_typed_amount !== null ? formatCurrency(p.admin_typed_amount) : "—"}
                 </TableCell>
                 <TableCell className="text-muted-foreground">{p.reviewer?.full_name ?? "—"}</TableCell>
-                <TableCell>
-                  <PaymentStatusBadge status={p.status} />
+                <TableCell className="text-center">
+                  <div className="flex justify-center">
+                    <PaymentStatusBadge status={p.status} />
+                  </div>
                 </TableCell>
               </TableRow>
             ))}

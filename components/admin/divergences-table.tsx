@@ -3,10 +3,9 @@
 import { useMemo, useState, useTransition } from "react";
 import { toast } from "sonner";
 import Link from "next/link";
-import { Search, ChevronLeft, ChevronRight, Eraser } from "lucide-react";
+import { Search, ChevronLeft, ChevronRight, Eraser, Eye } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { applyStockAuditItem } from "@/app/actions/admin/audits";
 import { formatDateTime } from "@/lib/format";
@@ -40,11 +39,13 @@ export function DivergencesTable({
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return divergences.filter((d) => {
-      const matchesQuery = !q || d.product_name.toLowerCase().includes(q);
-      const matchesLocation = locationFilter === "all" || d.location_name === locationFilter;
-      return matchesQuery && matchesLocation;
-    });
+    return divergences
+      .filter((d) => !d.applied_at)
+      .filter((d) => {
+        const matchesQuery = !q || d.product_name.toLowerCase().includes(q);
+        const matchesLocation = locationFilter === "all" || d.location_name === locationFilter;
+        return matchesQuery && matchesLocation;
+      });
   }, [divergences, query, locationFilter]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
@@ -125,29 +126,27 @@ export function DivergencesTable({
                   {row.difference > 0 ? `+${row.difference}` : row.difference}
                 </TableCell>
                 <TableCell className="text-right">
-                  <div className="flex items-center justify-end gap-2">
+                  <div className="flex items-center justify-end gap-1.5">
                     <Button
                       render={<Link href={`/admin/auditoria/${row.audit_id}`} />}
                       nativeButton={false}
                       variant="ghost"
-                      size="sm"
+                      size="icon-sm"
+                      title="Ver balanço"
+                      aria-label="Ver balanço"
                     >
-                      Ver balanço
+                      <Eye className="h-3.5 w-3.5" />
                     </Button>
-                    {row.applied_at ? (
-                      <Badge variant="secondary">Aplicado</Badge>
-                    ) : (
-                      <Button
-                        variant="outline"
-                        size="icon-sm"
-                        disabled={pendingId === row.id}
-                        onClick={() => handleApply(row.id)}
-                        title="Zerar divergência (aplica a contagem física ao estoque)"
-                        aria-label="Zerar divergência"
-                      >
-                        <Eraser className="h-3.5 w-3.5" />
-                      </Button>
-                    )}
+                    <Button
+                      variant="outline"
+                      size="icon-sm"
+                      disabled={pendingId === row.id}
+                      onClick={() => handleApply(row.id)}
+                      title="Zerar divergência (aplica a contagem física ao estoque)"
+                      aria-label="Zerar divergência"
+                    >
+                      <Eraser className="h-3.5 w-3.5" />
+                    </Button>
                   </div>
                 </TableCell>
               </TableRow>

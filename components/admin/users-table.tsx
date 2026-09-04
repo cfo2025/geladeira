@@ -70,7 +70,7 @@ export function UsersTable({ users }: { users: UserRow[] }) {
               <TableHead>Pelotão</TableHead>
               <TableHead>E-mail</TableHead>
               <TableHead>Perfil</TableHead>
-              <TableHead>Status</TableHead>
+              <TableHead className="text-center">Status</TableHead>
               <TableHead>Criado em</TableHead>
               <TableHead className="text-right">Ações</TableHead>
             </TableRow>
@@ -87,18 +87,20 @@ export function UsersTable({ users }: { users: UserRow[] }) {
                     {user.role === "admin" ? "Admin" : "Usuário"}
                   </Badge>
                 </TableCell>
-                <TableCell>
-                  {user.is_active ? (
-                    <Badge className="border-transparent bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-400">
-                      Ativo
-                    </Badge>
-                  ) : (
-                    <Badge variant="destructive">
-                      Inativo
-                      {user.deactivation_reason &&
-                        ` · ${DEACTIVATION_REASON_LABELS[user.deactivation_reason]}`}
-                    </Badge>
-                  )}
+                <TableCell className="text-center">
+                  <div className="flex justify-center">
+                    {user.is_active ? (
+                      <Badge className="border-transparent bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-400">
+                        Ativo
+                      </Badge>
+                    ) : (
+                      <Badge variant="destructive">
+                        Inativo
+                        {user.deactivation_reason &&
+                          ` · ${DEACTIVATION_REASON_LABELS[user.deactivation_reason]}`}
+                      </Badge>
+                    )}
+                  </div>
                 </TableCell>
                 <TableCell className="whitespace-nowrap text-muted-foreground">
                   {formatDate(user.created_at)}
