@@ -54,7 +54,9 @@ export function ProductCard({
       </div>
       <CardContent className={cn(compact ? "space-y-1.5 pt-2" : "space-y-2 pt-4")}>
         <div>
-          <p className={cn("line-clamp-1 font-semibold", compact ? "text-xs" : "text-sm")}>{name}</p>
+          <p className={cn("line-clamp-2 leading-tight font-semibold", compact ? "text-[11px]" : "text-sm")}>
+            {name}
+          </p>
           {!compact && <p className="line-clamp-1 text-xs text-muted-foreground">{category || " "}</p>}
         </div>
         <div className={cn("flex items-center justify-between gap-2", compact ? "my-1" : "my-2")}>
