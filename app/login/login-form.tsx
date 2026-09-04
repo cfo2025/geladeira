@@ -16,16 +16,26 @@ export function LoginForm() {
 
   return (
     <div className="w-full max-w-sm space-y-8">
-      <div className="space-y-4 lg:hidden">
-        <BrandMark tone="light" />
-        <div className="space-y-2">
-          <p className="font-heading text-xl leading-tight font-semibold text-balance">
-            Ajude a manter nossas geladeiras organizadas.
-          </p>
-          <p className="text-sm text-muted-foreground">
-            Registre o que você colocou nas geladeiras e o que retirou, para sabermos sempre o
-            que tem e de quem é.
-          </p>
+      <div className="relative overflow-hidden rounded-2xl bg-sidebar p-5 text-sidebar-foreground lg:hidden">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.07]"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 1px 1px, var(--gold) 1px, transparent 0)",
+            backgroundSize: "28px 28px",
+          }}
+        />
+        <div className="relative space-y-3">
+          <BrandMark tone="dark" />
+          <div className="space-y-1.5">
+            <p className="font-heading text-lg leading-tight font-semibold text-balance">
+              Ajude a manter nossas geladeiras organizadas.
+            </p>
+            <p className="text-sm text-sidebar-foreground/70">
+              Registre o que você colocou nas geladeiras e o que retirou, para sabermos sempre
+              o que tem e de quem é.
+            </p>
+          </div>
         </div>
       </div>
 
