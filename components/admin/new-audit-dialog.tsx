@@ -2,7 +2,7 @@
 
 import { useMemo, useState, useTransition } from "react";
 import { toast } from "sonner";
-import { ClipboardCheck } from "lucide-react";
+import { ClipboardCheck, ChevronLeft, ChevronRight } from "lucide-react";
 import { createStockAudit, type ActionResult } from "@/app/actions/admin/audits";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,6 +28,8 @@ function defaultCounts(items: InventoryItem[], locationId: string) {
   );
 }
 
+const PAGE_SIZE = 5;
+
 export function NewAuditDialog({
   locations,
   inventory,
@@ -40,6 +42,7 @@ export function NewAuditDialog({
   const [counts, setCounts] = useState<Record<string, string>>(() =>
     defaultCounts(inventory, locations[0]?.id ?? "")
   );
+  const [page, setPage] = useState(0);
   const [pending, startTransition] = useTransition();
 
   const items = useMemo(
@@ -50,9 +53,14 @@ export function NewAuditDialog({
     [inventory, locationId]
   );
 
+  const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages - 1);
+  const pageItems = items.slice(currentPage * PAGE_SIZE, currentPage * PAGE_SIZE + PAGE_SIZE);
+
   function handleSelectLocation(id: string) {
     setLocationId(id);
     setCounts(defaultCounts(inventory, id));
+    setPage(0);
   }
 
   function handleSubmit(formData: FormData) {
@@ -124,7 +132,7 @@ export function NewAuditDialog({
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {items.map((item) => (
+                  {pageItems.map((item) => (
                     <TableRow key={item.product_id}>
                       <TableCell className="font-medium">{item.product_name}</TableCell>
                       <TableCell className="text-right text-muted-foreground">{item.quantity}</TableCell>
@@ -145,6 +153,34 @@ export function NewAuditDialog({
               </Table>
             )}
           </div>
+
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-3">
+              <Button
+                type="button"
+                variant="outline"
+                size="icon-xs"
+                disabled={currentPage === 0}
+                onClick={() => setPage((p) => Math.max(0, p - 1))}
+                aria-label="Página anterior"
+              >
+                <ChevronLeft className="h-3.5 w-3.5" />
+              </Button>
+              <span className="text-xs text-muted-foreground">
+                Página {currentPage + 1} de {totalPages}
+              </span>
+              <Button
+                type="button"
+                variant="outline"
+                size="icon-xs"
+                disabled={currentPage >= totalPages - 1}
+                onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+                aria-label="Próxima página"
+              >
+                <ChevronRight className="h-3.5 w-3.5" />
+              </Button>
+            </div>
+          )}
 
           <div className="space-y-2">
             <Label htmlFor="notes">Observações (opcional)</Label>

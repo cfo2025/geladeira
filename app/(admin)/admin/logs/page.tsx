@@ -1,34 +1,28 @@
 import { createClient } from "@/lib/supabase/server";
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { LogDetailDialog } from "@/components/admin/log-detail-dialog";
+import { getLogPresentation, TONE_CLASSES } from "@/lib/log-presentation";
+import { cn } from "@/lib/utils";
 import { formatDateTime } from "@/lib/format";
-
-const ACTION_LABELS: Record<string, string> = {
-  user_created: "Usuário criado",
-  user_deactivated: "Usuário desativado",
-  user_reactivated: "Usuário reativado",
-  password_reset: "Senha redefinida",
-  cancellation_requested: "Cancelamento solicitado",
-  cancellation_reviewed: "Cancelamento revisado",
-  payment_reviewed: "Pagamento revisado",
-  stock_audit_created: "Balanço de estoque criado",
-  stock_audit_applied: "Balanço aplicado ao estoque",
-  stock_restock: "Reposição de estoque",
-  stock_transfer: "Transferência entre geladeiras",
-  product_deleted: "Produto excluído",
-  location_deleted: "Local excluído",
-};
 
 export default async function AdminLogsPage() {
   const supabase = await createClient();
 
-  const { data: logs } = await supabase
-    .from("audit_logs")
-    .select(
-      "id, action, details, created_at, actor:profiles!audit_logs_actor_id_fkey(full_name), target:profiles!audit_logs_target_user_id_fkey(full_name)"
-    )
-    .order("created_at", { ascending: false })
-    .limit(200);
+  const [{ data: logs }, { data: products }, { data: locations }] = await Promise.all([
+    supabase
+      .from("audit_logs")
+      .select(
+        "id, action, details, created_at, actor:profiles!audit_logs_actor_id_fkey(full_name), target:profiles!audit_logs_target_user_id_fkey(full_name)"
+      )
+      .order("created_at", { ascending: false })
+      .limit(200),
+    supabase.from("products").select("id, name"),
+    supabase.from("locations").select("id, name"),
+  ]);
+
+  const productsMap = Object.fromEntries((products ?? []).map((p) => [p.id, p.name]));
+  const locationsMap = Object.fromEntries((locations ?? []).map((l) => [l.id, l.name]));
 
   return (
     <div className="space-y-6">
@@ -46,21 +40,54 @@ export default async function AdminLogsPage() {
                 <TableHead>Ação</TableHead>
                 <TableHead>Responsável</TableHead>
                 <TableHead>Alvo</TableHead>
-                <TableHead>Detalhes</TableHead>
+                <TableHead className="text-right">Detalhes</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {(logs ?? []).map((log) => (
-                <TableRow key={log.id}>
-                  <TableCell className="whitespace-nowrap">{formatDateTime(log.created_at)}</TableCell>
-                  <TableCell>{ACTION_LABELS[log.action] ?? log.action}</TableCell>
-                  <TableCell>{log.actor?.full_name ?? "—"}</TableCell>
-                  <TableCell>{log.target?.full_name ?? "—"}</TableCell>
-                  <TableCell className="max-w-xs truncate font-mono text-xs text-muted-foreground">
-                    {log.details ? JSON.stringify(log.details) : ""}
-                  </TableCell>
-                </TableRow>
-              ))}
+              {(logs ?? []).map((log) => {
+                const actorName = log.actor?.full_name ?? "Sistema";
+                const targetName = log.target?.full_name ?? "—";
+                const details = (log.details as Record<string, unknown> | null) ?? null;
+                const presentation = getLogPresentation(log.action, details, {
+                  actorName,
+                  targetName,
+                  products: productsMap,
+                  locations: locationsMap,
+                });
+                const Icon = presentation.icon;
+                const toneClasses = TONE_CLASSES[presentation.tone];
+
+                return (
+                  <TableRow key={log.id}>
+                    <TableCell className="whitespace-nowrap">{formatDateTime(log.created_at)}</TableCell>
+                    <TableCell>
+                      <span
+                        className={cn(
+                          "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium",
+                          toneClasses.bg,
+                          toneClasses.text
+                        )}
+                      >
+                        <Icon className="h-3.5 w-3.5" />
+                        {presentation.title}
+                      </span>
+                    </TableCell>
+                    <TableCell>{actorName}</TableCell>
+                    <TableCell>{targetName}</TableCell>
+                    <TableCell className="text-right">
+                      <LogDetailDialog
+                        action={log.action}
+                        details={details}
+                        actorName={actorName}
+                        targetName={targetName}
+                        createdAt={log.created_at}
+                        products={productsMap}
+                        locations={locationsMap}
+                      />
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
               {(!logs || logs.length === 0) && (
                 <TableRow>
                   <TableCell colSpan={5} className="text-center text-muted-foreground">

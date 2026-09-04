@@ -6,7 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button";
 import { ApplyAuditButton } from "@/components/admin/apply-audit-button";
 import { formatDateTime } from "@/lib/format";
-import { FileDown } from "lucide-react";
+import { FileDown, ArrowLeft } from "lucide-react";
 
 export default async function AuditoriaDetalhePage({
   params,
@@ -33,6 +33,17 @@ export default async function AuditoriaDetalhePage({
 
   return (
     <div className="space-y-6">
+      <Button
+        render={<Link href="/admin/retiradas" />}
+        nativeButton={false}
+        variant="ghost"
+        size="sm"
+        className="-ml-2"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        Voltar para Retiradas
+      </Button>
+
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">
@@ -95,10 +106,6 @@ export default async function AuditoriaDetalhePage({
           </Table>
         </CardContent>
       </Card>
-
-      <Button render={<Link href="/admin/retiradas" />} nativeButton={false} variant="ghost" size="sm">
-        Voltar para Retiradas
-      </Button>
     </div>
   );
 }
