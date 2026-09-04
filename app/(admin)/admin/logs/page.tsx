@@ -2,14 +2,14 @@ import { createClient } from "@/lib/supabase/server";
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { LogDetailDialog } from "@/components/admin/log-detail-dialog";
-import { getLogPresentation, TONE_CLASSES } from "@/lib/log-presentation";
+import { getLogPresentation, TONE_CLASSES, type AuditDiffItem } from "@/lib/log-presentation";
 import { cn } from "@/lib/utils";
 import { formatDateTime } from "@/lib/format";
 
 export default async function AdminLogsPage() {
   const supabase = await createClient();
 
-  const [{ data: logs }, { data: products }, { data: locations }] = await Promise.all([
+  const [{ data: logs }, { data: products }, { data: locations }, { data: auditItems }] = await Promise.all([
     supabase
       .from("audit_logs")
       .select(
@@ -19,10 +19,17 @@ export default async function AdminLogsPage() {
       .limit(200),
     supabase.from("products").select("id, name"),
     supabase.from("locations").select("id, name"),
+    supabase.from("stock_audit_items").select("audit_id, difference, product:products(name)").neq("difference", 0),
   ]);
 
   const productsMap = Object.fromEntries((products ?? []).map((p) => [p.id, p.name]));
   const locationsMap = Object.fromEntries((locations ?? []).map((l) => [l.id, l.name]));
+
+  const auditDiffsMap: Record<string, AuditDiffItem[]> = {};
+  for (const item of auditItems ?? []) {
+    const list = auditDiffsMap[item.audit_id] ?? (auditDiffsMap[item.audit_id] = []);
+    list.push({ product_name: item.product?.name ?? "—", difference: item.difference });
+  }
 
   return (
     <div className="space-y-6">
@@ -53,6 +60,7 @@ export default async function AdminLogsPage() {
                   targetName,
                   products: productsMap,
                   locations: locationsMap,
+                  auditDiffs: auditDiffsMap,
                 });
                 const Icon = presentation.icon;
                 const toneClasses = TONE_CLASSES[presentation.tone];
@@ -83,6 +91,7 @@ export default async function AdminLogsPage() {
                         createdAt={log.created_at}
                         products={productsMap}
                         locations={locationsMap}
+                        auditDiffs={auditDiffsMap}
                       />
                     </TableCell>
                   </TableRow>

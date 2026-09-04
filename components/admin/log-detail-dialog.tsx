@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { Eye, ArrowRight } from "lucide-react";
-import { getLogPresentation, TONE_CLASSES } from "@/lib/log-presentation";
+import { Eye, ArrowRight, CheckCircle2 } from "lucide-react";
+import { getLogPresentation, TONE_CLASSES, type AuditDiffItem } from "@/lib/log-presentation";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { formatDateTime } from "@/lib/format";
@@ -22,6 +22,7 @@ export function LogDetailDialog({
   createdAt,
   products,
   locations,
+  auditDiffs,
 }: {
   action: string;
   details: Record<string, unknown> | null;
@@ -30,8 +31,15 @@ export function LogDetailDialog({
   createdAt: string;
   products: Record<string, string>;
   locations: Record<string, string>;
+  auditDiffs?: Record<string, AuditDiffItem[]>;
 }) {
-  const presentation = getLogPresentation(action, details, { actorName, targetName, products, locations });
+  const presentation = getLogPresentation(action, details, {
+    actorName,
+    targetName,
+    products,
+    locations,
+    auditDiffs,
+  });
   const { icon: Icon, tone, title, description, chips, auditId } = presentation;
   const toneClasses = TONE_CLASSES[tone];
 
@@ -58,9 +66,12 @@ export function LogDetailDialog({
         </div>
 
         {chips.length > 0 && (
-          <div className="grid grid-cols-2 gap-2">
+          <div className="flex flex-wrap justify-center gap-2">
             {chips.map((chip) => (
-              <div key={chip.label} className="rounded-lg border bg-muted/40 px-3 py-2 text-center">
+              <div
+                key={chip.label}
+                className="w-[calc(50%-0.25rem)] min-w-0 shrink-0 rounded-lg border bg-muted/40 px-3 py-2 text-center"
+              >
                 <p className="text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
                   {chip.label}
                 </p>
@@ -68,6 +79,10 @@ export function LogDetailDialog({
               </div>
             ))}
           </div>
+        )}
+
+        {presentation.auditDiffs && (
+          <AuditDiffsSummary diffs={presentation.auditDiffs} />
         )}
 
         {auditId && (
@@ -85,5 +100,42 @@ export function LogDetailDialog({
         <p className="text-center text-xs text-muted-foreground">{formatDateTime(createdAt)}</p>
       </DialogContent>
     </Dialog>
+  );
+}
+
+function AuditDiffsSummary({ diffs }: { diffs: AuditDiffItem[] }) {
+  if (diffs.length === 0) {
+    return (
+      <div className="flex items-center justify-center gap-2 rounded-lg border border-dashed px-3 py-2.5 text-sm text-muted-foreground">
+        <CheckCircle2 className="h-4 w-4 shrink-0 text-green-600 dark:text-green-400" />
+        Nenhuma diferença — balanço batendo certinho.
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-1.5">
+      <p className="text-center text-[10px] font-medium tracking-wide text-muted-foreground uppercase">
+        Diferenças encontradas
+      </p>
+      <div className="space-y-1">
+        {diffs.map((diff, index) => (
+          <div
+            key={`${diff.product_name}-${index}`}
+            className="flex items-center justify-between gap-2 rounded-lg border bg-muted/40 px-3 py-1.5 text-sm"
+          >
+            <span className="min-w-0 truncate">{diff.product_name}</span>
+            <span
+              className={cn(
+                "shrink-0 font-semibold tabular-nums",
+                diff.difference < 0 ? "text-destructive" : "text-green-600 dark:text-green-400"
+              )}
+            >
+              {diff.difference > 0 ? `+${diff.difference}` : diff.difference}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }

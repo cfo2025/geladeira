@@ -22,6 +22,7 @@ import { DEACTIVATION_REASON_LABELS, PAYMENT_STATUS_LABELS } from "@/lib/format"
 export type LogTone = "green" | "red" | "blue" | "amber" | "slate";
 
 export type LogChip = { label: string; value: string };
+export type AuditDiffItem = { product_name: string; difference: number };
 
 export type LogPresentation = {
   icon: LucideIcon;
@@ -30,6 +31,7 @@ export type LogPresentation = {
   description: string;
   chips: LogChip[];
   auditId?: string;
+  auditDiffs?: AuditDiffItem[];
 };
 
 export const TONE_CLASSES: Record<LogTone, { bg: string; text: string }> = {
@@ -60,6 +62,7 @@ export function getLogPresentation(
     targetName: string;
     products: Record<string, string>;
     locations: Record<string, string>;
+    auditDiffs?: Record<string, AuditDiffItem[]>;
   }
 ): LogPresentation {
   const { actorName, targetName } = ctx;
@@ -131,24 +134,30 @@ export function getLogPresentation(
         chips: amount !== undefined ? [{ label: "Valor conferido", value: formatCurrency(amount) }] : [],
       };
     }
-    case "stock_audit_created":
+    case "stock_audit_created": {
+      const auditId = str(details, "audit_id");
       return {
         icon: ClipboardList,
         tone: "amber",
         title: "Balanço de estoque criado",
         description: `${actorName} criou um balanço de estoque em ${locationName(str(details, "location_id"))}.`,
         chips: [],
-        auditId: str(details, "audit_id"),
+        auditId,
+        auditDiffs: auditId ? (ctx.auditDiffs?.[auditId] ?? []) : undefined,
       };
-    case "stock_audit_applied":
+    }
+    case "stock_audit_applied": {
+      const auditId = str(details, "audit_id");
       return {
         icon: CheckCircle2,
         tone: "green",
         title: "Balanço aplicado ao estoque",
         description: `${actorName} aplicou a contagem física do balanço ao estoque.`,
         chips: [],
-        auditId: str(details, "audit_id"),
+        auditId,
+        auditDiffs: auditId ? (ctx.auditDiffs?.[auditId] ?? []) : undefined,
       };
+    }
     case "stock_audit_item_applied":
       return {
         icon: Eraser,
