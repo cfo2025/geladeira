@@ -68,6 +68,72 @@ export async function createUser(
   return { success: true };
 }
 
+const updateUserSchema = z.object({
+  userId: z.string().uuid(),
+  fullName: z.string().min(2, "Nome de guerra muito curto"),
+  courseNumber: z.string().min(1, "Informe o número do curso"),
+  platoon: z.string().min(1, "Informe o pelotão"),
+  email: z.string().email("E-mail inválido"),
+  role: z.enum(["user", "admin"]),
+});
+
+export async function updateUser(
+  _prevState: ActionResult,
+  formData: FormData
+): Promise<ActionResult> {
+  const { userId: actorId } = await requireAdmin();
+
+  const parsed = updateUserSchema.safeParse({
+    userId: formData.get("userId"),
+    fullName: formData.get("fullName"),
+    courseNumber: formData.get("courseNumber"),
+    platoon: formData.get("platoon"),
+    email: formData.get("email"),
+    role: formData.get("role") || "user",
+  });
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message };
+
+  const admin = createAdminClient();
+
+  const { data: current, error: getUserError } = await admin.auth.admin.getUserById(
+    parsed.data.userId
+  );
+  if (getUserError || !current.user) {
+    return { error: "Usuário não encontrado" };
+  }
+
+  if (current.user.email !== parsed.data.email) {
+    const { error: emailError } = await admin.auth.admin.updateUserById(parsed.data.userId, {
+      email: parsed.data.email,
+      email_confirm: true,
+    });
+    if (emailError) {
+      return {
+        error:
+          emailError.code === "email_exists"
+            ? "Já existe um usuário com este e-mail"
+            : emailError.message,
+      };
+    }
+  }
+
+  const { error: profileError } = await admin
+    .from("profiles")
+    .update({
+      full_name: parsed.data.fullName,
+      course_number: parsed.data.courseNumber,
+      platoon: parsed.data.platoon,
+      role: parsed.data.role,
+    })
+    .eq("id", parsed.data.userId);
+  if (profileError) return { error: profileError.message };
+
+  await logAdminAction(actorId, parsed.data.userId, "user_updated", { email: parsed.data.email });
+
+  revalidatePath("/admin/usuarios");
+  return { success: true };
+}
+
 const deactivateSchema = z.object({
   userId: z.string().uuid(),
   reason: z.enum(["desligamento", "pedido de baixa", "a pedido", "dever"]),

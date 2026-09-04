@@ -1,6 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 import {
   UserPlus,
+  UserCog,
   UserX,
   UserCheck,
   KeyRound,
@@ -76,6 +77,14 @@ export function getLogPresentation(
         tone: "green",
         title: "Usuário criado",
         description: `${actorName} criou o usuário ${targetName}.`,
+        chips: str(details, "email") ? [{ label: "E-mail", value: str(details, "email")! }] : [],
+      };
+    case "user_updated":
+      return {
+        icon: UserCog,
+        tone: "blue",
+        title: "Usuário editado",
+        description: `${actorName} editou os dados de ${targetName}.`,
         chips: str(details, "email") ? [{ label: "E-mail", value: str(details, "email")! }] : [],
       };
     case "user_deactivated": {

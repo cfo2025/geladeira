@@ -106,7 +106,15 @@ export function UsersTable({ users }: { users: UserRow[] }) {
                   {formatDate(user.created_at)}
                 </TableCell>
                 <TableCell>
-                  <UserRowActions userId={user.id} userName={user.full_name} isActive={user.is_active} />
+                  <UserRowActions
+                    userId={user.id}
+                    userName={user.full_name}
+                    courseNumber={user.course_number}
+                    platoon={user.platoon}
+                    email={user.email}
+                    role={user.role}
+                    isActive={user.is_active}
+                  />
                 </TableCell>
               </TableRow>
             ))}

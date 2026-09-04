@@ -18,7 +18,7 @@ export function AppShell({
       <TopNavbar userId={userId} fullName={fullName} />
       <SecondaryNav role={role} />
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 md:px-8">{children}</main>
-      <AppFooter role={role} />
+      <AppFooter />
     </div>
   );
 }

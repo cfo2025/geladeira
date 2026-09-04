@@ -41,3 +41,32 @@ export async function updateOwnProfile(
   revalidatePath("/perfil", "layout");
   return { success: true };
 }
+
+const passwordSchema = z
+  .object({
+    password: z.string().min(8, "A senha deve ter pelo menos 8 caracteres"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "As senhas não coincidem",
+    path: ["confirmPassword"],
+  });
+
+export async function updateOwnPassword(
+  _prevState: ActionResult,
+  formData: FormData
+): Promise<ActionResult> {
+  await requireUser();
+
+  const parsed = passwordSchema.safeParse({
+    password: formData.get("password"),
+    confirmPassword: formData.get("confirmPassword"),
+  });
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message };
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.updateUser({ password: parsed.data.password });
+  if (error) return { error: "Não foi possível atualizar a senha. Tente novamente." };
+
+  return { success: true };
+}
