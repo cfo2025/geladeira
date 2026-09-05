@@ -52,9 +52,13 @@ export default async function ExtratoPage() {
     (sum, w) => sum + w.unit_price_at_withdrawal * w.quantity,
     0
   );
-  const paidThisMonth = (payments ?? [])
-    .filter((p) => p.status === "approved" && new Date(p.created_at) >= startOfMonth)
-    .reduce((sum, p) => sum + (p.admin_typed_amount ?? p.user_declared_amount), 0);
+  // "pago esse mês" é sobre o consumo DESTE mês já ter sido quitado — não sobre
+  // quando o pagamento foi declarado. Um pagamento feito hoje pode ter ido
+  // inteiro pra dívida do mês passado (quita sempre o mais antigo primeiro),
+  // então olhamos o payment_id de cada retirada do mês, não a data do pagamento.
+  const paidThisMonth = monthWithdrawals
+    .filter((w) => w.payment_id !== null)
+    .reduce((sum, w) => sum + w.unit_price_at_withdrawal * w.quantity, 0);
 
   const monthlyHistory = buildMonthlyHistory(nonCancelled);
   const locationDistribution = buildLocationDistribution(nonCancelled);
