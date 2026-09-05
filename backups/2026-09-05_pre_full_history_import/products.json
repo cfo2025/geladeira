@@ -1,0 +1,522 @@
+[
+ {
+  "id": "85821335-f51e-4e68-bccd-5756fa7fd05c",
+  "name": "Snickers Original",
+  "is_active": true,
+  "created_at": "2026-09-04T14:22:56.197702+00:00",
+  "category": "Doce",
+  "image_url": "https://carrefourbr.vtexassets.com/arquivos/ids/115295741-200-auto/19d088f69ee347a3b3c85c2362a76270.jpg",
+  "price": 3.5,
+  "promo_price": null
+ },
+ {
+  "id": "e05b718e-b416-4a57-8cb0-b2be4576c65a",
+  "name": "Snickers Dark",
+  "is_active": true,
+  "created_at": "2026-09-04T14:22:56.197702+00:00",
+  "category": "Doce",
+  "image_url": "https://carrefourbr.vtexassets.com/arquivos/ids/115300411-200-auto/c59641b4205d4849882ad902df07febe.jpg",
+  "price": 3.5,
+  "promo_price": null
+ },
+ {
+  "id": "68cda655-4e09-4e14-8b1b-a0f39ef98adc",
+  "name": "Snickers Pé de Moleque",
+  "is_active": true,
+  "created_at": "2026-09-04T14:22:56.197702+00:00",
+  "category": "Doce",
+  "image_url": "https://carrefourbr.vtexassets.com/arquivos/ids/115438869-200-auto/64b6b7409abd45c09dc2cf40f6f0eb5c.jpg",
+  "price": 3.5,
+  "promo_price": null
+ },
+ {
+  "id": "0be908aa-f41a-4412-84dd-1f6b0a9bd0ef",
+  "name": "Whey Pro 3 Corações",
+  "is_active": true,
+  "created_at": "2026-09-04T14:22:56.197702+00:00",
+  "category": "Bebida",
+  "image_url": "https://carrefourbr.vtexassets.com/arquivos/ids/119706604-200-auto/d03012e3c0e54c189cde07383414fc3e.jpg",
+  "price": 7,
+  "promo_price": null
+ },
+ {
+  "id": "181788fb-a4c6-427d-a584-18d7acea9741",
+  "name": "Whey Pro Nescau",
+  "is_active": true,
+  "created_at": "2026-09-04T14:22:56.197702+00:00",
+  "category": "Bebida",
+  "image_url": "https://carrefourbr.vtexassets.com/arquivos/ids/118902947-200-auto/e3a658a9701a42cb91833afec998c34d.jpg",
+  "price": 7,
+  "promo_price": null
+ },
+ {
+  "id": "80183faa-274f-4f7e-a57d-7c4886e86b84",
+  "name": "Monster Absolutely Zero",
+  "is_active": true,
+  "created_at": "2026-09-04T14:22:56.197702+00:00",
+  "category": "Bebida",
+  "image_url": "https://carrefourbr.vtexassets.com/arquivos/ids/181478692-200-auto/image-0.jpg",
+  "price": 10,
+  "promo_price": null
+ },
+ {
+  "id": "1904de8d-6757-407d-93cd-2e43321fa82b",
+  "name": "Powerade Frutas Tropicais",
+  "is_active": true,
+  "created_at": "2026-09-04T14:34:35.632186+00:00",
+  "category": "Bebida",
+  "image_url": "https://carrefourbr.vtexassets.com/arquivos/ids/119707299-200-auto/3508c58be221451a979f2bcec8ad37db.jpg",
+  "price": 7,
+  "promo_price": null
+ },
+ {
+  "id": "2460a444-df35-4ed0-9d6c-28271e0599dc",
+  "name": "Powerade Mountain Blast",
+  "is_active": true,
+  "created_at": "2026-09-04T14:34:35.632186+00:00",
+  "category": "Bebida",
+  "image_url": "https://carrefourbr.vtexassets.com/arquivos/ids/118849170-200-auto/50eac5c384194dfc970c94e7145223b0.jpg",
+  "price": 7,
+  "promo_price": null
+ },
+ {
+  "id": "cac65c60-b5e8-4245-a44f-53c7f6beb1f3",
+  "name": "Monster (genérico — histórico)",
+  "is_active": false,
+  "created_at": "2026-09-04T14:22:43.961895+00:00",
+  "category": "Histórico",
+  "image_url": null,
+  "price": 11,
+  "promo_price": null
+ },
+ {
+  "id": "78fa4499-8c42-4337-b8dc-28a10ad4111a",
+  "name": "Kit Kat (genérico — histórico)",
+  "is_active": false,
+  "created_at": "2026-09-04T14:22:43.961895+00:00",
+  "category": "Histórico",
+  "image_url": null,
+  "price": 4,
+  "promo_price": null
+ },
+ {
+  "id": "f0e3fce4-529e-421d-8c4c-0ed010cb1537",
+  "name": "Doce (genérico — histórico)",
+  "is_active": false,
+  "created_at": "2026-09-04T14:22:43.961895+00:00",
+  "category": "Histórico",
+  "image_url": null,
+  "price": 3,
+  "promo_price": null
+ },
+ {
+  "id": "08902b32-72db-460e-95a8-b10f4980a873",
+  "name": "Monster Pacific Punch",
+  "is_active": true,
+  "created_at": "2026-09-04T14:22:43.961895+00:00",
+  "category": "Bebida",
+  "image_url": "https://carrefourbr.vtexassets.com/arquivos/ids/115297090-200-auto/ab6923a3f23240bb88ac13d505b5f5c2.jpg",
+  "price": 10,
+  "promo_price": null
+ },
+ {
+  "id": "091368a3-ce9d-42d7-aa07-667e34828a1c",
+  "name": "Red Bull Zero",
+  "is_active": true,
+  "created_at": "2026-09-04T14:22:56.197702+00:00",
+  "category": "Bebida",
+  "image_url": "https://carrefourbr.vtexassets.com/arquivos/ids/213986457-200-auto/image-0.jpg",
+  "price": 10,
+  "promo_price": null
+ },
+ {
+  "id": "0a79c114-fe25-4172-902e-cddf402303fd",
+  "name": "Red Bull Melancia",
+  "is_active": true,
+  "created_at": "2026-09-04T14:22:56.197702+00:00",
+  "category": "Bebida",
+  "image_url": "https://carrefourbr.vtexassets.com/arquivos/ids/183189807-200-auto/image-0.jpg",
+  "price": 10,
+  "promo_price": null
+ },
+ {
+  "id": "d0e092ca-b20e-4384-9ecb-211de012c2fc",
+  "name": "Bis Extra Ao Leite",
+  "is_active": true,
+  "created_at": "2026-09-04T14:22:56.197702+00:00",
+  "category": "Doce",
+  "image_url": "https://carrefourbr.vtexassets.com/arquivos/ids/186172614-200-auto/image-0.jpg",
+  "price": 3.5,
+  "promo_price": null
+ },
+ {
+  "id": "fe8d7f12-1a6f-41e4-b237-56ec442af24c",
+  "name": "Bis Extra Dark",
+  "is_active": true,
+  "created_at": "2026-09-04T14:22:56.197702+00:00",
+  "category": "Doce",
+  "image_url": "https://carrefourbr.vtexassets.com/arquivos/ids/183119927-200-auto/image-0.jpg",
+  "price": 3.5,
+  "promo_price": null
+ },
+ {
+  "id": "b4bf69fe-4f22-433d-aae9-bff28637d278",
+  "name": "Bis Extra Oreo",
+  "is_active": true,
+  "created_at": "2026-09-04T14:22:56.197702+00:00",
+  "category": "Doce",
+  "image_url": "https://carrefourbr.vtexassets.com/arquivos/ids/183119925-200-auto/image-0.jpg",
+  "price": 3.5,
+  "promo_price": null
+ },
+ {
+  "id": "78234f05-932d-4d7a-a2fd-2487e9387dc0",
+  "name": "Powerade Limão",
+  "is_active": true,
+  "created_at": "2026-09-04T14:34:35.632186+00:00",
+  "category": "Bebida",
+  "image_url": "https://carrefourbr.vtexassets.com/arquivos/ids/119516442-200-auto/aafab0a87fde4ec0b80b096595dcfc5e.jpg",
+  "price": 7,
+  "promo_price": null
+ },
+ {
+  "id": "01cb0ebb-9362-4acd-8ac2-6f5444570190",
+  "name": "Gatorade Laranja",
+  "is_active": true,
+  "created_at": "2026-09-04T14:34:35.632186+00:00",
+  "category": "Bebida",
+  "image_url": "https://carrefourbr.vtexassets.com/arquivos/ids/119286825-200-auto/3d2a940e12c743bb816839cc274df8f9.jpg",
+  "price": 7.5,
+  "promo_price": null
+ },
+ {
+  "id": "20e2e5cd-1d4a-49cf-922c-d9b2a6357b4f",
+  "name": "Juninho - Coca-Cola",
+  "is_active": true,
+  "created_at": "2026-09-04T14:22:56.197702+00:00",
+  "category": "Bebida",
+  "image_url": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQdrqX6euG4WTqa1VHKGJP9-KRzvMQPswYB1gwTJJE50MKJFJJSVJguMmQGcpVTrc6Il94OucCSmGUHWMrtZia1Cjbgz9jXXSoGS1VNKCY",
+  "price": 2.5,
+  "promo_price": null
+ },
+ {
+  "id": "efb02dc0-f0dc-435e-881f-dcd64d1bfca7",
+  "name": "Juninho - Coca-Cola Zero",
+  "is_active": true,
+  "created_at": "2026-09-04T14:22:56.197702+00:00",
+  "category": "Bebida",
+  "image_url": "https://andinacocacola.vtexassets.com/arquivos/ids/158891/Coca-Cola-Zero-Acucar-200ml.jpg?v=639226788840870000",
+  "price": 2.5,
+  "promo_price": null
+ },
+ {
+  "id": "6a952748-68a9-42fa-9028-a7cd62ef83fc",
+  "name": "Juninho - Cola Coroa",
+  "is_active": true,
+  "created_at": "2026-09-04T14:22:56.197702+00:00",
+  "category": "Bebida",
+  "image_url": "https://coroa.com.br/wp-content/uploads/2026/02/COROA-COLA-250ml.png",
+  "price": 2.5,
+  "promo_price": null
+ },
+ {
+  "id": "2d455d5e-9942-4436-b2c3-8f4328887cd6",
+  "name": "Juninho - Guaraná Coroa",
+  "is_active": true,
+  "created_at": "2026-09-04T14:22:56.197702+00:00",
+  "category": "Bebida",
+  "image_url": "https://coroa.com.br/wp-content/uploads/2024/11/02.-Guarana-Coroa-PET-250ml-min.png",
+  "price": 2.5,
+  "promo_price": null
+ },
+ {
+  "id": "0b2203aa-bb6f-4e3e-842c-035d876c4332",
+  "name": "Coca-Cola Zero (Lata)",
+  "is_active": true,
+  "created_at": "2026-09-04T14:22:43.961895+00:00",
+  "category": "Bebida",
+  "image_url": "https://carrefourbr.vtexassets.com/arquivos/ids/183191307-200-auto/image-0.jpg",
+  "price": 6,
+  "promo_price": null
+ },
+ {
+  "id": "7dcbf747-e157-487a-b757-b59c41ad030a",
+  "name": "Guaraná Antarctica (Lata)",
+  "is_active": true,
+  "created_at": "2026-09-04T14:22:43.961895+00:00",
+  "category": "Bebida",
+  "image_url": "https://carrefourbr.vtexassets.com/arquivos/ids/169438393-200-auto/9530a19e5e4e4e34818b75588cdb1ef5.jpg",
+  "price": 5.5,
+  "promo_price": null
+ },
+ {
+  "id": "65eeb280-5e44-4e3d-86ad-e5f7cebe4d4c",
+  "name": "Kit Kat Ao Leite",
+  "is_active": true,
+  "created_at": "2026-09-04T14:22:43.961895+00:00",
+  "category": "Doce",
+  "image_url": "https://carrefourbr.vtexassets.com/arquivos/ids/49895930-200-auto/c9230554652d43cfb1db7d7d500220a5.jpg",
+  "price": 4,
+  "promo_price": null
+ },
+ {
+  "id": "51e70612-ad4c-41a6-b4ce-d02a3f67cf2b",
+  "name": "Juninho - Laranja Coroa",
+  "is_active": true,
+  "created_at": "2026-09-04T14:22:56.197702+00:00",
+  "category": "Bebida",
+  "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7R6YR52r7wGYWoMnD0qSPEDRHaXYADnzrfoS1bXsT0g&s=10",
+  "price": 2.5,
+  "promo_price": null
+ },
+ {
+  "id": "5395739a-c633-4bbe-9946-fea59caf69e5",
+  "name": "Juninho - Uva Coroa",
+  "is_active": true,
+  "created_at": "2026-09-04T14:22:56.197702+00:00",
+  "category": "Bebida",
+  "image_url": "https://coroa.com.br/wp-content/uploads/2024/11/05.-Refrigerante-Coroa-Sabor-Uva-250ml.png",
+  "price": 2.5,
+  "promo_price": null
+ },
+ {
+  "id": "88b8e9de-301c-488d-93dd-574f190084ca",
+  "name": "Toddynho - Achocolatado Ibituruna",
+  "is_active": true,
+  "created_at": "2026-09-04T14:22:43.961895+00:00",
+  "category": "Bebida",
+  "image_url": "https://www.extrabom.com.br/media/produtos/350x350/8207_20230629152232_thumb_2.png_.jpeg",
+  "price": 2.5,
+  "promo_price": null
+ },
+ {
+  "id": "97cf6ca0-6b25-4859-8580-9d485ea6ddc1",
+  "name": "Monster Original (Verde)",
+  "is_active": true,
+  "created_at": "2026-09-04T14:22:56.197702+00:00",
+  "category": "Bebida",
+  "image_url": "https://carrefourbr.vtexassets.com/arquivos/ids/147567321-200-auto/c4fc2f877e8e48d2a25ea071c436113b.jpg",
+  "price": 10,
+  "promo_price": null
+ },
+ {
+  "id": "1aaeff27-5249-471f-b28e-78873052b840",
+  "name": "Monster Mango (Sem Açúcar)",
+  "is_active": true,
+  "created_at": "2026-09-04T14:22:43.961895+00:00",
+  "category": "Bebida",
+  "image_url": "https://carrefourbr.vtexassets.com/arquivos/ids/181474039-200-auto/image-0.jpg",
+  "price": 10,
+  "promo_price": null
+ },
+ {
+  "id": "2e45e02e-468d-4ac3-a7f1-88339174992c",
+  "name": "Monster Rio Punch",
+  "is_active": true,
+  "created_at": "2026-09-04T14:22:43.961895+00:00",
+  "category": "Bebida",
+  "image_url": "https://carrefourbr.vtexassets.com/arquivos/ids/204995962-200-auto/image-0.jpg",
+  "price": 10,
+  "promo_price": null
+ },
+ {
+  "id": "06bb42de-3bde-4777-a1c5-ed8ef7303ef9",
+  "name": "Red Bull Original",
+  "is_active": true,
+  "created_at": "2026-09-04T14:22:56.197702+00:00",
+  "category": "Bebida",
+  "image_url": "https://carrefourbr.vtexassets.com/arquivos/ids/160026770-200-auto/f9ab3e17cb014155b6ee39679e942b66.jpg",
+  "price": 10,
+  "promo_price": null
+ },
+ {
+  "id": "c03b0698-ae7a-48b7-9787-388b897b9d9c",
+  "name": "Red Bull Sugarfree",
+  "is_active": true,
+  "created_at": "2026-09-04T14:22:56.197702+00:00",
+  "category": "Bebida",
+  "image_url": "https://carrefourbr.vtexassets.com/arquivos/ids/100816400-200-auto/f5a3b41c25454923acf85a4313d80595.jpg",
+  "price": 10,
+  "promo_price": null
+ },
+ {
+  "id": "4d3d7b9b-24c3-4714-850a-680d50db6590",
+  "name": "Red Bull Tropical Edition",
+  "is_active": true,
+  "created_at": "2026-09-04T14:22:56.197702+00:00",
+  "category": "Bebida",
+  "image_url": "https://carrefourbr.vtexassets.com/arquivos/ids/181476729-200-auto/image-0.jpg",
+  "price": 10,
+  "promo_price": null
+ },
+ {
+  "id": "6c1652de-1a6c-4c37-95a5-c76849aa48d3",
+  "name": "Monster Ultra (Branco)",
+  "is_active": true,
+  "created_at": "2026-09-04T14:22:43.961895+00:00",
+  "category": "Bebida",
+  "image_url": "https://carrefourbr.vtexassets.com/arquivos/ids/115297088-200-auto/78aca634a33d466f8fb65e05baadbca0.jpg",
+  "price": 10,
+  "promo_price": null
+ },
+ {
+  "id": "c2c3b6d5-4853-4e55-8fa5-81ceda6f85f9",
+  "name": "Monster Ultra Violet",
+  "is_active": true,
+  "created_at": "2026-09-04T14:22:56.197702+00:00",
+  "category": "Bebida",
+  "image_url": "https://carrefourbr.vtexassets.com/arquivos/ids/115302731-200-auto/4b590e33a37742a2b3bcedfdb176396c.jpg",
+  "price": 10,
+  "promo_price": null
+ },
+ {
+  "id": "2aa21595-ea6c-42f7-9f2d-77f4cdace53f",
+  "name": "Powerade Laranja",
+  "is_active": true,
+  "created_at": "2026-09-04T14:34:40.113191+00:00",
+  "category": "Bebida",
+  "image_url": "https://carrefourbr.vtexassets.com/arquivos/ids/119515829-200-auto/76e7a612ee4243d4b8beb7e4c372639d.jpg",
+  "price": 7,
+  "promo_price": null
+ },
+ {
+  "id": "11ec75b3-ffca-4322-beee-a79521827453",
+  "name": "Powerade Uva",
+  "is_active": true,
+  "created_at": "2026-09-04T14:34:40.113191+00:00",
+  "category": "Bebida",
+  "image_url": "https://carrefourbr.vtexassets.com/arquivos/ids/118743132-200-auto/af67cd5feb754ee2ab4971fff8579a2f.jpg",
+  "price": 7,
+  "promo_price": null
+ },
+ {
+  "id": "0ddc071c-05e8-4b1e-af28-4fd54579b6ca",
+  "name": "Gatorade Limão",
+  "is_active": true,
+  "created_at": "2026-09-04T14:34:40.113191+00:00",
+  "category": "Bebida",
+  "image_url": "https://carrefourbr.vtexassets.com/arquivos/ids/118849759-200-auto/9c524192035f4771b943d85e1774ccc4.jpg",
+  "price": 7.5,
+  "promo_price": null
+ },
+ {
+  "id": "1b20a6e3-59f9-402a-b072-f93c13c673eb",
+  "name": "Gatorade Uva",
+  "is_active": true,
+  "created_at": "2026-09-04T14:34:40.113191+00:00",
+  "category": "Bebida",
+  "image_url": "https://carrefourbr.vtexassets.com/arquivos/ids/118907727-200-auto/6f54643621754fa2a411513658dc948b.jpg",
+  "price": 7.5,
+  "promo_price": null
+ },
+ {
+  "id": "9030cb5f-b93b-447b-b027-c46f54b280a0",
+  "name": "Gatorade Morango e Maracujá",
+  "is_active": true,
+  "created_at": "2026-09-04T14:34:40.113191+00:00",
+  "category": "Bebida",
+  "image_url": "https://carrefourbr.vtexassets.com/arquivos/ids/118848168-200-auto/918a6bb46c884b75af5cdc159f6a3665.jpg",
+  "price": 7.5,
+  "promo_price": null
+ },
+ {
+  "id": "127a14a5-760c-4a1d-a9a1-3c05883987fe",
+  "name": "Gatorade Tangerina",
+  "is_active": true,
+  "created_at": "2026-09-04T14:34:40.113191+00:00",
+  "category": "Bebida",
+  "image_url": "https://carrefourbr.vtexassets.com/arquivos/ids/118362430-200-auto/6f158438d8614a90b560aba4e1785219.jpg",
+  "price": 7.5,
+  "promo_price": null
+ },
+ {
+  "id": "fd96eb15-4fab-4bea-8c97-22c6c495bddd",
+  "name": "Kit Kat Dark",
+  "is_active": true,
+  "created_at": "2026-09-04T14:22:43.961895+00:00",
+  "category": "Doce",
+  "image_url": "https://carrefourbr.vtexassets.com/arquivos/ids/118906825-200-auto/5d19e490d2f84671b393fe36d9212aad.jpg",
+  "price": 4,
+  "promo_price": null
+ },
+ {
+  "id": "efdc7bb5-f4a1-4189-a885-7c7361b7cad1",
+  "name": "Kit Kat Branco",
+  "is_active": true,
+  "created_at": "2026-09-04T14:22:43.961895+00:00",
+  "category": "Doce",
+  "image_url": "https://carrefourbr.vtexassets.com/arquivos/ids/31413579-200-auto/b37e2ba1b49b4eaa9a68373c464dc03a.jpg",
+  "price": 4,
+  "promo_price": null
+ },
+ {
+  "id": "a3728786-7dd8-4f69-ac2c-c3830068a7b0",
+  "name": "Bis Extra (genérico — histórico)",
+  "is_active": false,
+  "created_at": "2026-09-04T15:04:18.236876+00:00",
+  "category": "Histórico",
+  "image_url": null,
+  "price": 3.5,
+  "promo_price": null
+ },
+ {
+  "id": "c976fc98-c768-44b0-89c8-44d3db83b1a9",
+  "name": "Gatorade (genérico — histórico)",
+  "is_active": false,
+  "created_at": "2026-09-04T15:04:18.236876+00:00",
+  "category": "Histórico",
+  "image_url": null,
+  "price": 7.5,
+  "promo_price": null
+ },
+ {
+  "id": "d31fae73-97c0-412f-bc8b-703cc54bcc32",
+  "name": "Juninho (genérico — histórico)",
+  "is_active": false,
+  "created_at": "2026-09-04T15:04:18.236876+00:00",
+  "category": "Histórico",
+  "image_url": null,
+  "price": 2.5,
+  "promo_price": null
+ },
+ {
+  "id": "870059ac-2770-4767-8649-bd8babfd2690",
+  "name": "Powerade (genérico — histórico)",
+  "is_active": false,
+  "created_at": "2026-09-04T15:04:18.236876+00:00",
+  "category": "Histórico",
+  "image_url": null,
+  "price": 7,
+  "promo_price": null
+ },
+ {
+  "id": "a667457f-29be-4119-8842-c312f11d69d8",
+  "name": "Snickers (genérico — histórico)",
+  "is_active": false,
+  "created_at": "2026-09-04T15:04:18.236876+00:00",
+  "category": "Histórico",
+  "image_url": null,
+  "price": 3.5,
+  "promo_price": null
+ },
+ {
+  "id": "ee6d65de-7843-44ec-a05b-5b91f98f62f8",
+  "name": "Whey Pro (genérico — histórico)",
+  "is_active": false,
+  "created_at": "2026-09-04T15:04:18.236876+00:00",
+  "category": "Histórico",
+  "image_url": null,
+  "price": 7,
+  "promo_price": null
+ },
+ {
+  "id": "cb128453-00e4-4f3b-ba59-d7db5e06e316",
+  "name": "Red Bull (genérico — histórico)",
+  "is_active": false,
+  "created_at": "2026-09-04T15:04:18.236876+00:00",
+  "category": "Histórico",
+  "image_url": null,
+  "price": 10,
+  "promo_price": null
+ }
+]

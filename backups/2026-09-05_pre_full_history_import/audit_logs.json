@@ -1,0 +1,719 @@
+[
+ {
+  "id": "ec69619b-560a-4ff3-a7de-747f59b87b59",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "6454f233-24a9-4011-a1cd-a981072f3940",
+  "action": "user_created",
+  "details": {
+   "email": "eliasoliveira126@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:56:18.69188+00:00"
+ },
+ {
+  "id": "09a619c6-9974-4ee4-9ade-0d42f5b3e591",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "f5249eae-0e1a-4576-b0f0-b4d0c03ba50d",
+  "action": "user_created",
+  "details": {
+   "email": "pedroroberto711@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:56:21.421716+00:00"
+ },
+ {
+  "id": "5e41e92b-ac99-467c-b805-f1acd33b2dbb",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "699a07d7-1d03-4040-aa50-2ff7f309c796",
+  "action": "user_created",
+  "details": {
+   "email": "samuca192m@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:56:23.188623+00:00"
+ },
+ {
+  "id": "a34eb2c9-3d56-4b9c-b382-4f55bcb5a340",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "81d61d48-8e8b-4f12-9ace-ff6f29eea3a9",
+  "action": "user_created",
+  "details": {
+   "email": "yanbr1999@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:56:25.102704+00:00"
+ },
+ {
+  "id": "fa772324-42a2-45ba-a8df-28727f272f08",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "fe820e0c-b9f2-4d21-af5c-96d4f0e42b0e",
+  "action": "user_created",
+  "details": {
+   "email": "bazelattojuan@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:56:26.865428+00:00"
+ },
+ {
+  "id": "8fc6cca7-b97e-44f7-9983-b508f4358a5d",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "a50f946e-aeab-4a2d-b14f-254b1d897308",
+  "action": "user_created",
+  "details": {
+   "email": "kaiob.deoliveira@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:56:28.232944+00:00"
+ },
+ {
+  "id": "631e1b05-2e66-4754-834d-6f8dda56bc61",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "de8ce638-2540-4ea8-a194-0c4d982fe59e",
+  "action": "user_created",
+  "details": {
+   "email": "mariocavalcanti.321@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:56:29.618004+00:00"
+ },
+ {
+  "id": "b666a4cf-f6f4-407e-9587-102002dcc063",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "19b3a982-b73d-463f-9f67-11c297cde39f",
+  "action": "user_created",
+  "details": {
+   "email": "rodrigocteixeira5@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:56:31.498514+00:00"
+ },
+ {
+  "id": "fb72e47c-c557-4be2-b2b8-57ddaa09f088",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "c46a41cc-d582-4206-9bc3-07c732766275",
+  "action": "user_created",
+  "details": {
+   "email": "emerson.correia669@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:56:32.967859+00:00"
+ },
+ {
+  "id": "b9ed0161-2089-44fa-a75a-fdf48fbce10c",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "1c94493f-247c-4173-97fd-8381e0da1031",
+  "action": "user_created",
+  "details": {
+   "email": "cigor4499@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:56:34.345551+00:00"
+ },
+ {
+  "id": "1dad6484-5ad1-447b-b40b-930335d93069",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "09edc554-0857-44be-b557-99dc154a247a",
+  "action": "user_created",
+  "details": {
+   "email": "candidosilvajunior@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:56:35.763434+00:00"
+ },
+ {
+  "id": "61707d17-20e9-40f2-8c1b-0e9d52da2601",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "d4e49e32-42d8-4852-a341-d2bec84dca9e",
+  "action": "user_created",
+  "details": {
+   "email": "reginaldolopesm@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:56:37.174416+00:00"
+ },
+ {
+  "id": "bb7d1def-521a-467a-8eb7-0359b245c72b",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "8281abf7-5a1b-4671-b79c-9dda5d070e2e",
+  "action": "user_created",
+  "details": {
+   "email": "andersondeg189@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:56:38.555313+00:00"
+ },
+ {
+  "id": "f907c653-c451-4045-ac9e-3a7a3c568e9b",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "5a7b8de1-2d9e-4792-8563-e51179a15a3e",
+  "action": "user_created",
+  "details": {
+   "email": "joaovictorfelix900@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:56:39.946615+00:00"
+ },
+ {
+  "id": "c86ddf60-bf89-4ad5-ac38-3da99bc5727c",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "16f79ff3-7c5a-403c-9cf5-09df2279a741",
+  "action": "user_created",
+  "details": {
+   "email": "allissonbrunow@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:56:41.336204+00:00"
+ },
+ {
+  "id": "661995b7-f71b-44f7-af50-855b1efbbd4e",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "c37ed1bd-df13-4792-a6a2-a267c3b411e4",
+  "action": "user_created",
+  "details": {
+   "email": "aanaclaranunesgoncalves@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:56:42.726983+00:00"
+ },
+ {
+  "id": "17787d69-4156-48ed-8048-6cefd8ac70a1",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "826705b6-b6b2-412f-a38a-6b4f4a817ded",
+  "action": "user_created",
+  "details": {
+   "email": "davigoulart9@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:56:44.131096+00:00"
+ },
+ {
+  "id": "595f13b5-b81d-4139-bd5c-8c2b285b039b",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "e2761753-331f-47b4-aec9-2f09ca76c189",
+  "action": "user_created",
+  "details": {
+   "email": "isabelarsodre@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:56:45.924543+00:00"
+ },
+ {
+  "id": "9333b9c8-03a4-450d-9957-5fbb53d446e0",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "67f8d452-4474-4e43-b266-ee3eb2ad6e2a",
+  "action": "user_created",
+  "details": {
+   "email": "katielebitten@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:56:47.342456+00:00"
+ },
+ {
+  "id": "021683fd-ad1f-4a58-a1e7-a7a3e33c1e91",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "239d659d-b2c8-4c7b-8cd3-78ee9b841600",
+  "action": "user_created",
+  "details": {
+   "email": "marciogmssilva@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:56:48.771155+00:00"
+ },
+ {
+  "id": "134084f7-2b20-4bc4-a0ee-51991c0b6abd",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "c8d6fa24-7a46-4aab-8f78-945758f17068",
+  "action": "user_created",
+  "details": {
+   "email": "brunolpessoa@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:56:50.171788+00:00"
+ },
+ {
+  "id": "bfa9a9c7-c872-46e4-902f-8e3c9faa5aa0",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "9ae5f934-f22e-4ad7-82c0-7624a0fe7f3c",
+  "action": "user_created",
+  "details": {
+   "email": "lumatrrs@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:56:51.579068+00:00"
+ },
+ {
+  "id": "13f6ec0d-4bc4-4388-925c-cf1c692034fd",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "5b723ba6-5f77-45d6-af24-41d714d99006",
+  "action": "user_created",
+  "details": {
+   "email": "marcopassamanicosta@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:56:52.982274+00:00"
+ },
+ {
+  "id": "71de28f2-9bea-45a9-afa9-eae8b0dfce85",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "6209ab74-1169-4ee4-aefe-4f2d3a48db2a",
+  "action": "user_created",
+  "details": {
+   "email": "brunomarinhosantossilva@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:56:54.395236+00:00"
+ },
+ {
+  "id": "7517b290-52ee-430c-943f-20b6a784393a",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "9149a5e5-3614-4ac9-9dbc-cc6788045073",
+  "action": "user_created",
+  "details": {
+   "email": "andre.meriguete@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:56:56.308063+00:00"
+ },
+ {
+  "id": "3e06ec8d-033a-4fb7-a319-5aaa93f648d6",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "412ca39d-80cf-4fff-9efe-c3daf22f79d7",
+  "action": "user_created",
+  "details": {
+   "email": "felipemerlo2001@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:56:57.673718+00:00"
+ },
+ {
+  "id": "76439e80-d671-49d9-9884-2749b79495f9",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "d2e4659f-51c4-4f58-9a3b-aedc49b0ada9",
+  "action": "user_created",
+  "details": {
+   "email": "miiihborges93@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:56:59.657221+00:00"
+ },
+ {
+  "id": "481ea658-cf61-475d-aa1e-036d81b4e326",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "7f8dddb9-cd1e-441f-9b5d-e4994b770d4d",
+  "action": "user_created",
+  "details": {
+   "email": "gabrielgame360x@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:57:01.473856+00:00"
+ },
+ {
+  "id": "f49994fe-d20d-419d-b9c5-7a35b5fee9d9",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "7f169167-209e-4bb8-b26f-4865e836b982",
+  "action": "user_created",
+  "details": {
+   "email": "nicollasmiranda10@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:57:02.844606+00:00"
+ },
+ {
+  "id": "0f69a3db-dcec-4c1e-b2b1-4a213539d90c",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "54b5a0c9-ae87-41f6-a61f-2e151192ba6e",
+  "action": "user_created",
+  "details": {
+   "email": "gustavo.eb2000@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:57:04.2697+00:00"
+ },
+ {
+  "id": "3dc5bb77-c93e-426a-ae49-b8f2cd10f452",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "2310bad6-775f-4aa1-8ba9-7d1a59477e03",
+  "action": "user_created",
+  "details": {
+   "email": "nunesalvesdeassisigor@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:57:06.113167+00:00"
+ },
+ {
+  "id": "0ca0a872-f552-4e1f-9ad7-3305522904ee",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "5d7b2813-262f-4b60-9740-a350fb9db368",
+  "action": "user_created",
+  "details": {
+   "email": "matheusoliveiraftw@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:57:07.509455+00:00"
+ },
+ {
+  "id": "7ad3d46f-c854-47e5-9294-78148ee26818",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "b673e38c-4eae-4ef6-b352-086c9abb973c",
+  "action": "user_created",
+  "details": {
+   "email": "jordan.equiuqui@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:57:08.911424+00:00"
+ },
+ {
+  "id": "49a8ba16-18c5-4a23-862d-f6859eda4a63",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "392cd1d8-d98b-4b49-831b-0d1021c5c7ea",
+  "action": "user_created",
+  "details": {
+   "email": "g.rafalsky@hotmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:57:10.330316+00:00"
+ },
+ {
+  "id": "d10c9e5e-036d-423c-ae35-bf3941e5935f",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "195b271d-493e-4282-9ebd-5da8667d561f",
+  "action": "user_created",
+  "details": {
+   "email": "renatojesux@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:57:12.189945+00:00"
+ },
+ {
+  "id": "9437a192-cedd-45f8-bf66-d5cf7c271b0b",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "f979712e-d932-4ab5-aaed-1a0ecfc987f1",
+  "action": "user_created",
+  "details": {
+   "email": "thaynan35@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:57:13.640368+00:00"
+ },
+ {
+  "id": "31aebdd3-ab4d-4fd5-b852-b70b5aaad34c",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "1fe10392-09ad-47e1-97b5-7ab141da3334",
+  "action": "user_created",
+  "details": {
+   "email": "markinr7@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:57:15.047924+00:00"
+ },
+ {
+  "id": "4ab62668-c1af-4589-bc0b-e607875b9211",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "cbca8dac-7497-4e0e-b762-436475877265",
+  "action": "user_created",
+  "details": {
+   "email": "rovetta98@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:57:16.445449+00:00"
+ },
+ {
+  "id": "9051185d-c7f4-46f1-9102-563d1b17fc50",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "d9d657e9-0de9-4fcc-adf8-7109dfa689f9",
+  "action": "user_created",
+  "details": {
+   "email": "harthursalvati@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:57:17.850715+00:00"
+ },
+ {
+  "id": "5ccdf289-97c7-4605-b876-5ad7131947dc",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "912731a7-5edb-4d06-87f1-2522492d687b",
+  "action": "user_created",
+  "details": {
+   "email": "marcosgtlopess@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:57:19.245914+00:00"
+ },
+ {
+  "id": "f6de170c-cb8b-4ca0-8e36-2d18a7482bdb",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "a0ef1d19-7e61-4bbb-bfe5-47af46d41cf0",
+  "action": "user_created",
+  "details": {
+   "email": "luisfhelipe8704@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:57:20.629128+00:00"
+ },
+ {
+  "id": "0fce8cdd-9510-4adc-9b73-5c090cad0b7a",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "2b71594b-9ac0-498b-a9e3-757d8ca28040",
+  "action": "user_created",
+  "details": {
+   "email": "julyder11@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:57:22.055108+00:00"
+ },
+ {
+  "id": "84997b45-3e78-4853-b295-cc5956334b41",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "125ea52e-c91d-4585-bfac-50ec0d2ac349",
+  "action": "user_created",
+  "details": {
+   "email": "wilkerwilson6@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:57:23.45375+00:00"
+ },
+ {
+  "id": "61dc64eb-2445-4631-8c41-95d56b8e6e3d",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "66d57e8f-7b86-479e-8e2c-91dc97a01cad",
+  "action": "user_created",
+  "details": {
+   "email": "zanotellivinicius13@gmail.com",
+   "bulk_import": true
+  },
+  "created_at": "2026-09-04T14:57:24.844826+00:00"
+ },
+ {
+  "id": "13ff03d8-15bf-47c1-a878-4abc9a774dd9",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": null,
+  "action": "historical_import",
+  "details": {
+   "source": "Geladeira Honesta CFO-2 (respostas).xlsx",
+   "total_value": 924,
+   "skipped_no_profile": [
+    "TOMÉ",
+    "RAYNER"
+   ],
+   "withdrawals_imported": 163
+  },
+  "created_at": "2026-09-04T15:04:20.464932+00:00"
+ },
+ {
+  "id": "602f6c50-ad7e-47f0-8266-bbf0112e691f",
+  "actor_id": "b293ffc8-2c7e-41fd-a272-c8c5238dec03",
+  "target_user_id": null,
+  "action": "stock_restock",
+  "details": {
+   "notes": null,
+   "quantity": 3,
+   "product_id": "1aaeff27-5249-471f-b28e-78873052b840",
+   "location_id": "1c3d3bb0-ed15-432a-a5ed-4d2605a4d9b0"
+  },
+  "created_at": "2026-09-04T20:09:22.863928+00:00"
+ },
+ {
+  "id": "9099a28f-ef99-43d0-bfaa-340e56f71a14",
+  "actor_id": "b293ffc8-2c7e-41fd-a272-c8c5238dec03",
+  "target_user_id": null,
+  "action": "stock_restock",
+  "details": {
+   "notes": null,
+   "quantity": 12,
+   "product_id": "6c1652de-1a6c-4c37-95a5-c76849aa48d3",
+   "location_id": "1c3d3bb0-ed15-432a-a5ed-4d2605a4d9b0"
+  },
+  "created_at": "2026-09-04T20:10:01.844303+00:00"
+ },
+ {
+  "id": "58c032a4-f57c-464c-8e55-9c2c4bfb737c",
+  "actor_id": "b293ffc8-2c7e-41fd-a272-c8c5238dec03",
+  "target_user_id": null,
+  "action": "stock_restock",
+  "details": {
+   "notes": null,
+   "quantity": 9,
+   "product_id": "0be908aa-f41a-4412-84dd-1f6b0a9bd0ef",
+   "location_id": "1c3d3bb0-ed15-432a-a5ed-4d2605a4d9b0"
+  },
+  "created_at": "2026-09-04T20:11:22.19209+00:00"
+ },
+ {
+  "id": "b95a4902-9fff-4b2c-8af0-8e9866b5d6f9",
+  "actor_id": "b293ffc8-2c7e-41fd-a272-c8c5238dec03",
+  "target_user_id": null,
+  "action": "stock_restock",
+  "details": {
+   "notes": null,
+   "quantity": 4,
+   "product_id": "091368a3-ce9d-42d7-aa07-667e34828a1c",
+   "location_id": "1c3d3bb0-ed15-432a-a5ed-4d2605a4d9b0"
+  },
+  "created_at": "2026-09-04T20:12:28.546754+00:00"
+ },
+ {
+  "id": "1c1e8ff2-9a1e-43b1-a17f-79b9df852561",
+  "actor_id": "b293ffc8-2c7e-41fd-a272-c8c5238dec03",
+  "target_user_id": null,
+  "action": "stock_restock",
+  "details": {
+   "notes": null,
+   "quantity": 2,
+   "product_id": "6c1652de-1a6c-4c37-95a5-c76849aa48d3",
+   "location_id": "1c3d3bb0-ed15-432a-a5ed-4d2605a4d9b0"
+  },
+  "created_at": "2026-09-04T20:12:45.067816+00:00"
+ },
+ {
+  "id": "1058c5c3-1d10-4805-96c9-fb3d5118665c",
+  "actor_id": "b293ffc8-2c7e-41fd-a272-c8c5238dec03",
+  "target_user_id": null,
+  "action": "stock_restock",
+  "details": {
+   "notes": null,
+   "quantity": 2,
+   "product_id": "2e45e02e-468d-4ac3-a7f1-88339174992c",
+   "location_id": "1c3d3bb0-ed15-432a-a5ed-4d2605a4d9b0"
+  },
+  "created_at": "2026-09-04T20:12:57.300957+00:00"
+ },
+ {
+  "id": "d1261c26-f62a-451b-86e5-c19722f65ead",
+  "actor_id": "b293ffc8-2c7e-41fd-a272-c8c5238dec03",
+  "target_user_id": null,
+  "action": "stock_restock",
+  "details": {
+   "notes": null,
+   "quantity": 12,
+   "product_id": "51e70612-ad4c-41a6-b4ce-d02a3f67cf2b",
+   "location_id": "cce368e7-4437-42ef-a5cc-87aed4cc417f"
+  },
+  "created_at": "2026-09-04T20:13:35.900127+00:00"
+ },
+ {
+  "id": "ec5f75fb-d8da-4f2b-b462-07f7cd53c232",
+  "actor_id": "b293ffc8-2c7e-41fd-a272-c8c5238dec03",
+  "target_user_id": null,
+  "action": "stock_restock",
+  "details": {
+   "notes": null,
+   "quantity": 11,
+   "product_id": "6a952748-68a9-42fa-9028-a7cd62ef83fc",
+   "location_id": "cce368e7-4437-42ef-a5cc-87aed4cc417f"
+  },
+  "created_at": "2026-09-04T20:14:11.459075+00:00"
+ },
+ {
+  "id": "97a8fa8e-d314-48a0-b1c4-60955432b9d1",
+  "actor_id": "b293ffc8-2c7e-41fd-a272-c8c5238dec03",
+  "target_user_id": null,
+  "action": "stock_restock",
+  "details": {
+   "notes": null,
+   "quantity": 2,
+   "product_id": "5395739a-c633-4bbe-9946-fea59caf69e5",
+   "location_id": "cce368e7-4437-42ef-a5cc-87aed4cc417f"
+  },
+  "created_at": "2026-09-04T20:14:30.22841+00:00"
+ },
+ {
+  "id": "4bda2ef9-c9c2-48cb-80af-32e4569552ff",
+  "actor_id": "b293ffc8-2c7e-41fd-a272-c8c5238dec03",
+  "target_user_id": null,
+  "action": "stock_restock",
+  "details": {
+   "notes": null,
+   "quantity": 4,
+   "product_id": "0ddc071c-05e8-4b1e-af28-4fd54579b6ca",
+   "location_id": "cce368e7-4437-42ef-a5cc-87aed4cc417f"
+  },
+  "created_at": "2026-09-04T20:15:04.006988+00:00"
+ },
+ {
+  "id": "68d4d5da-031b-4601-9602-6f48d7b3ab2b",
+  "actor_id": "b293ffc8-2c7e-41fd-a272-c8c5238dec03",
+  "target_user_id": null,
+  "action": "stock_restock",
+  "details": {
+   "notes": null,
+   "quantity": 1,
+   "product_id": "9030cb5f-b93b-447b-b027-c46f54b280a0",
+   "location_id": "cce368e7-4437-42ef-a5cc-87aed4cc417f"
+  },
+  "created_at": "2026-09-04T20:15:32.48135+00:00"
+ },
+ {
+  "id": "161484fe-b7bc-41e1-8d75-3ee74949608f",
+  "actor_id": "b293ffc8-2c7e-41fd-a272-c8c5238dec03",
+  "target_user_id": null,
+  "action": "stock_restock",
+  "details": {
+   "notes": null,
+   "quantity": 2,
+   "product_id": "97cf6ca0-6b25-4859-8580-9d485ea6ddc1",
+   "location_id": "cce368e7-4437-42ef-a5cc-87aed4cc417f"
+  },
+  "created_at": "2026-09-04T20:16:08.421657+00:00"
+ },
+ {
+  "id": "d3bf2c5f-fa4e-471a-a52e-8d684c0130f7",
+  "actor_id": "b293ffc8-2c7e-41fd-a272-c8c5238dec03",
+  "target_user_id": null,
+  "action": "stock_restock",
+  "details": {
+   "notes": null,
+   "quantity": 4,
+   "product_id": "6c1652de-1a6c-4c37-95a5-c76849aa48d3",
+   "location_id": "cce368e7-4437-42ef-a5cc-87aed4cc417f"
+  },
+  "created_at": "2026-09-04T20:16:44.923145+00:00"
+ },
+ {
+  "id": "80b3f5ff-9a88-433d-9e53-8164af1cbdfc",
+  "actor_id": "b293ffc8-2c7e-41fd-a272-c8c5238dec03",
+  "target_user_id": "c46a41cc-d582-4206-9bc3-07c732766275",
+  "action": "payment_reviewed",
+  "details": {
+   "decision": "approved",
+   "payment_id": "11fa474f-f14d-43cf-8ec0-7cab3f879810",
+   "admin_typed_amount": 21.5
+  },
+  "created_at": "2026-09-04T23:26:46.217679+00:00"
+ },
+ {
+  "id": "0bfd2797-98c1-4bbc-9feb-832e91a1b5f0",
+  "actor_id": "b293ffc8-2c7e-41fd-a272-c8c5238dec03",
+  "target_user_id": null,
+  "action": "stock_restock",
+  "details": {
+   "notes": null,
+   "quantity": 23,
+   "product_id": "b4bf69fe-4f22-433d-aae9-bff28637d278",
+   "location_id": "cce368e7-4437-42ef-a5cc-87aed4cc417f"
+  },
+  "created_at": "2026-09-04T23:38:02.353322+00:00"
+ },
+ {
+  "id": "33c4d52c-8b41-41ff-97c7-6834cb9aba3a",
+  "actor_id": "b293ffc8-2c7e-41fd-a272-c8c5238dec03",
+  "target_user_id": null,
+  "action": "stock_restock",
+  "details": {
+   "notes": null,
+   "quantity": 22,
+   "product_id": "fe8d7f12-1a6f-41e4-b237-56ec442af24c",
+   "location_id": "cce368e7-4437-42ef-a5cc-87aed4cc417f"
+  },
+  "created_at": "2026-09-04T23:38:12.931363+00:00"
+ },
+ {
+  "id": "8b0b16b3-8193-4b0a-b675-8b8e9ba9f94f",
+  "actor_id": "596c330a-45fd-45e7-8978-567061974e79",
+  "target_user_id": "9c3c0c28-ebe7-4809-895a-319c6df4477a",
+  "action": "user_created",
+  "details": {
+   "email": "rl.beto.lorenzoni@gmail.com"
+  },
+  "created_at": "2026-09-05T14:50:13.55318+00:00"
+ }
+]

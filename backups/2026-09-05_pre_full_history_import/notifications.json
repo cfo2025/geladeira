@@ -1,0 +1,74 @@
+[
+ {
+  "id": "19343d67-7055-468b-a167-a912cabed06f",
+  "user_id": "2310bad6-775f-4aa1-8ba9-7d1a59477e03",
+  "title": "Retirada registrada",
+  "message": "1 item(ns) retirado(s), totalizando R$ 2.50.",
+  "is_read": false,
+  "created_at": "2026-09-04T20:43:15.640068+00:00"
+ },
+ {
+  "id": "ae96bf74-c467-48ca-81b9-d6d537957e58",
+  "user_id": "f5249eae-0e1a-4576-b0f0-b4d0c03ba50d",
+  "title": "Retirada registrada",
+  "message": "1 item(ns) retirado(s), totalizando R$ 7.50.",
+  "is_read": false,
+  "created_at": "2026-09-04T21:36:41.572377+00:00"
+ },
+ {
+  "id": "c10f1632-264c-4f24-81b0-468460c1220a",
+  "user_id": "c46a41cc-d582-4206-9bc3-07c732766275",
+  "title": "Pagamento aprovado",
+  "message": "Seu pagamento foi conferido e aprovado.",
+  "is_read": false,
+  "created_at": "2026-09-04T23:26:46.217679+00:00"
+ },
+ {
+  "id": "a19ada0d-b3ac-456a-a3db-932152bed78a",
+  "user_id": "a0ef1d19-7e61-4bbb-bfe5-47af46d41cf0",
+  "title": "Retirada registrada",
+  "message": "2 item(ns) retirado(s), totalizando R$ 22.50.",
+  "is_read": false,
+  "created_at": "2026-09-04T23:26:55.41985+00:00"
+ },
+ {
+  "id": "fc3ef7b6-2d98-4f9c-bbb5-5cfa2f256adc",
+  "user_id": "1c94493f-247c-4173-97fd-8381e0da1031",
+  "title": "Retirada registrada",
+  "message": "1 item(ns) retirado(s), totalizando R$ 3.50.",
+  "is_read": false,
+  "created_at": "2026-09-05T00:43:41.108727+00:00"
+ },
+ {
+  "id": "7522aac4-db7c-4181-978d-f2822227a188",
+  "user_id": "b673e38c-4eae-4ef6-b352-086c9abb973c",
+  "title": "Retirada registrada",
+  "message": "1 item(ns) retirado(s), totalizando R$ 10.00.",
+  "is_read": false,
+  "created_at": "2026-09-05T01:45:05.62299+00:00"
+ },
+ {
+  "id": "b90fa94a-d52b-44e6-a394-86a84e2e442a",
+  "user_id": "6209ab74-1169-4ee4-aefe-4f2d3a48db2a",
+  "title": "Retirada registrada",
+  "message": "1 item(ns) retirado(s), totalizando R$ 10.00.",
+  "is_read": false,
+  "created_at": "2026-09-05T08:54:05.518982+00:00"
+ },
+ {
+  "id": "ac8a9008-886a-4bb9-9848-0e9b87557711",
+  "user_id": "cbca8dac-7497-4e0e-b762-436475877265",
+  "title": "Retirada registrada",
+  "message": "1 item(ns) retirado(s), totalizando R$ 10.00.",
+  "is_read": false,
+  "created_at": "2026-09-05T11:37:50.342027+00:00"
+ },
+ {
+  "id": "55be8605-9cf5-49d4-8352-14d6bc77ab95",
+  "user_id": "cbca8dac-7497-4e0e-b762-436475877265",
+  "title": "Retirada registrada",
+  "message": "1 item(ns) retirado(s), totalizando R$ 2.50.",
+  "is_read": false,
+  "created_at": "2026-09-05T14:39:15.735095+00:00"
+ }
+]
