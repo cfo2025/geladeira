@@ -1,0 +1,26 @@
+[
+ {
+  "id": "cce368e7-4437-42ef-a5cc-87aed4cc417f",
+  "name": "Alojamento Masculino",
+  "description": null,
+  "created_at": "2026-08-11T13:12:30.078833+00:00"
+ },
+ {
+  "id": "1c3d3bb0-ed15-432a-a5ed-4d2605a4d9b0",
+  "name": "Antessala",
+  "description": null,
+  "created_at": "2026-08-11T13:12:30.078833+00:00"
+ },
+ {
+  "id": "cf31bad3-15f4-4101-b59a-87f903403705",
+  "name": "Rancho",
+  "description": null,
+  "created_at": "2026-09-03T15:20:08.089766+00:00"
+ },
+ {
+  "id": "14b1776f-4318-4246-86ff-d6305414ba38",
+  "name": "Doce",
+  "description": null,
+  "created_at": "2026-09-04T20:45:45.413225+00:00"
+ }
+]
