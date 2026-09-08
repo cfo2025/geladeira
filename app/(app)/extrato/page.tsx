@@ -10,6 +10,7 @@ import {
   buildLocationDistribution,
   buildComparativeStats,
 } from "@/lib/extrato-analytics";
+import { allocateMonthlyBalance } from "@/lib/debt-ledger";
 
 export default async function ExtratoPage() {
   const { userId } = await requireUser();
@@ -25,7 +26,7 @@ export default async function ExtratoPage() {
       supabase
         .from("withdrawals")
         .select(
-          "id, quantity, unit_price_at_withdrawal, status, created_at, payment_id, product:products(name, category, image_url), location:locations(id, name)"
+          "id, quantity, unit_price_at_withdrawal, status, created_at, product:products(name, category, image_url), location:locations(id, name)"
         )
         .eq("user_id", userId)
         .order("created_at", { ascending: false }),
@@ -52,13 +53,13 @@ export default async function ExtratoPage() {
     (sum, w) => sum + w.unit_price_at_withdrawal * w.quantity,
     0
   );
+  const spentBeforeMonth = totalSpentAllTime - spentThisMonth;
   // "pago esse mês" é sobre o consumo DESTE mês já ter sido quitado — não sobre
   // quando o pagamento foi declarado. Um pagamento feito hoje pode ter ido
-  // inteiro pra dívida do mês passado (quita sempre o mais antigo primeiro),
-  // então olhamos o payment_id de cada retirada do mês, não a data do pagamento.
-  const paidThisMonth = monthWithdrawals
-    .filter((w) => w.payment_id !== null)
-    .reduce((sum, w) => sum + w.unit_price_at_withdrawal * w.quantity, 0);
+  // inteiro pra dívida do mês passado (o saldo é um razão só, sem vínculo por
+  // retirada — ver lib/debt-ledger.ts), então assumimos que sempre quita a
+  // dívida mais antiga primeiro.
+  const { paidThisMonth } = allocateMonthlyBalance(spentBeforeMonth, spentThisMonth, totalPaidAllTime);
 
   const monthlyHistory = buildMonthlyHistory(nonCancelled);
   const locationDistribution = buildLocationDistribution(nonCancelled);

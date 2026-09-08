@@ -353,6 +353,20 @@ export interface Database {
         Args: { p_period?: "month" | "year" | "all" };
         Returns: { user_id: string; full_name: string; total_spent: number }[];
       };
+      get_admin_debtor_summary: {
+        Args: Record<string, never>;
+        Returns: {
+          user_id: string;
+          full_name: string;
+          total_consumed: number;
+          total_paid: number;
+          balance: number;
+          last_payment_amount: number | null;
+          last_payment_at: string | null;
+          last_payment_status: string | null;
+          has_pending_payment: boolean;
+        }[];
+      };
       create_withdrawal: {
         Args: { p_product_id: string; p_location_id: string; p_quantity?: number };
         Returns: WithdrawalsRow;
