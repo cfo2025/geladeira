@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Users, ClipboardCheck } from "lucide-react";
+import { Wallet, ClipboardCheck } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DebtorsTab, type DebtorRow } from "@/components/admin/debtors-tab";
 import { PendingPaymentsCard } from "@/components/admin/pending-payments-card";
@@ -50,8 +50,8 @@ export function PagamentosTabs({
     <Tabs value={tab} onValueChange={(value) => setTab(value as string)}>
       <TabsList>
         <TabsTrigger value="devedores">
-          <Users className="h-4 w-4" />
-          Devedores
+          <Wallet className="h-4 w-4" />
+          Saldo em Aberto
         </TabsTrigger>
         <TabsTrigger value="aprovacao">
           <ClipboardCheck className="h-4 w-4" />

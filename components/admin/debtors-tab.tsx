@@ -1,8 +1,17 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Search, ChevronLeft, ChevronRight, HandCoins, ArrowRight, CalendarClock, TrendingUp, Landmark } from "lucide-react";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Search,
+  ChevronLeft,
+  ChevronRight,
+  HandCoins,
+  ArrowRight,
+  CalendarClock,
+  TrendingUp,
+  Landmark,
+} from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { KpiStrip, type KpiItem } from "@/components/kpi-strip";
@@ -20,7 +29,7 @@ export type DebtorRow = {
   has_pending_payment: boolean;
 };
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 12;
 
 export function DebtorsTab({
   debtors,
@@ -83,66 +92,68 @@ export function DebtorsTab({
           </div>
         </div>
 
-        <div className="overflow-x-auto rounded-xl border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-10">#</TableHead>
-                <TableHead>Nome</TableHead>
-                <TableHead className="text-right">Saldo em aberto</TableHead>
-                <TableHead className="text-right">Último pagamento</TableHead>
-                <TableHead className="whitespace-nowrap">Data</TableHead>
-                <TableHead className="text-center">Pendente</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {pageRows.map((d, idx) => (
-                <TableRow key={d.user_id}>
-                  <TableCell className="text-center text-xs text-muted-foreground">
-                    {currentPage * PAGE_SIZE + idx + 1}
-                  </TableCell>
-                  <TableCell className="font-medium">{d.full_name}</TableCell>
-                  <TableCell className="text-right tabular-nums">
-                    <span className={d.balance > 0 ? "font-semibold text-destructive" : "text-muted-foreground"}>
-                      {formatCurrency(d.balance)}
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+          {pageRows.map((d, idx) => (
+            <Card key={d.user_id} size="sm">
+              <CardContent className="space-y-2 pt-3">
+                <div className="flex items-start justify-between gap-1.5">
+                  <p className="min-w-0 truncate text-sm font-medium">
+                    <span className="mr-1 text-xs text-muted-foreground">
+                      {currentPage * PAGE_SIZE + idx + 1}º
                     </span>
-                  </TableCell>
-                  <TableCell className="text-right tabular-nums text-muted-foreground">
-                    {d.last_payment_amount !== null ? formatCurrency(d.last_payment_amount) : "—"}
-                  </TableCell>
-                  <TableCell className="whitespace-nowrap text-muted-foreground">
-                    {d.last_payment_at ? formatDateTime(d.last_payment_at) : "—"}
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex justify-center">
-                      {d.has_pending_payment ? (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="h-7 gap-1.5 border-amber-300 text-xs text-amber-700 hover:bg-amber-50 dark:border-amber-500/40 dark:text-amber-400 dark:hover:bg-amber-500/10"
-                          onClick={onGoToApproval}
-                        >
-                          <Badge className="border-transparent bg-amber-100 px-1.5 py-0 text-amber-700 dark:bg-amber-500/15 dark:text-amber-400">
-                            Aguardando
-                          </Badge>
-                          <ArrowRight className="h-3 w-3" />
-                        </Button>
-                      ) : (
-                        <span className="text-muted-foreground">—</span>
-                      )}
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-              {pageRows.length === 0 && (
-                <TableRow>
-                  <TableCell colSpan={6} className="text-center text-muted-foreground">
-                    {query ? "Nenhum usuário encontrado." : "Nenhum usuário ativo."}
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+                    {d.full_name}
+                  </p>
+                  {d.has_pending_payment && (
+                    <Button
+                      variant="ghost"
+                      size="icon-xs"
+                      className="shrink-0 text-amber-600 hover:bg-amber-50 dark:text-amber-400 dark:hover:bg-amber-500/10"
+                      onClick={onGoToApproval}
+                      aria-label="Ver pagamento pendente"
+                    >
+                      <ArrowRight className="h-3.5 w-3.5" />
+                    </Button>
+                  )}
+                </div>
+
+                <p
+                  className={
+                    d.balance > 0
+                      ? "text-lg font-bold tabular-nums text-destructive"
+                      : "text-lg font-bold tabular-nums text-muted-foreground"
+                  }
+                >
+                  {formatCurrency(d.balance)}
+                </p>
+
+                {d.has_pending_payment && (
+                  <Badge className="border-transparent bg-amber-100 px-1.5 py-0 text-[10px] text-amber-700 dark:bg-amber-500/15 dark:text-amber-400">
+                    Pagamento pendente
+                  </Badge>
+                )}
+
+                <div className="space-y-0.5 border-t pt-1.5 text-xs">
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">Últ. pagamento</span>
+                    <span className="font-medium tabular-nums">
+                      {d.last_payment_amount !== null ? formatCurrency(d.last_payment_amount) : "—"}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">Data</span>
+                    <span className="font-medium whitespace-nowrap">
+                      {d.last_payment_at ? formatDateTime(d.last_payment_at) : "—"}
+                    </span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+          {pageRows.length === 0 && (
+            <p className="col-span-full py-10 text-center text-sm text-muted-foreground">
+              {query ? "Nenhum usuário encontrado." : "Nenhum usuário ativo."}
+            </p>
+          )}
         </div>
 
         {filtered.length > 0 && (
