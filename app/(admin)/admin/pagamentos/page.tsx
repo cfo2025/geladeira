@@ -10,7 +10,7 @@ export default async function AdminPagamentosPage() {
   const startOfLastMonth = new Date(startOfMonth);
   startOfLastMonth.setMonth(startOfLastMonth.getMonth() - 1);
 
-  const [{ data: payments }, { data: debtors }] = await Promise.all([
+  const [{ data: payments }, { data: debtors, error: debtorsError }] = await Promise.all([
     supabase
       .from("payments")
       .select(
@@ -19,6 +19,7 @@ export default async function AdminPagamentosPage() {
       .order("created_at", { ascending: false }),
     supabase.rpc("get_admin_debtor_summary"),
   ]);
+  if (debtorsError) console.error("get_admin_debtor_summary error:", debtorsError);
 
   const pending = (payments ?? []).filter((p) => p.status === "pending");
   const reviewed = (payments ?? []).filter((p) => p.status !== "pending");
