@@ -133,4 +133,10 @@
   html {
     @apply font-sans;
   }
+  /* Componentes Base UI (ex: Tabs) marcam painéis inativos como [inert] em vez
+     de escondê-los — inert só tira da navegação/foco, não é visual por spec.
+     Sem isso os dois painéis de uma aba ficam sobrepostos e visíveis juntos. */
+  [inert] {
+    display: none;
+  }
 }
