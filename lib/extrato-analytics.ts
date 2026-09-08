@@ -1,3 +1,5 @@
+import { startOfMonthBrasilia, monthKeyBrasilia, BR_TIME_ZONE } from "@/lib/br-time";
+
 export type MonthlyPoint = { key: string; label: string; value: number };
 export type LocationSlice = { id: string; name: string; value: number };
 
@@ -30,20 +32,20 @@ type WithdrawalLike = {
 };
 
 export function buildMonthlyHistory(withdrawals: WithdrawalLike[], months = 6): MonthlyPoint[] {
-  const now = new Date();
   const buckets: MonthlyPoint[] = [];
 
   for (let i = months - 1; i >= 0; i--) {
-    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    const key = `${d.getFullYear()}-${d.getMonth()}`;
-    const label = d.toLocaleDateString("pt-BR", { month: "short" }).replace(".", "");
+    const d = startOfMonthBrasilia(i);
+    const key = monthKeyBrasilia(d);
+    const label = new Intl.DateTimeFormat("pt-BR", { month: "short", timeZone: BR_TIME_ZONE })
+      .format(d)
+      .replace(".", "");
     buckets.push({ key, label, value: 0 });
   }
 
   const byKey = new Map(buckets.map((b) => [b.key, b]));
   for (const w of withdrawals) {
-    const d = new Date(w.created_at);
-    const key = `${d.getFullYear()}-${d.getMonth()}`;
+    const key = monthKeyBrasilia(new Date(w.created_at));
     const bucket = byKey.get(key);
     if (bucket) bucket.value += w.unit_price_at_withdrawal * w.quantity;
   }
@@ -88,9 +90,8 @@ export function buildComparativeStats(
     location: { name: string } | null;
   })[]
 ): ComparativeStats {
-  const now = new Date();
-  const startOfThisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-  const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  const startOfThisMonth = startOfMonthBrasilia();
+  const startOfLastMonth = startOfMonthBrasilia(1);
 
   let spentThisMonth = 0;
   let spentLastMonth = 0;

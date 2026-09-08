@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PaymentStatusBadge } from "@/components/status-badge";
 import { formatCurrency, formatDateTime } from "@/lib/format";
+import { dateInputValueBrasilia } from "@/lib/br-time";
 import type { PaymentStatus } from "@/lib/database.types";
 
 type PaymentRow = {
@@ -30,7 +31,7 @@ export function PaymentsHistoryTable({ payments }: { payments: PaymentRow[] }) {
     const q = query.trim().toLowerCase();
     return payments.filter((p) => {
       const matchesQuery = !q || (p.profile?.full_name ?? "").toLowerCase().includes(q);
-      const matchesDate = !date || p.created_at.slice(0, 10) === date;
+      const matchesDate = !date || dateInputValueBrasilia(p.created_at) === date;
       return matchesQuery && matchesDate;
     });
   }, [payments, query, date]);

@@ -1,14 +1,12 @@
 import { createClient } from "@/lib/supabase/server";
 import { PagamentosTabs } from "@/components/admin/pagamentos-tabs";
+import { startOfMonthBrasilia } from "@/lib/br-time";
 
 export default async function AdminPagamentosPage() {
   const supabase = await createClient();
 
-  const startOfMonth = new Date();
-  startOfMonth.setDate(1);
-  startOfMonth.setHours(0, 0, 0, 0);
-  const startOfLastMonth = new Date(startOfMonth);
-  startOfLastMonth.setMonth(startOfLastMonth.getMonth() - 1);
+  const startOfMonth = startOfMonthBrasilia();
+  const startOfLastMonth = startOfMonthBrasilia(1);
 
   const [{ data: payments }, { data: debtors, error: debtorsError }] = await Promise.all([
     supabase
