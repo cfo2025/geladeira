@@ -10,6 +10,7 @@ import { LogDetailDialog } from "@/components/admin/log-detail-dialog";
 import { getLogPresentation, TONE_CLASSES, type AuditDiffItem } from "@/lib/log-presentation";
 import { cn } from "@/lib/utils";
 import { formatDateTime } from "@/lib/format";
+import { dateInputValueBrasilia } from "@/lib/br-time";
 
 type LogRow = {
   id: string;
@@ -73,7 +74,7 @@ export function LogsTable({
 
   const filtered = useMemo(() => {
     return rows.filter(({ log }) => {
-      const matchesDate = !date || log.created_at.slice(0, 10) === date;
+      const matchesDate = !date || dateInputValueBrasilia(log.created_at) === date;
       const matchesAction = actionFilter === "all" || log.action === actionFilter;
       const matchesActor = actorFilter === "all" || log.actorName === actorFilter;
       const matchesTarget = targetFilter === "all" || log.targetName === targetFilter;

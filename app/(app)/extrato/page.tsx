@@ -11,14 +11,13 @@ import {
   buildComparativeStats,
 } from "@/lib/extrato-analytics";
 import { allocateMonthlyBalance } from "@/lib/debt-ledger";
+import { startOfMonthBrasilia } from "@/lib/br-time";
 
 export default async function ExtratoPage() {
   const { userId } = await requireUser();
   const supabase = await createClient();
 
-  const startOfMonth = new Date();
-  startOfMonth.setDate(1);
-  startOfMonth.setHours(0, 0, 0, 0);
+  const startOfMonth = startOfMonthBrasilia();
 
   const [{ data: balance }, { data: withdrawals }, { data: payments }, { data: locations }] =
     await Promise.all([

@@ -8,15 +8,14 @@ import { StockOverview } from "@/components/stock-overview";
 import { SpendingRanking } from "@/components/spending-ranking";
 import { KpiStrip, type KpiItem } from "@/components/kpi-strip";
 import { formatCurrency } from "@/lib/format";
+import { startOfMonthBrasilia } from "@/lib/br-time";
 import { Wallet, TrendingUp, Trophy, Receipt } from "lucide-react";
 
 export default async function DashboardPage() {
   const { userId, profile } = await requireUser();
   const supabase = await createClient();
 
-  const startOfMonth = new Date();
-  startOfMonth.setDate(1);
-  startOfMonth.setHours(0, 0, 0, 0);
+  const startOfMonth = startOfMonthBrasilia();
 
   const [
     { data: balance },

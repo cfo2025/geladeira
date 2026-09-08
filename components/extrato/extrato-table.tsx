@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { WithdrawalStatusBadge, PaymentStatusBadge } from "@/components/status-badge";
 import { CancellationDialog } from "@/components/cancellation-dialog";
 import { formatCurrency, formatDateTime } from "@/lib/format";
+import { startOfMonthBrasilia } from "@/lib/br-time";
 
 type Withdrawal = {
   id: string;
@@ -50,11 +51,10 @@ const PAGE_SIZE_OPTIONS = [5, 10];
 
 function isInPeriod(dateStr: string, period: string) {
   if (period === "all") return true;
-  const now = new Date();
   const d = new Date(dateStr);
-  const startOfThisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const startOfThisMonth = startOfMonthBrasilia();
   if (period === "current_month") return d >= startOfThisMonth;
-  const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  const startOfLastMonth = startOfMonthBrasilia(1);
   return d >= startOfLastMonth && d < startOfThisMonth;
 }
 

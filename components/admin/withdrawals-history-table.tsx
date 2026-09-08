@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { WithdrawalStatusBadge } from "@/components/status-badge";
 import { formatCurrency, formatDateTime, WITHDRAWAL_STATUS_LABELS } from "@/lib/format";
+import { dateInputValueBrasilia } from "@/lib/br-time";
 import type { WithdrawalStatus } from "@/lib/database.types";
 
 type WithdrawalActivity = {
@@ -58,7 +59,7 @@ export function WithdrawalsHistoryTable({
         !q ||
         (row.user_name ?? "").toLowerCase().includes(q) ||
         (productName ?? "").toLowerCase().includes(q);
-      const matchesDate = !date || row.created_at.slice(0, 10) === date;
+      const matchesDate = !date || dateInputValueBrasilia(row.created_at) === date;
       const matchesLocation = locationFilter === "all" || row.location_name === locationFilter;
       const matchesStatus =
         statusFilter === "all" ||
