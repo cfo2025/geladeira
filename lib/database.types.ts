@@ -351,7 +351,7 @@ export interface Database {
         Returns: number;
       };
       get_spending_ranking: {
-        Args: { p_period?: "month" | "year" | "all" };
+        Args: { p_period?: "debt" | "last_month" | "year" | "all" };
         Returns: { user_id: string; full_name: string; total_spent: number }[];
       };
       get_admin_debtor_summary: {

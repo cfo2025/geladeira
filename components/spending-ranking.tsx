@@ -10,7 +10,21 @@ import { formatCurrency } from "@/lib/format";
 
 type RankingRow = { user_id: string; full_name: string; total_spent: number };
 type PositionedRow = { row: RankingRow; position: number };
-type Period = "month" | "year" | "all";
+type Period = "debt" | "last_month" | "year" | "all";
+
+const SHARE_LABEL: Record<Period, string> = {
+  debt: "% do saldo devedor total",
+  last_month: "% do total do período",
+  year: "% do total do período",
+  all: "% do total do período",
+};
+
+const EMPTY_LABEL: Record<Period, string> = {
+  debt: "Ninguém com saldo em aberto no momento.",
+  last_month: "Nenhum gasto registrado neste período.",
+  year: "Nenhum gasto registrado neste período.",
+  all: "Nenhum gasto registrado neste período.",
+};
 
 const MEDAL_ICONS = [Trophy, Medal, Award];
 const MEDAL_COLORS = ["text-gold", "text-slate-400", "text-amber-700 dark:text-amber-600"];
@@ -21,11 +35,13 @@ function RankingRowView({
   position,
   isMe,
   total,
+  shareLabel,
 }: {
   row: RankingRow;
   position: number;
   isMe: boolean;
   total: number;
+  shareLabel: string;
 }) {
   const share = total > 0 ? (row.total_spent / total) * 100 : 0;
   const initials = row.full_name
@@ -51,7 +67,10 @@ function RankingRowView({
           {row.full_name}
           {isMe && <span className="ml-1.5 text-xs font-normal text-muted-foreground">(você)</span>}
         </p>
-        <p className="text-xs text-muted-foreground">{share.toFixed(1)}% do total do período</p>
+        <p className="text-xs text-muted-foreground">
+          {share.toFixed(1)}
+          {shareLabel}
+        </p>
       </div>
       <span className="text-sm font-semibold tabular-nums">{formatCurrency(row.total_spent)}</span>
       {MedalIcon && <MedalIcon className={cn("h-4 w-4 shrink-0", MEDAL_COLORS[position - 1])} />}
@@ -63,10 +82,15 @@ export function SpendingRanking({
   rankingByPeriod,
   currentUserId,
 }: {
-  rankingByPeriod: { month: RankingRow[]; year: RankingRow[]; all: RankingRow[] };
+  rankingByPeriod: {
+    debt: RankingRow[];
+    last_month: RankingRow[];
+    year: RankingRow[];
+    all: RankingRow[];
+  };
   currentUserId: string;
 }) {
-  const [period, setPeriod] = useState<Period>("month");
+  const [period, setPeriod] = useState<Period>("debt");
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(0);
 
@@ -102,11 +126,14 @@ export function SpendingRanking({
   return (
     <Card>
       <div className="flex flex-wrap items-center justify-between gap-3 px-(--card-spacing)">
-        <CardTitle className="text-lg">Ranking de gastos da turma</CardTitle>
+        <CardTitle className="text-lg">
+          {period === "debt" ? "Ranking de saldo devedor da turma" : "Ranking de gastos da turma"}
+        </CardTitle>
         <div className="flex items-center gap-2">
           <Tabs value={period} onValueChange={(value) => handlePeriodChange(value as Period)}>
             <TabsList>
-              <TabsTrigger value="month">Mês</TabsTrigger>
+              <TabsTrigger value="debt">Saldo devedor</TabsTrigger>
+              <TabsTrigger value="last_month">Mês passado</TabsTrigger>
               <TabsTrigger value="year">Ano</TabsTrigger>
               <TabsTrigger value="all">Total</TabsTrigger>
             </TabsList>
@@ -132,12 +159,11 @@ export function SpendingRanking({
               position={position}
               isMe={row.user_id === currentUserId}
               total={total}
+              shareLabel={SHARE_LABEL[period]}
             />
           ))}
           {ranking.length === 0 && (
-            <p className="py-6 text-center text-sm text-muted-foreground">
-              Nenhum gasto registrado neste período.
-            </p>
+            <p className="py-6 text-center text-sm text-muted-foreground">{EMPTY_LABEL[period]}</p>
           )}
           {ranking.length > 0 && q && filtered.length === 0 && (
             <p className="py-6 text-center text-sm text-muted-foreground">Ninguém encontrado com esse nome.</p>
