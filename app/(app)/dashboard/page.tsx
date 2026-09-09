@@ -22,7 +22,8 @@ export default async function DashboardPage() {
     { data: myWithdrawals },
     { data: locations },
     { data: inventory },
-    { data: rankingMonth },
+    { data: rankingDebt },
+    { data: rankingLastMonth },
     { data: rankingYear },
     { data: rankingAll },
   ] = await Promise.all([
@@ -38,7 +39,8 @@ export default async function DashboardPage() {
         "id, location_id, quantity, product:products!inner(id, name, category, image_url, is_active, price, promo_price)"
       )
       .eq("product.is_active", true),
-    supabase.rpc("get_spending_ranking", { p_period: "month" }),
+    supabase.rpc("get_spending_ranking", { p_period: "debt" }),
+    supabase.rpc("get_spending_ranking", { p_period: "last_month" }),
     supabase.rpc("get_spending_ranking", { p_period: "year" }),
     supabase.rpc("get_spending_ranking", { p_period: "all" }),
   ]);
@@ -113,7 +115,12 @@ export default async function DashboardPage() {
       </div>
 
       <SpendingRanking
-        rankingByPeriod={{ month: rankingMonth ?? [], year: rankingYear ?? [], all: rankingRows }}
+        rankingByPeriod={{
+          debt: rankingDebt ?? [],
+          last_month: rankingLastMonth ?? [],
+          year: rankingYear ?? [],
+          all: rankingRows,
+        }}
         currentUserId={userId}
       />
     </div>
