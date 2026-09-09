@@ -28,7 +28,7 @@ export default async function AdminRetiradasPage() {
       )
       .order("created_at", { ascending: false })
       .limit(500),
-    supabase.from("locations").select("id, name").order("name"),
+    supabase.from("locations").select("id, name, is_active").order("name"),
     supabase
       .from("inventory")
       .select("location_id, quantity, product:products!inner(id, name, is_active)")
@@ -109,7 +109,10 @@ export default async function AdminRetiradasPage() {
             <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
               Divergências de balanço
             </h2>
-            <NewAuditDialog locations={locations ?? []} inventory={inventoryItems} />
+            <NewAuditDialog
+              locations={(locations ?? []).filter((l) => l.is_active)}
+              inventory={inventoryItems}
+            />
           </div>
           <DivergencesTable divergences={divergences} locations={locations ?? []} />
         </div>

@@ -15,7 +15,7 @@ export async function TopNavbar({ userId, fullName }: { userId: string; fullName
       .eq("user_id", userId)
       .order("created_at", { ascending: false })
       .limit(30),
-    supabase.from("locations").select("id, name").order("name"),
+    supabase.from("locations").select("id, name").eq("is_active", true).order("name"),
     supabase
       .from("inventory")
       .select(

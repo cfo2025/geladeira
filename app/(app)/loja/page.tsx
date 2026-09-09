@@ -5,7 +5,7 @@ export default async function LojaPage() {
   const supabase = await createClient();
 
   const [{ data: locations }, { data: inventory }] = await Promise.all([
-    supabase.from("locations").select("id, name").order("name"),
+    supabase.from("locations").select("id, name").eq("is_active", true).order("name"),
     supabase
       .from("inventory")
       .select(
