@@ -22,20 +22,23 @@ type InventoryRow = {
   product_id: string;
   quantity: number;
 };
-type LocationRow = { id: string; name: string; description: string | null };
+type LocationRow = { id: string; name: string; description: string | null; is_active: boolean };
 
 export function CatalogTabs({
   locations,
   products,
   inventory,
   stockByLocation,
+  hasHistory,
 }: {
   locations: LocationRow[];
   products: Product[];
   inventory: InventoryRow[];
   stockByLocation: Record<string, number>;
+  hasHistory: Record<string, boolean>;
 }) {
   const [tab, setTab] = useState("estoque");
+  const activeLocations = locations.filter((l) => l.is_active);
 
   return (
     <Tabs value={tab} onValueChange={(value) => setTab(value as string)}>
@@ -54,11 +57,11 @@ export function CatalogTabs({
       </div>
 
       <TabsContent value="estoque" className="pt-4">
-        <StockTab locations={locations} products={products} inventory={inventory} />
+        <StockTab locations={activeLocations} products={products} inventory={inventory} />
       </TabsContent>
 
       <TabsContent value="locais" className="pt-4">
-        <LocationsTab locations={locations} stockByLocation={stockByLocation} />
+        <LocationsTab locations={locations} stockByLocation={stockByLocation} hasHistory={hasHistory} />
       </TabsContent>
     </Tabs>
   );

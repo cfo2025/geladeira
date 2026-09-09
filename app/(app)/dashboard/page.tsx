@@ -31,7 +31,7 @@ export default async function DashboardPage() {
       .from("withdrawals")
       .select("unit_price_at_withdrawal, quantity, status, created_at")
       .eq("user_id", userId),
-    supabase.from("locations").select("id, name").order("name"),
+    supabase.from("locations").select("id, name").eq("is_active", true).order("name"),
     supabase
       .from("inventory")
       .select(

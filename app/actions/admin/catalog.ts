@@ -84,7 +84,7 @@ export async function deleteLocation(id: string): Promise<ActionResult> {
   if (error) {
     if (error.code === FOREIGN_KEY_VIOLATION) {
       return {
-        error: "Não é possível excluir: existem retiradas registradas neste local. Considere renomeá-lo.",
+        error: "Não é possível excluir: existem retiradas registradas neste local. Use \"Desativar\" — o nome continua aparecendo certinho no histórico.",
       };
     }
     return { error: error.message };
@@ -93,6 +93,44 @@ export async function deleteLocation(id: string): Promise<ActionResult> {
   await logAdminAction(actorId, null, "location_deleted", { location_id: id });
 
   revalidatePath("/admin/estoque");
+  revalidatePath("/loja");
+  revalidatePath("/dashboard");
+  return { success: true };
+}
+
+/** Esconde o local das telas de uso (loja, novo lançamento, balanço, estoque) sem apagar nada — o
+ *  histórico (extrato, logs) continua mostrando o nome normalmente, já que a linha é mantida. */
+export async function deactivateLocation(id: string): Promise<ActionResult> {
+  const { userId: actorId } = await requireAdmin();
+  const supabase = await createClient();
+
+  const { error } = await supabase.from("locations").update({ is_active: false }).eq("id", id);
+  if (error) return { error: error.message };
+
+  await logAdminAction(actorId, null, "location_deactivated", { location_id: id });
+
+  revalidatePath("/admin/estoque");
+  revalidatePath("/admin/retiradas");
+  revalidatePath("/loja");
+  revalidatePath("/dashboard");
+  return { success: true };
+}
+
+export async function reactivateLocation(id: string): Promise<ActionResult> {
+  const { userId: actorId } = await requireAdmin();
+  const supabase = await createClient();
+
+  const { error } = await supabase.from("locations").update({ is_active: true }).eq("id", id);
+  if (error) {
+    return {
+      error: error.code === "23505" ? "Já existe um local ativo com este nome" : error.message,
+    };
+  }
+
+  await logAdminAction(actorId, null, "location_reactivated", { location_id: id });
+
+  revalidatePath("/admin/estoque");
+  revalidatePath("/admin/retiradas");
   revalidatePath("/loja");
   revalidatePath("/dashboard");
   return { success: true };

@@ -16,6 +16,8 @@ import {
   BadgePercent,
   Eraser,
   FileQuestion,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import { formatCurrency } from "@/lib/format";
 import { DEACTIVATION_REASON_LABELS, PAYMENT_STATUS_LABELS } from "@/lib/format";
@@ -205,6 +207,22 @@ export function getLogPresentation(
         tone: "red",
         title: "Local excluído",
         description: `${actorName} excluiu um local.`,
+        chips: [{ label: "Local", value: locationName(str(details, "location_id")) }],
+      };
+    case "location_deactivated":
+      return {
+        icon: EyeOff,
+        tone: "amber",
+        title: "Local desativado",
+        description: `${actorName} desativou um local — some das telas de uso, mas o histórico continua normal.`,
+        chips: [{ label: "Local", value: locationName(str(details, "location_id")) }],
+      };
+    case "location_reactivated":
+      return {
+        icon: Eye,
+        tone: "green",
+        title: "Local reativado",
+        description: `${actorName} reativou um local.`,
         chips: [{ label: "Local", value: locationName(str(details, "location_id")) }],
       };
     case "product_deleted":
