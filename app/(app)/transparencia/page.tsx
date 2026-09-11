@@ -50,7 +50,11 @@ export default async function TransparenciaPage() {
         "id, valor, data_hora, local_destinado, responsavel_retirada, observacoes, criado_por:profiles!expense_outflows_criado_por_id_fkey(full_name)"
       )
       .order("data_hora", { ascending: false }),
-    supabase.from("products").select("id, name").eq("is_active", true).order("name"),
+    supabase
+      .from("products")
+      .select("id, name, category, image_url")
+      .eq("is_active", true)
+      .order("name"),
   ]);
 
   const summary = summaryRows?.[0] ?? {
@@ -77,6 +81,16 @@ export default async function TransparenciaPage() {
       value: formatCurrency(Number(summary.total_outflows ?? 0)),
       icon: BanknoteArrowDown,
     },
+    {
+      label: "Lucro previsto",
+      value: formatCurrency(Number(summary.projected_profit ?? 0)),
+      icon: TrendingUp,
+    },
+    {
+      label: "Lucro real",
+      value: formatCurrency(Number(summary.realized_profit ?? 0)),
+      icon: PiggyBank,
+    },
   ];
 
   return (
@@ -95,50 +109,11 @@ export default async function TransparenciaPage() {
       </div>
 
       <KpiStrip items={stats} />
-
-      <div>
-        <h2 className="mb-3 text-lg font-bold">Lucro</h2>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <Card>
-            <CardContent className="flex items-center gap-4 pt-6">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-accent">
-                <TrendingUp className="h-5 w-5 text-gold" />
-              </span>
-              <div className="min-w-0">
-                <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                  Lucro previsto
-                </p>
-                <p className="truncate text-xl font-bold">
-                  {formatCurrency(Number(summary.projected_profit ?? 0))}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  O que ainda está em estoque, aos preços e custos de hoje
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="flex items-center gap-4 pt-6">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-accent">
-                <PiggyBank className="h-5 w-5 text-gold" />
-              </span>
-              <div className="min-w-0">
-                <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                  Lucro real
-                </p>
-                <p className="truncate text-xl font-bold">
-                  {formatCurrency(Number(summary.realized_profit ?? 0))}
-                </p>
-                <p className="text-xs text-muted-foreground">Já efetivado nas vendas concluídas</p>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-        <p className="mt-2 text-xs text-muted-foreground">
-          Só entram nessa conta produtos que já tiveram compra registrada (ou custo definido em
-          Estoque) — por isso o módulo começa zerado.
-        </p>
-      </div>
+      <p className="text-xs text-muted-foreground">
+        O lucro só entra na conta pra produtos que já tiveram compra registrada (ou custo definido
+        em Estoque) — por isso começa zerado. Previsto = o que está em estoque hoje; real = o que já
+        foi vendido.
+      </p>
 
       <div>
         <h2 className="mb-3 text-lg font-bold">Extrato de prestação de contas</h2>

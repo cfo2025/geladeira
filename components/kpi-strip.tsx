@@ -7,9 +7,24 @@ export type KpiItem = {
   icon: LucideIcon;
 };
 
+// Classes completas (não interpoladas) pra o Tailwind JIT conseguir gerá-las.
+const DESKTOP_COLS: Record<number, string> = {
+  2: "sm:grid-cols-2",
+  3: "sm:grid-cols-3",
+  4: "sm:grid-cols-4",
+  5: "sm:grid-cols-5",
+  6: "sm:grid-cols-6",
+};
+
 export function KpiStrip({ items }: { items: KpiItem[] }) {
+  const desktopCols = DESKTOP_COLS[items.length] ?? "sm:grid-cols-4";
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-0 sm:overflow-hidden sm:rounded-2xl sm:border">
+    <div
+      className={cn(
+        "grid grid-cols-2 gap-3 sm:gap-0 sm:overflow-hidden sm:rounded-2xl sm:border",
+        desktopCols
+      )}
+    >
       {items.map((item, idx) => (
         <div
           key={item.label}
