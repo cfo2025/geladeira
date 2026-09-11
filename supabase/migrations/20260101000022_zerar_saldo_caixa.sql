@@ -30,7 +30,13 @@ insert into app_settings (key, value)
 values ('cash_ledger_started_at', to_jsonb(now()))
 on conflict (key) do update set value = excluded.value, updated_at = now();
 
-create or replace function public.get_transparency_summary()
+-- CREATE OR REPLACE não troca o formato de retorno (colunas OUT) de uma
+-- função existente — precisa apagar primeiro. Cobre o caso de a migration
+-- anterior (20260101000021, que mudou de "estimated_profit" pra
+-- "projected_profit"+"realized_profit") ainda não ter sido rodada.
+drop function if exists public.get_transparency_summary();
+
+create function public.get_transparency_summary()
 returns table(
   total_collected numeric,
   total_outflows numeric,
