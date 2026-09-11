@@ -3,7 +3,7 @@
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
-import { requireExpenseOrderer } from "@/lib/session";
+import { requireExpenseOrderer, requireAdmin } from "@/lib/session";
 
 export type ActionResult = { error?: string; success?: boolean };
 
@@ -43,5 +43,44 @@ export async function createExpenseOutflow(
 
   revalidatePath("/transparencia");
   revalidatePath("/dashboard");
+  return { success: true };
+}
+
+const purchaseSchema = z.object({
+  productId: z.string().uuid("Selecione um produto"),
+  quantity: z.coerce.number().int().min(1, "Informe uma quantidade maior que zero"),
+  unitCost: z.coerce.number().positive("Informe o valor pago por unidade"),
+  observacoes: z.string().max(500).optional(),
+});
+
+/** Registra uma compra de produto (só custo/margem — não repõe estoque nem
+ *  desconta do saldo em caixa; isso continua sendo feito à parte em "Repor
+ *  estoque" e "Lançar despesa", respectivamente). Recalcula o custo médio
+ *  ponderado do produto, usado no lucro previsto/real. Só admin. */
+export async function registerProductPurchase(
+  _prevState: ActionResult,
+  formData: FormData
+): Promise<ActionResult> {
+  await requireAdmin();
+
+  const parsed = purchaseSchema.safeParse({
+    productId: formData.get("productId"),
+    quantity: formData.get("quantity"),
+    unitCost: formData.get("unitCost"),
+    observacoes: formData.get("observacoes") || undefined,
+  });
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message };
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("register_product_purchase", {
+    p_product_id: parsed.data.productId,
+    p_quantity: parsed.data.quantity,
+    p_unit_cost: parsed.data.unitCost,
+    p_observacoes: parsed.data.observacoes ?? null,
+  });
+  if (error) return { error: error.message };
+
+  revalidatePath("/transparencia");
+  revalidatePath("/admin/estoque");
   return { success: true };
 }
