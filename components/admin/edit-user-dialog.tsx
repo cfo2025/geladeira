@@ -16,6 +16,8 @@ import {
 } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Pencil } from "lucide-react";
+import { ROLE_LABELS } from "@/lib/format";
+import type { UserRole } from "@/lib/database.types";
 
 export function EditUserDialog({
   userId,
@@ -30,7 +32,7 @@ export function EditUserDialog({
   courseNumber: string;
   platoon: string;
   email: string;
-  role: "user" | "admin";
+  role: UserRole;
 }) {
   const [open, setOpen] = useState(false);
   const [roleValue, setRoleValue] = useState(role);
@@ -84,15 +86,14 @@ export function EditUserDialog({
           </div>
           <div className="space-y-2">
             <Label htmlFor="role">Perfil</Label>
-            <Select value={roleValue} onValueChange={(value) => setRoleValue((value as "user" | "admin") ?? "user")}>
+            <Select value={roleValue} onValueChange={(value) => setRoleValue((value as UserRole) ?? "user")}>
               <SelectTrigger id="role">
-                <SelectValue>
-                  {(value: string) => (value === "admin" ? "Administrador" : "Usuário")}
-                </SelectValue>
+                <SelectValue>{(value: string) => ROLE_LABELS[value] ?? value}</SelectValue>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="user">Usuário</SelectItem>
                 <SelectItem value="admin">Administrador</SelectItem>
+                <SelectItem value="ordenador_despesa">Ordenador de despesa</SelectItem>
               </SelectContent>
             </Select>
           </div>

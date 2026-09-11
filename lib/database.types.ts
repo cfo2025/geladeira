@@ -20,12 +20,14 @@ export type PaymentStatus =
   | "rejected_divergent"
   | "rejected_unpaid";
 
+export type UserRole = "user" | "admin" | "ordenador_despesa";
+
 type ProfilesRow = {
   id: string;
   full_name: string;
   course_number: string;
   platoon: string;
-  role: "user" | "admin";
+  role: UserRole;
   is_active: boolean;
   deactivation_reason: DeactivationReason | null;
   must_change_password: boolean;
@@ -48,6 +50,7 @@ type ProductsRow = {
   image_url: string | null;
   price: number;
   promo_price: number | null;
+  cost_price: number;
   created_at: string;
 };
 
@@ -128,6 +131,17 @@ type AuditLogsRow = {
   target_user_id: string | null;
   action: string;
   details: Json | null;
+  created_at: string;
+};
+
+type ExpenseOutflowsRow = {
+  id: string;
+  valor: number;
+  data_hora: string;
+  local_destinado: string;
+  responsavel_retirada: string;
+  criado_por_id: string;
+  observacoes: string | null;
   created_at: string;
 };
 
@@ -335,6 +349,21 @@ export interface Database {
           },
         ];
       };
+      expense_outflows: {
+        Row: ExpenseOutflowsRow;
+        Insert: Partial<ExpenseOutflowsRow> &
+          Pick<ExpenseOutflowsRow, "valor" | "local_destinado" | "responsavel_retirada" | "criado_por_id">;
+        Update: Partial<ExpenseOutflowsRow>;
+        Relationships: [
+          {
+            foreignKeyName: "expense_outflows_criado_por_id_fkey";
+            columns: ["criado_por_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
     };
     Views: Record<string, never>;
     Functions: {
@@ -431,6 +460,24 @@ export interface Database {
           p_notes?: string | null;
         };
         Returns: undefined;
+      };
+      get_transparency_summary: {
+        Args: Record<string, never>;
+        Returns: {
+          total_collected: number;
+          total_outflows: number;
+          available_balance: number;
+          estimated_profit: number;
+        }[];
+      };
+      create_expense_outflow: {
+        Args: {
+          p_valor: number;
+          p_local_destinado: string;
+          p_responsavel_retirada: string;
+          p_observacoes?: string | null;
+        };
+        Returns: ExpenseOutflowsRow;
       };
     };
     Enums: Record<string, never>;

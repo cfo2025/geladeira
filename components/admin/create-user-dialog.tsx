@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UserPlus } from "lucide-react";
+import { ROLE_LABELS } from "@/lib/format";
 
 export function CreateUserDialog() {
   const [open, setOpen] = useState(false);
@@ -80,13 +81,12 @@ export function CreateUserDialog() {
             <input type="hidden" name="role" value={role} />
             <Select value={role} onValueChange={(value) => setRole(value ?? "user")}>
               <SelectTrigger id="role">
-                <SelectValue>
-                  {(value: string) => (value === "admin" ? "Administrador" : "Usuário")}
-                </SelectValue>
+                <SelectValue>{(value: string) => ROLE_LABELS[value] ?? value}</SelectValue>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="user">Usuário</SelectItem>
                 <SelectItem value="admin">Administrador</SelectItem>
+                <SelectItem value="ordenador_despesa">Ordenador de despesa</SelectItem>
               </SelectContent>
             </Select>
           </div>

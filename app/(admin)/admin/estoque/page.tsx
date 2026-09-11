@@ -9,7 +9,7 @@ export default async function AdminEstoquePage() {
       supabase.from("locations").select("id, name, description, is_active").order("name"),
       supabase
         .from("products")
-        .select("id, name, category, image_url, is_active, price, promo_price")
+        .select("id, name, category, image_url, is_active, price, promo_price, cost_price")
         .order("name"),
       supabase.from("inventory").select("location_id, product_id, quantity"),
       supabase.from("withdrawals").select("location_id").not("location_id", "is", null),

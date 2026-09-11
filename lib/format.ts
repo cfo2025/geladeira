@@ -18,6 +18,29 @@ export function formatDate(value: string | Date): string {
   return new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeZone: BR_TIME_ZONE }).format(date);
 }
 
+/** "DD/MM/AAAA às HH:mm", pro extrato de prestação de contas da Transparência. */
+export function formatDateTimeFull(value: string | Date): string {
+  const date = typeof value === "string" ? new Date(value) : value;
+  const datePart = new Intl.DateTimeFormat("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    timeZone: BR_TIME_ZONE,
+  }).format(date);
+  const timePart = new Intl.DateTimeFormat("pt-BR", {
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: BR_TIME_ZONE,
+  }).format(date);
+  return `${datePart} às ${timePart}`;
+}
+
+export const ROLE_LABELS: Record<string, string> = {
+  user: "Usuário",
+  admin: "Administrador",
+  ordenador_despesa: "Ordenador de despesa",
+};
+
 export const DEACTIVATION_REASON_LABELS: Record<string, string> = {
   desligamento: "Desligamento",
   "pedido de baixa": "Pedido de baixa",

@@ -9,6 +9,7 @@ import {
   CheckCircle2,
   XCircle,
   Wallet,
+  BanknoteArrowDown,
   ClipboardList,
   PackagePlus,
   ArrowLeftRight,
@@ -247,6 +248,21 @@ export function getLogPresentation(
           ...(price !== undefined ? [{ label: "Preço", value: formatCurrency(price) }] : []),
           ...(promoPrice !== undefined ? [{ label: "Promocional", value: formatCurrency(promoPrice) }] : []),
           ...(discount ? [{ label: "Desconto", value: `−${discount}` }] : []),
+        ],
+      };
+    }
+    case "expense_created": {
+      const valor = num(details, "valor");
+      const local = str(details, "local_destinado");
+      const responsavel = str(details, "responsavel_retirada");
+      return {
+        icon: BanknoteArrowDown,
+        tone: "amber",
+        title: "Saída de caixa lançada",
+        description: `${actorName} lançou uma saída de caixa${local ? ` para "${local}"` : ""}.`,
+        chips: [
+          ...(valor !== undefined ? [{ label: "Valor", value: formatCurrency(valor) }] : []),
+          ...(responsavel ? [{ label: "Responsável pela retirada", value: responsavel }] : []),
         ],
       };
     }
