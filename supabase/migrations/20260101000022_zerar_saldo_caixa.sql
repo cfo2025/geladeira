@@ -22,6 +22,7 @@ create table if not exists app_settings (
 
 alter table app_settings enable row level security;
 
+drop policy if exists "app_settings_select_active_users" on app_settings;
 create policy "app_settings_select_active_users" on app_settings for select
   using (public.is_active_user());
 -- Sem policy de escrita: só via SQL/service role mesmo — não é editável pelo app.

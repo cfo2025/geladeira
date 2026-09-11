@@ -18,9 +18,12 @@
 --   quantidade que está em estoque agora (o que ainda não foi vendido).
 -- - Lucro real = valor de venda no momento da retirada − custo médio
 --   atual, aplicado às retiradas não canceladas já feitas.
+--
+-- Escrita com IF NOT EXISTS / DROP IF EXISTS em tudo — segura pra rodar de
+-- novo mesmo que uma tentativa anterior tenha parado no meio por erro.
 -- ============================================================================
 
-create table product_purchases (
+create table if not exists product_purchases (
   id uuid primary key default gen_random_uuid(),
   product_id uuid not null references products(id),
   quantity int not null check (quantity > 0),
@@ -31,15 +34,17 @@ create table product_purchases (
   created_at timestamptz not null default now()
 );
 
-create index idx_product_purchases_product on product_purchases(product_id);
-create index idx_product_purchases_data_hora on product_purchases(data_hora desc);
+create index if not exists idx_product_purchases_product on product_purchases(product_id);
+create index if not exists idx_product_purchases_data_hora on product_purchases(data_hora desc);
 
 alter table product_purchases enable row level security;
 
+drop policy if exists "product_purchases_select_active_users" on product_purchases;
 create policy "product_purchases_select_active_users" on product_purchases for select
   using (public.is_active_user());
 -- Escrita só admin (mesmo critério de quem edita custo manualmente em Estoque)
 -- — defesa em profundidade, o caminho normal é register_product_purchase.
+drop policy if exists "product_purchases_admin_write" on product_purchases;
 create policy "product_purchases_admin_write" on product_purchases for all
   using (public.is_admin()) with check (public.is_admin());
 
@@ -101,7 +106,13 @@ $$;
 -- lucro pra qualquer produto sem custo definido). Agora exige cost_price
 -- > 0 pra entrar na conta, e separa lucro previsto (estoque parado) de
 -- lucro real (já vendido).
-create or replace function public.get_transparency_summary()
+--
+-- CREATE OR REPLACE não troca o formato de colunas de retorno de uma
+-- função existente — apaga antes, pra não depender de qual versão estava
+-- ativa.
+drop function if exists public.get_transparency_summary();
+
+create function public.get_transparency_summary()
 returns table(
   total_collected numeric,
   total_outflows numeric,
