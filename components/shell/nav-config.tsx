@@ -4,6 +4,7 @@ import {
   Refrigerator,
   Receipt,
   Wallet,
+  Landmark,
   LayoutGrid,
   Boxes,
   Users,
@@ -19,6 +20,13 @@ export const userNavItems: NavItem[] = [
   { href: "/extrato", label: "Extrato", icon: Receipt },
   { href: "/pagamento", label: "Pagamento", icon: Wallet },
 ];
+
+/** Visível pra qualquer usuário logado — fica entre Pagamento e Administração. */
+export const transparenciaNavItem: NavItem = {
+  href: "/transparencia",
+  label: "Transparência",
+  icon: Landmark,
+};
 
 export const adminNavItems: NavItem[] = [
   { href: "/admin", label: "Painel", icon: LayoutGrid },

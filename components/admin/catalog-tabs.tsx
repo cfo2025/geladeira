@@ -16,6 +16,7 @@ type Product = {
   is_active: boolean | null;
   price: number;
   promo_price: number | null;
+  cost_price: number;
 };
 type InventoryRow = {
   location_id: string;

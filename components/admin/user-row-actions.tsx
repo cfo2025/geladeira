@@ -8,6 +8,7 @@ import { reactivateUser } from "@/app/actions/admin/users";
 import { DeactivateUserDialog } from "@/components/admin/deactivate-user-dialog";
 import { EditUserDialog } from "@/components/admin/edit-user-dialog";
 import { ResetPasswordDialog } from "@/components/admin/reset-password-dialog";
+import type { UserRole } from "@/lib/database.types";
 
 export function UserRowActions({
   userId,
@@ -23,7 +24,7 @@ export function UserRowActions({
   courseNumber: string;
   platoon: string;
   email: string;
-  role: "user" | "admin";
+  role: UserRole;
   isActive: boolean;
 }) {
   const [pending, startTransition] = useTransition();

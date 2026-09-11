@@ -7,6 +7,7 @@ import { LocationCard } from "@/components/loja/location-card";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ProductPriceForm } from "@/components/admin/product-price-form";
+import { ProductCostForm } from "@/components/admin/product-cost-form";
 import { RestockDialog } from "@/components/admin/restock-dialog";
 import { TransferDialog } from "@/components/admin/transfer-dialog";
 import { PromoDialog } from "@/components/admin/promo-dialog";
@@ -24,6 +25,7 @@ type Product = {
   is_active: boolean | null;
   price: number;
   promo_price: number | null;
+  cost_price: number;
 };
 type InventoryRow = {
   location_id: string;
@@ -97,6 +99,7 @@ export function StockTab({
             <TableRow>
               <TableHead>Produto</TableHead>
               <TableHead>Preço</TableHead>
+              <TableHead>Custo</TableHead>
               <TableHead>Estoque</TableHead>
               <TableHead className="text-right">Ações</TableHead>
               <TableHead className="text-right">Produto</TableHead>
@@ -149,6 +152,9 @@ export function StockTab({
                         </p>
                       )}
                     </div>
+                  </TableCell>
+                  <TableCell>
+                    <ProductCostForm productId={product.id} costPrice={product.cost_price} />
                   </TableCell>
                   <TableCell>
                     <Badge
@@ -214,7 +220,7 @@ export function StockTab({
             })}
             {products.length === 0 && (
               <TableRow>
-                <TableCell colSpan={5} className="text-center text-muted-foreground">
+                <TableCell colSpan={6} className="text-center text-muted-foreground">
                   Nenhum produto cadastrado.
                 </TableCell>
               </TableRow>

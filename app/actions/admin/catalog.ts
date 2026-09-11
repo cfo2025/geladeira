@@ -275,6 +275,22 @@ export async function updateProductPrice(productId: string, price: number): Prom
   return { success: true };
 }
 
+// ---- Custo unitário do produto (só pra projetar o lucro bruto em /transparencia) ----
+
+export async function updateProductCost(productId: string, costPrice: number): Promise<ActionResult> {
+  await requireAdmin();
+
+  if (!Number.isFinite(costPrice) || costPrice < 0) return { error: "Custo inválido" };
+
+  const supabase = await createClient();
+  const { error } = await supabase.from("products").update({ cost_price: costPrice }).eq("id", productId);
+  if (error) return { error: error.message };
+
+  revalidatePath("/admin/estoque");
+  revalidatePath("/transparencia");
+  return { success: true };
+}
+
 // ---- Promoções (também únicas por produto, valem para todas as geladeiras) ----
 
 const promoSchema = z.object({

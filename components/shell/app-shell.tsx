@@ -1,6 +1,7 @@
 import { TopNavbar } from "@/components/shell/top-navbar";
 import { SecondaryNav } from "@/components/shell/secondary-nav";
 import { AppFooter } from "@/components/shell/app-footer";
+import type { UserRole } from "@/lib/database.types";
 
 export function AppShell({
   userId,
@@ -10,7 +11,7 @@ export function AppShell({
 }: {
   userId: string;
   fullName: string;
-  role: "user" | "admin";
+  role: UserRole;
   children: React.ReactNode;
 }) {
   return (

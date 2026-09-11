@@ -39,3 +39,12 @@ export async function requireAdmin() {
   if (session.profile.role !== "admin") redirect("/dashboard");
   return session;
 }
+
+/** Admin ou ordenador de despesa: quem pode lançar saídas de caixa em /transparencia. */
+export async function requireExpenseOrderer() {
+  const session = await requireUser();
+  if (session.profile.role !== "admin" && session.profile.role !== "ordenador_despesa") {
+    redirect("/dashboard");
+  }
+  return session;
+}

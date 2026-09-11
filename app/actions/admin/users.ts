@@ -16,7 +16,7 @@ const createUserSchema = z.object({
   courseNumber: z.string().min(1, "Informe o número do curso"),
   platoon: z.string().min(1, "Informe o pelotão"),
   email: z.string().email("E-mail inválido"),
-  role: z.enum(["user", "admin"]),
+  role: z.enum(["user", "admin", "ordenador_despesa"]),
 });
 
 export async function createUser(
@@ -74,7 +74,7 @@ const updateUserSchema = z.object({
   courseNumber: z.string().min(1, "Informe o número do curso"),
   platoon: z.string().min(1, "Informe o pelotão"),
   email: z.string().email("E-mail inválido"),
-  role: z.enum(["user", "admin"]),
+  role: z.enum(["user", "admin", "ordenador_despesa"]),
 });
 
 export async function updateUser(

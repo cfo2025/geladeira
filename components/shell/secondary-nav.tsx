@@ -4,20 +4,21 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronDown, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { userNavItems, adminNavItems } from "@/components/shell/nav-config";
+import { userNavItems, transparenciaNavItem, adminNavItems } from "@/components/shell/nav-config";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import type { UserRole } from "@/lib/database.types";
 
 function isActive(pathname: string, href: string) {
   if (href === "/dashboard" || href === "/admin") return pathname === href;
   return pathname === href || pathname.startsWith(href + "/");
 }
 
-export function SecondaryNav({ role }: { role: "user" | "admin" }) {
+export function SecondaryNav({ role }: { role: UserRole }) {
   const pathname = usePathname();
   const inAdminArea = pathname.startsWith("/admin");
 
@@ -43,6 +44,26 @@ export function SecondaryNav({ role }: { role: "user" | "admin" }) {
             </Link>
           );
         })}
+
+        <span className="mx-1.5 h-4 w-px shrink-0 bg-border" />
+        {(() => {
+          const active = isActive(pathname, transparenciaNavItem.href);
+          const Icon = transparenciaNavItem.icon;
+          return (
+            <Link
+              href={transparenciaNavItem.href}
+              className={cn(
+                "flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium whitespace-nowrap transition-colors",
+                active
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+              )}
+            >
+              <Icon className="h-3.5 w-3.5" />
+              {transparenciaNavItem.label}
+            </Link>
+          );
+        })()}
 
         {role === "admin" && (
           <>

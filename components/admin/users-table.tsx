@@ -7,15 +7,15 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CreateUserDialog } from "@/components/admin/create-user-dialog";
 import { UserRowActions } from "@/components/admin/user-row-actions";
-import { DEACTIVATION_REASON_LABELS, formatDate } from "@/lib/format";
-import type { DeactivationReason } from "@/lib/database.types";
+import { DEACTIVATION_REASON_LABELS, ROLE_LABELS, formatDate } from "@/lib/format";
+import type { DeactivationReason, UserRole } from "@/lib/database.types";
 
 type UserRow = {
   id: string;
   full_name: string;
   course_number: string;
   platoon: string;
-  role: "user" | "admin";
+  role: UserRole;
   is_active: boolean;
   deactivation_reason: DeactivationReason | null;
   created_at: string;
@@ -83,8 +83,8 @@ export function UsersTable({ users }: { users: UserRow[] }) {
                 <TableCell className="text-muted-foreground">{user.platoon}</TableCell>
                 <TableCell className="text-muted-foreground">{user.email}</TableCell>
                 <TableCell>
-                  <Badge variant={user.role === "admin" ? "default" : "secondary"}>
-                    {user.role === "admin" ? "Admin" : "Usuário"}
+                  <Badge variant={user.role === "user" ? "secondary" : "default"}>
+                    {ROLE_LABELS[user.role] ?? user.role}
                   </Badge>
                 </TableCell>
                 <TableCell className="text-center">
