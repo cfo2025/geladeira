@@ -145,6 +145,17 @@ type ExpenseOutflowsRow = {
   created_at: string;
 };
 
+type ProductPurchasesRow = {
+  id: string;
+  product_id: string;
+  quantity: number;
+  unit_cost: number;
+  data_hora: string;
+  criado_por_id: string;
+  observacoes: string | null;
+  created_at: string;
+};
+
 export interface Database {
   public: {
     Tables: {
@@ -364,6 +375,28 @@ export interface Database {
           },
         ];
       };
+      product_purchases: {
+        Row: ProductPurchasesRow;
+        Insert: Partial<ProductPurchasesRow> &
+          Pick<ProductPurchasesRow, "product_id" | "quantity" | "unit_cost" | "criado_por_id">;
+        Update: Partial<ProductPurchasesRow>;
+        Relationships: [
+          {
+            foreignKeyName: "product_purchases_product_id_fkey";
+            columns: ["product_id"];
+            isOneToOne: false;
+            referencedRelation: "products";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "product_purchases_criado_por_id_fkey";
+            columns: ["criado_por_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
     };
     Views: Record<string, never>;
     Functions: {
@@ -467,7 +500,8 @@ export interface Database {
           total_collected: number;
           total_outflows: number;
           available_balance: number;
-          estimated_profit: number;
+          projected_profit: number;
+          realized_profit: number;
         }[];
       };
       create_expense_outflow: {
@@ -478,6 +512,15 @@ export interface Database {
           p_observacoes?: string | null;
         };
         Returns: ExpenseOutflowsRow;
+      };
+      register_product_purchase: {
+        Args: {
+          p_product_id: string;
+          p_quantity: number;
+          p_unit_cost: number;
+          p_observacoes?: string | null;
+        };
+        Returns: ProductPurchasesRow;
       };
     };
     Enums: Record<string, never>;

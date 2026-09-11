@@ -1,0 +1,106 @@
+"use client";
+
+import { useActionState, useRef, useState } from "react";
+import { ShoppingCart } from "lucide-react";
+import { registerProductPurchase, type ActionResult } from "@/app/actions/transparencia";
+import { useActionFeedback } from "@/hooks/use-action-feedback";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { CurrencyInput } from "@/components/ui/currency-input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+type Product = { id: string; name: string };
+
+export function ProductPurchaseForm({ products }: { products: Product[] }) {
+  const [open, setOpen] = useState(false);
+  const [productId, setProductId] = useState("");
+  const [state, formAction, pending] = useActionState<ActionResult, FormData>(registerProductPurchase, {});
+  const formRef = useRef<HTMLFormElement>(null);
+
+  useActionFeedback(state, {
+    successMessage: "Compra registrada — custo médio do produto atualizado",
+    onSuccess: () => {
+      formRef.current?.reset();
+      setProductId("");
+      setOpen(false);
+    },
+  });
+
+  return (
+    <Dialog
+      open={open}
+      onOpenChange={(next) => {
+        setOpen(next);
+        if (!next) setProductId("");
+      }}
+    >
+      <DialogTrigger render={<Button variant="outline" />}>
+        <ShoppingCart className="h-4 w-4" />
+        Lançar compra de produto
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <ShoppingCart className="h-4 w-4 text-gold" />
+            Lançar compra de produto
+          </DialogTitle>
+          <DialogDescription>
+            Registra quanto foi pago pelo produto. Não repõe estoque (use &quot;Repor estoque&quot; em
+            Admin &gt; Estoque) nem desconta do saldo em caixa (use &quot;Lançar despesa&quot; se o
+            dinheiro saiu do caixa) — serve só pra calcular o custo médio e o lucro.
+          </DialogDescription>
+        </DialogHeader>
+        <form ref={formRef} action={formAction} className="space-y-4">
+          <input type="hidden" name="productId" value={productId} />
+          <div className="space-y-2">
+            <Label htmlFor="productId">Produto</Label>
+            <Select value={productId} onValueChange={(value) => setProductId(value ?? "")}>
+              <SelectTrigger id="productId">
+                <SelectValue placeholder="Selecione um produto">
+                  {(value: string) => products.find((p) => p.id === value)?.name}
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                {products.map((product) => (
+                  <SelectItem key={product.id} value={product.id}>
+                    {product.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="quantity">Quantidade comprada</Label>
+              <Input id="quantity" name="quantity" type="number" min="1" step="1" required />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="unitCost">Valor pago por unidade</Label>
+              <CurrencyInput id="unitCost" name="unitCost" required />
+            </div>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="observacoes">Observações (opcional)</Label>
+            <Textarea id="observacoes" name="observacoes" rows={2} />
+          </div>
+          <DialogFooter>
+            <Button type="submit" disabled={pending || !productId}>
+              {pending ? "Registrando..." : "Registrar compra"}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}

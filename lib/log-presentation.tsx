@@ -10,6 +10,7 @@ import {
   XCircle,
   Wallet,
   BanknoteArrowDown,
+  ShoppingCart,
   ClipboardList,
   PackagePlus,
   ArrowLeftRight,
@@ -263,6 +264,20 @@ export function getLogPresentation(
         chips: [
           ...(valor !== undefined ? [{ label: "Valor", value: formatCurrency(valor) }] : []),
           ...(responsavel ? [{ label: "Responsável pela retirada", value: responsavel }] : []),
+        ],
+      };
+    }
+    case "product_purchase_created": {
+      const quantity = num(details, "quantity");
+      const unitCost = num(details, "unit_cost");
+      return {
+        icon: ShoppingCart,
+        tone: "blue",
+        title: "Compra de produto registrada",
+        description: `${actorName} registrou uma compra de ${productName(str(details, "product_id"))}.`,
+        chips: [
+          ...(quantity !== undefined ? [{ label: "Quantidade", value: String(quantity) }] : []),
+          ...(unitCost !== undefined ? [{ label: "Custo unitário", value: formatCurrency(unitCost) }] : []),
         ],
       };
     }
