@@ -50,20 +50,18 @@ export function ExpenseForm({ availableBalance }: { availableBalance: number }) 
           </DialogDescription>
         </DialogHeader>
         <form ref={formRef} action={formAction} className="space-y-4">
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="valor">Valor (R$)</Label>
-              <CurrencyInput id="valor" name="valor" required />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="responsavelRetirada">Responsável pela retirada</Label>
-              <Input
-                id="responsavelRetirada"
-                name="responsavelRetirada"
-                placeholder="Nome de quem retirou/utilizou"
-                required
-              />
-            </div>
+          <div className="space-y-2">
+            <Label htmlFor="valor">Valor (R$)</Label>
+            <CurrencyInput id="valor" name="valor" required />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="responsavelRetirada">Responsável pela retirada</Label>
+            <Input
+              id="responsavelRetirada"
+              name="responsavelRetirada"
+              placeholder="Nome de quem retirou/utilizou"
+              required
+            />
           </div>
           <div className="space-y-2">
             <Label htmlFor="localDestinado">Local destinado / finalidade</Label>
