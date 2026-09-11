@@ -85,8 +85,8 @@ export function CreateUserDialog() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="user">Usuário</SelectItem>
-                <SelectItem value="admin">Administrador</SelectItem>
                 <SelectItem value="ordenador_despesa">Ordenador de despesa</SelectItem>
+                <SelectItem value="admin">Administrador</SelectItem>
               </SelectContent>
             </Select>
           </div>

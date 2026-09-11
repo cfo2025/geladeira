@@ -117,7 +117,13 @@ export async function updateUser(
     }
   }
 
-  const { error: profileError } = await admin
+  // O trigger guard_profile_self_update valida is_admin() via auth.uid() da
+  // sessão — isso só existe no client autenticado (createClient), não no
+  // client de service role (admin), que não carrega JWT nenhum. Por isso o
+  // update do perfil (que troca o campo role) vai pelo client normal; o
+  // client admin acima é só pra chamadas da Auth Admin API.
+  const supabase = await createClient();
+  const { error: profileError } = await supabase
     .from("profiles")
     .update({
       full_name: parsed.data.fullName,
