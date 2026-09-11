@@ -3,14 +3,43 @@ import { createClient } from "@/lib/supabase/server";
 import { KpiStrip, type KpiItem } from "@/components/kpi-strip";
 import { ExpenseForm } from "@/components/transparencia/expense-form";
 import { ExpenseOutflowsTable } from "@/components/transparencia/expense-outflows-table";
+import { Card, CardContent } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/format";
-import { Wallet, HandCoins, BanknoteArrowDown, TrendingUp } from "lucide-react";
+import { Wallet, HandCoins, BanknoteArrowDown, TrendingUp, Construction } from "lucide-react";
 
 export default async function TransparenciaPage() {
   const { profile } = await requireUser();
-  const supabase = await createClient();
 
   const canManage = profile.role === "admin" || profile.role === "ordenador_despesa";
+
+  // Ainda em produção pra usuário comum — só admin/ordenador de despesa vê a
+  // tela de verdade por enquanto.
+  if (!canManage) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Transparência e fluxo de caixa</h1>
+          <p className="text-muted-foreground">
+            Saldo em caixa e prestação de contas de todas as saídas registradas na loja honesta.
+          </p>
+        </div>
+        <Card>
+          <CardContent className="flex flex-col items-center gap-3 py-16 text-center">
+            <span className="flex h-12 w-12 items-center justify-center rounded-full bg-accent">
+              <Construction className="h-6 w-6 text-gold" />
+            </span>
+            <p className="font-semibold">Em produção</p>
+            <p className="max-w-sm text-sm text-muted-foreground">
+              Essa página ainda está sendo finalizada. Em breve todo mundo vai poder ver o saldo em
+              caixa e o extrato de prestação de contas por aqui.
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  const supabase = await createClient();
 
   const [{ data: summaryRows }, { data: expenses }] = await Promise.all([
     supabase.rpc("get_transparency_summary"),
