@@ -5,6 +5,7 @@ import { Search, ChevronLeft, ChevronRight, BanknoteArrowDown } from "lucide-rea
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { ExpenseTagBadge } from "@/components/status-badge";
+import { ExpenseViewDialog } from "@/components/transparencia/expense-view-dialog";
 import { formatCurrency, formatDateTimeFull } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { ExpenseTag } from "@/lib/database.types";
@@ -22,6 +23,8 @@ type ExpenseRow = {
 
 const PAGE_SIZE = 10;
 
+/** Extrato de saídas só-leitura — usado pra usuário comum ver pra onde o
+ *  dinheiro foi (empenho/bônus/descaminho), sem editar/excluir nada. */
 export function ExpenseOutflowsTable({ expenses }: { expenses: ExpenseRow[] }) {
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(0);
@@ -52,7 +55,7 @@ export function ExpenseOutflowsTable({ expenses }: { expenses: ExpenseRow[] }) {
         <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <input
           type="search"
-          placeholder="Buscar por local, responsável ou quem lançou..."
+          placeholder="Buscar por local ou responsável..."
           value={query}
           onChange={(e) => handleQueryChange(e.target.value)}
           className="h-9 w-full rounded-full border border-input bg-muted/40 pr-3 pl-9 text-sm outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
@@ -63,25 +66,25 @@ export function ExpenseOutflowsTable({ expenses }: { expenses: ExpenseRow[] }) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="whitespace-nowrap">Data e hora</TableHead>
-              <TableHead className="text-right">Valor</TableHead>
-              <TableHead>Tipo</TableHead>
-              <TableHead>Local / finalidade</TableHead>
-              <TableHead>Responsável pela retirada</TableHead>
-              <TableHead>Homologado por</TableHead>
-              <TableHead>Observações</TableHead>
+              <TableHead className="whitespace-nowrap text-center">Data e hora</TableHead>
+              <TableHead className="text-center">Tipo</TableHead>
+              <TableHead className="text-center">Valor</TableHead>
+              <TableHead className="text-center">Local / finalidade</TableHead>
+              <TableHead className="text-center">Responsável pela retirada</TableHead>
+              <TableHead className="text-center">Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {pageRows.map((expense) => (
               <TableRow
                 key={expense.id}
-                className={cn(
-                  expense.tag === "descaminho" && "bg-destructive/5 hover:bg-destructive/10"
-                )}
+                className={cn(expense.tag === "descaminho" && "bg-destructive/5 hover:bg-destructive/10")}
               >
                 <TableCell className="whitespace-nowrap text-muted-foreground">
                   {formatDateTimeFull(expense.data_hora)}
+                </TableCell>
+                <TableCell>
+                  <ExpenseTagBadge tag={expense.tag} />
                 </TableCell>
                 <TableCell
                   className={cn(
@@ -92,24 +95,20 @@ export function ExpenseOutflowsTable({ expenses }: { expenses: ExpenseRow[] }) {
                   {formatCurrency(expense.valor)}
                 </TableCell>
                 <TableCell>
-                  <ExpenseTagBadge tag={expense.tag} />
-                </TableCell>
-                <TableCell>
                   <div className="flex items-center gap-2">
                     <BanknoteArrowDown className="h-3.5 w-3.5 shrink-0 text-muted-foreground/60" />
                     {expense.local_destinado}
                   </div>
                 </TableCell>
                 <TableCell className="text-muted-foreground">{expense.responsavel_retirada}</TableCell>
-                <TableCell className="text-muted-foreground">{expense.criado_por?.full_name ?? "—"}</TableCell>
-                <TableCell className="max-w-56 truncate text-muted-foreground" title={expense.observacoes ?? undefined}>
-                  {expense.observacoes ?? "—"}
+                <TableCell className="text-right">
+                  <ExpenseViewDialog expense={expense} />
                 </TableCell>
               </TableRow>
             ))}
             {pageRows.length === 0 && (
               <TableRow>
-                <TableCell colSpan={7} className="text-center text-muted-foreground">
+                <TableCell colSpan={6} className="text-center text-muted-foreground">
                   {query ? "Nenhuma saída encontrada." : "Nenhuma saída de caixa registrada ainda."}
                 </TableCell>
               </TableRow>

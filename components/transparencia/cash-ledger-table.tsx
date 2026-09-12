@@ -124,12 +124,11 @@ export function CashLedgerTable({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="whitespace-nowrap">Data e hora</TableHead>
-              <TableHead>Tipo</TableHead>
-              <TableHead className="text-right">Valor</TableHead>
-              <TableHead>Descrição</TableHead>
-              <TableHead>Observações</TableHead>
-              <TableHead className="text-right">Ações</TableHead>
+              <TableHead className="whitespace-nowrap text-center">Data e hora</TableHead>
+              <TableHead className="text-center">Tipo</TableHead>
+              <TableHead className="text-center">Valor</TableHead>
+              <TableHead className="text-center">Descrição</TableHead>
+              <TableHead className="text-center">Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -180,12 +179,6 @@ export function CashLedgerTable({
                     </div>
                   </div>
                 </TableCell>
-                <TableCell
-                  className="max-w-56 truncate text-muted-foreground"
-                  title={row.kind === "saida" ? (row.observacoes ?? undefined) : undefined}
-                >
-                  {row.kind === "saida" ? (row.observacoes ?? "—") : "—"}
-                </TableCell>
                 <TableCell className="text-right">
                   {row.kind === "saida" ? <ExpenseActions expense={row.original} /> : null}
                 </TableCell>
@@ -193,7 +186,7 @@ export function CashLedgerTable({
             ))}
             {pageRows.length === 0 && (
               <TableRow>
-                <TableCell colSpan={6} className="text-center text-muted-foreground">
+                <TableCell colSpan={5} className="text-center text-muted-foreground">
                   {query ? "Nenhum lançamento encontrado." : "Nenhum lançamento registrado ainda."}
                 </TableCell>
               </TableRow>
