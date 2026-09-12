@@ -4,8 +4,9 @@ import { KpiStrip, type KpiItem } from "@/components/kpi-strip";
 import { ExpenseForm } from "@/components/transparencia/expense-form";
 import { ProductPurchaseForm } from "@/components/transparencia/product-purchase-form";
 import { ExpenseOutflowsTable } from "@/components/transparencia/expense-outflows-table";
+import { CashLedgerTable } from "@/components/transparencia/cash-ledger-table";
 import { formatCurrency } from "@/lib/format";
-import { Wallet, HandCoins, BanknoteArrowDown, TrendingUp, PiggyBank } from "lucide-react";
+import { Wallet, HandCoins, BanknoteArrowDown, PiggyBank } from "lucide-react";
 
 const EXPENSE_SELECT =
   "id, valor, data_hora, local_destinado, responsavel_retirada, tag, observacoes, criado_por:profiles!expense_outflows_criado_por_id_fkey(full_name)";
@@ -17,7 +18,7 @@ export default async function TransparenciaPage() {
   const canManage = profile.role === "admin" || profile.role === "ordenador_despesa";
 
   // Usuário comum: só saldo/arrecadado (2 cards centralizados) e o extrato
-  // de saídas — sem lançamentos, sem lucro previsto/real.
+  // de saídas — sem lançamentos, sem lucro.
   if (!canManage) {
     const [{ data: summaryRows }, { data: expenses }] = await Promise.all([
       supabase.rpc("get_transparency_summary"),
@@ -60,15 +61,24 @@ export default async function TransparenciaPage() {
     );
   }
 
-  const [{ data: summaryRows }, { data: expenses }, { data: products }] = await Promise.all([
-    supabase.rpc("get_transparency_summary"),
-    supabase.from("expense_outflows").select(EXPENSE_SELECT).order("data_hora", { ascending: false }),
-    supabase
-      .from("products")
-      .select("id, name, category, image_url")
-      .eq("is_active", true)
-      .order("name"),
-  ]);
+  const [{ data: summaryRows }, { data: expenses }, { data: products }, { data: payments }] =
+    await Promise.all([
+      supabase.rpc("get_transparency_summary"),
+      supabase.from("expense_outflows").select(EXPENSE_SELECT).order("data_hora", { ascending: false }),
+      supabase
+        .from("products")
+        .select("id, name, category, image_url, price, promo_price")
+        .eq("is_active", true)
+        .order("name"),
+      // Extrato mostra TODO o histórico de entradas, pra admin/ordenador
+      // auditarem tudo — diferente do card "Total arrecadado" acima, que só
+      // soma pagamentos aprovados depois do marco de zerar o caixa.
+      supabase
+        .from("payments")
+        .select("id, admin_typed_amount, reviewed_at, user:profiles!payments_user_id_fkey(full_name)")
+        .eq("status", "approved")
+        .order("reviewed_at", { ascending: false }),
+    ]);
 
   const summary = summaryRows?.[0] ?? {
     total_collected: 0,
@@ -95,11 +105,6 @@ export default async function TransparenciaPage() {
       icon: BanknoteArrowDown,
     },
     {
-      label: "Lucro previsto",
-      value: formatCurrency(Number(summary.projected_profit ?? 0)),
-      icon: TrendingUp,
-    },
-    {
       label: "Lucro real",
       value: formatCurrency(Number(summary.realized_profit ?? 0)),
       icon: PiggyBank,
@@ -123,14 +128,19 @@ export default async function TransparenciaPage() {
 
       <KpiStrip items={stats} />
       <p className="text-xs text-muted-foreground">
-        O lucro só entra na conta pra produtos que já tiveram compra registrada (ou custo definido
-        em Estoque) — por isso começa zerado. Previsto = o que está em estoque hoje; real = o que já
-        foi vendido.
+        O lucro real só entra na conta pra produtos que já tiveram compra registrada (ou custo
+        definido em Estoque) — por isso começa zerado. O lucro previsto de cada compra aparece na
+        hora do lançamento, no próprio modal.
       </p>
 
       <div>
-        <h2 className="mb-3 text-lg font-bold">Extrato de prestação de contas</h2>
-        <ExpenseOutflowsTable expenses={expenses ?? []} />
+        <h2 className="mb-3 text-lg font-bold">Extrato de entradas e saídas</h2>
+        <p className="mb-3 text-xs text-muted-foreground">
+          Mostra todo o histórico de pagamentos aprovados e saídas — inclusive de antes do
+          &quot;Total arrecadado&quot; acima começar a contar, que reflete só o saldo em caixa a
+          partir de quando esse módulo entrou no ar.
+        </p>
+        <CashLedgerTable expenses={expenses ?? []} payments={payments ?? []} />
       </div>
     </div>
   );
