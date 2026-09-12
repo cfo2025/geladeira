@@ -515,7 +515,6 @@ export interface Database {
           total_collected: number;
           total_outflows: number;
           available_balance: number;
-          projected_profit: number;
           realized_profit: number;
         }[];
       };

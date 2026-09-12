@@ -3,43 +3,22 @@ import { createClient } from "@/lib/supabase/server";
 import { KpiStrip, type KpiItem } from "@/components/kpi-strip";
 import { ExpenseForm } from "@/components/transparencia/expense-form";
 import { ProductPurchaseForm } from "@/components/transparencia/product-purchase-form";
-import { ExpenseOutflowsTable } from "@/components/transparencia/expense-outflows-table";
 import { CashLedgerTable } from "@/components/transparencia/cash-ledger-table";
+import { Card, CardContent } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/format";
-import { Wallet, HandCoins, BanknoteArrowDown, PiggyBank } from "lucide-react";
+import { Wallet, HandCoins, BanknoteArrowDown, PiggyBank, Construction } from "lucide-react";
 
 const EXPENSE_SELECT =
   "id, valor, data_hora, local_destinado, responsavel_retirada, tag, observacoes, criado_por:profiles!expense_outflows_criado_por_id_fkey(full_name)";
 
 export default async function TransparenciaPage() {
   const { profile } = await requireUser();
-  const supabase = await createClient();
 
   const canManage = profile.role === "admin" || profile.role === "ordenador_despesa";
 
-  // Usuário comum: só saldo/arrecadado (2 cards centralizados) e o extrato
-  // de saídas — sem lançamentos, sem lucro.
+  // Ainda em produção pra usuário comum — só admin/ordenador de despesa vê a
+  // tela de verdade por enquanto.
   if (!canManage) {
-    const [{ data: summaryRows }, { data: expenses }] = await Promise.all([
-      supabase.rpc("get_transparency_summary"),
-      supabase.from("expense_outflows").select(EXPENSE_SELECT).order("data_hora", { ascending: false }),
-    ]);
-
-    const summary = summaryRows?.[0] ?? { available_balance: 0, total_collected: 0 };
-
-    const stats: KpiItem[] = [
-      {
-        label: "Saldo em caixa disponível",
-        value: formatCurrency(Number(summary.available_balance ?? 0)),
-        icon: Wallet,
-      },
-      {
-        label: "Total arrecadado",
-        value: formatCurrency(Number(summary.total_collected ?? 0)),
-        icon: HandCoins,
-      },
-    ];
-
     return (
       <div className="space-y-6">
         <div>
@@ -48,18 +27,23 @@ export default async function TransparenciaPage() {
             Saldo em caixa e prestação de contas de todas as saídas registradas na loja honesta.
           </p>
         </div>
-
-        <div className="mx-auto max-w-lg">
-          <KpiStrip items={stats} />
-        </div>
-
-        <div>
-          <h2 className="mb-3 text-lg font-bold">Extrato de prestação de contas</h2>
-          <ExpenseOutflowsTable expenses={expenses ?? []} />
-        </div>
+        <Card>
+          <CardContent className="flex flex-col items-center gap-3 py-16 text-center">
+            <span className="flex h-12 w-12 items-center justify-center rounded-full bg-accent">
+              <Construction className="h-6 w-6 text-gold" />
+            </span>
+            <p className="font-semibold">Em produção</p>
+            <p className="max-w-sm text-sm text-muted-foreground">
+              Essa página ainda está sendo finalizada. Em breve todo mundo vai poder ver o saldo em
+              caixa e o extrato de prestação de contas por aqui.
+            </p>
+          </CardContent>
+        </Card>
       </div>
     );
   }
+
+  const supabase = await createClient();
 
   const [{ data: summaryRows }, { data: expenses }, { data: products }, { data: payments }] =
     await Promise.all([
@@ -70,9 +54,6 @@ export default async function TransparenciaPage() {
         .select("id, name, category, image_url, price, promo_price")
         .eq("is_active", true)
         .order("name"),
-      // Extrato mostra TODO o histórico de entradas, pra admin/ordenador
-      // auditarem tudo — diferente do card "Total arrecadado" acima, que só
-      // soma pagamentos aprovados depois do marco de zerar o caixa.
       supabase
         .from("payments")
         .select("id, admin_typed_amount, reviewed_at, user:profiles!payments_user_id_fkey(full_name)")
@@ -84,7 +65,6 @@ export default async function TransparenciaPage() {
     total_collected: 0,
     total_outflows: 0,
     available_balance: 0,
-    projected_profit: 0,
     realized_profit: 0,
   };
 
@@ -127,19 +107,9 @@ export default async function TransparenciaPage() {
       </div>
 
       <KpiStrip items={stats} />
-      <p className="text-xs text-muted-foreground">
-        O lucro real só entra na conta pra produtos que já tiveram compra registrada (ou custo
-        definido em Estoque) — por isso começa zerado. O lucro previsto de cada compra aparece na
-        hora do lançamento, no próprio modal.
-      </p>
 
       <div>
         <h2 className="mb-3 text-lg font-bold">Extrato de entradas e saídas</h2>
-        <p className="mb-3 text-xs text-muted-foreground">
-          Mostra todo o histórico de pagamentos aprovados e saídas — inclusive de antes do
-          &quot;Total arrecadado&quot; acima começar a contar, que reflete só o saldo em caixa a
-          partir de quando esse módulo entrou no ar.
-        </p>
         <CashLedgerTable expenses={expenses ?? []} payments={payments ?? []} />
       </div>
     </div>
