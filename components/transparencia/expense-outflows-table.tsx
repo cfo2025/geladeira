@@ -4,7 +4,10 @@ import { useMemo, useState } from "react";
 import { Search, ChevronLeft, ChevronRight, BanknoteArrowDown } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { ExpenseTagBadge } from "@/components/status-badge";
 import { formatCurrency, formatDateTimeFull } from "@/lib/format";
+import { cn } from "@/lib/utils";
+import type { ExpenseTag } from "@/lib/database.types";
 
 type ExpenseRow = {
   id: string;
@@ -12,6 +15,7 @@ type ExpenseRow = {
   data_hora: string;
   local_destinado: string;
   responsavel_retirada: string;
+  tag: ExpenseTag;
   observacoes: string | null;
   criado_por: { full_name: string } | null;
 };
@@ -61,6 +65,7 @@ export function ExpenseOutflowsTable({ expenses }: { expenses: ExpenseRow[] }) {
             <TableRow>
               <TableHead className="whitespace-nowrap">Data e hora</TableHead>
               <TableHead className="text-right">Valor</TableHead>
+              <TableHead>Tipo</TableHead>
               <TableHead>Local / finalidade</TableHead>
               <TableHead>Responsável pela retirada</TableHead>
               <TableHead>Homologado por</TableHead>
@@ -69,12 +74,25 @@ export function ExpenseOutflowsTable({ expenses }: { expenses: ExpenseRow[] }) {
           </TableHeader>
           <TableBody>
             {pageRows.map((expense) => (
-              <TableRow key={expense.id}>
+              <TableRow
+                key={expense.id}
+                className={cn(
+                  expense.tag === "descaminho" && "bg-destructive/5 hover:bg-destructive/10"
+                )}
+              >
                 <TableCell className="whitespace-nowrap text-muted-foreground">
                   {formatDateTimeFull(expense.data_hora)}
                 </TableCell>
-                <TableCell className="text-right font-medium tabular-nums whitespace-nowrap">
+                <TableCell
+                  className={cn(
+                    "text-right font-medium tabular-nums whitespace-nowrap",
+                    expense.tag === "descaminho" && "text-destructive"
+                  )}
+                >
                   {formatCurrency(expense.valor)}
+                </TableCell>
+                <TableCell>
+                  <ExpenseTagBadge tag={expense.tag} />
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center gap-2">
@@ -91,7 +109,7 @@ export function ExpenseOutflowsTable({ expenses }: { expenses: ExpenseRow[] }) {
             ))}
             {pageRows.length === 0 && (
               <TableRow>
-                <TableCell colSpan={6} className="text-center text-muted-foreground">
+                <TableCell colSpan={7} className="text-center text-muted-foreground">
                   {query ? "Nenhuma saída encontrada." : "Nenhuma saída de caixa registrada ainda."}
                 </TableCell>
               </TableRow>

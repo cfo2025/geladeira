@@ -29,7 +29,7 @@ export function ProductPurchaseForm({ products }: { products: Product[] }) {
   const formRef = useRef<HTMLFormElement>(null);
 
   useActionFeedback(state, {
-    successMessage: "Compra registrada — custo médio do produto atualizado",
+    successMessage: "Compra registrada — estoque reposto e custo médio atualizado",
     onSuccess: () => {
       formRef.current?.reset();
       setProductId("");
@@ -56,9 +56,9 @@ export function ProductPurchaseForm({ products }: { products: Product[] }) {
             Lançar compra de produto
           </DialogTitle>
           <DialogDescription>
-            Registra quanto foi pago pelo produto. Não repõe estoque (use &quot;Repor estoque&quot; em
-            Admin &gt; Estoque) nem desconta do saldo em caixa (use &quot;Lançar despesa&quot;) — serve
-            só pra calcular o custo médio e o lucro.
+            Já soma a quantidade comprada no estoque do local ativo e recalcula o custo médio do
+            produto (pro lucro previsto/real). Não desconta do saldo em caixa — se o dinheiro
+            realmente saiu do caixa pra pagar, lance também em &quot;Lançar despesa&quot;.
           </DialogDescription>
         </DialogHeader>
         <form ref={formRef} action={formAction} className="space-y-4">

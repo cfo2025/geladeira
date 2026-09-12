@@ -22,7 +22,7 @@ import {
   EyeOff,
 } from "lucide-react";
 import { formatCurrency } from "@/lib/format";
-import { DEACTIVATION_REASON_LABELS, PAYMENT_STATUS_LABELS } from "@/lib/format";
+import { DEACTIVATION_REASON_LABELS, EXPENSE_TAG_LABELS, PAYMENT_STATUS_LABELS } from "@/lib/format";
 
 export type LogTone = "green" | "red" | "blue" | "amber" | "slate";
 
@@ -256,13 +256,15 @@ export function getLogPresentation(
       const valor = num(details, "valor");
       const local = str(details, "local_destinado");
       const responsavel = str(details, "responsavel_retirada");
+      const tag = str(details, "tag");
       return {
         icon: BanknoteArrowDown,
-        tone: "amber",
+        tone: tag === "descaminho" ? "red" : "amber",
         title: "Saída de caixa lançada",
         description: `${actorName} lançou uma saída de caixa${local ? ` para "${local}"` : ""}.`,
         chips: [
           ...(valor !== undefined ? [{ label: "Valor", value: formatCurrency(valor) }] : []),
+          ...(tag ? [{ label: "Tipo", value: EXPENSE_TAG_LABELS[tag] ?? tag }] : []),
           ...(responsavel ? [{ label: "Responsável pela retirada", value: responsavel }] : []),
         ],
       };

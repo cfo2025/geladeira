@@ -1,6 +1,8 @@
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 import {
   CANCELLATION_STATUS_LABELS,
+  EXPENSE_TAG_LABELS,
   PAYMENT_STATUS_LABELS,
   WITHDRAWAL_STATUS_LABELS,
 } from "@/lib/format";
@@ -26,4 +28,25 @@ export function CancellationStatusBadge({ status }: { status: string }) {
   return (
     <Badge variant={variantFor(status)}>{CANCELLATION_STATUS_LABELS[status] ?? status}</Badge>
   );
+}
+
+/** Empenho = saída normal/planejada. Bônus = gratificação. Descaminho =
+ *  prejuízo (sumiço/furto não lançado como retirada) — destacado em
+ *  vermelho pra ficar bem visível que é uma perda, não um gasto normal. */
+export function ExpenseTagBadge({ tag }: { tag: string }) {
+  if (tag === "descaminho") {
+    return <Badge variant="destructive">{EXPENSE_TAG_LABELS[tag]}</Badge>;
+  }
+  if (tag === "bonus") {
+    return (
+      <Badge
+        className={cn(
+          "border-transparent bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-400"
+        )}
+      >
+        {EXPENSE_TAG_LABELS[tag]}
+      </Badge>
+    );
+  }
+  return <Badge variant="secondary">{EXPENSE_TAG_LABELS[tag] ?? tag}</Badge>;
 }

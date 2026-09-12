@@ -4,18 +4,41 @@ import { KpiStrip, type KpiItem } from "@/components/kpi-strip";
 import { ExpenseForm } from "@/components/transparencia/expense-form";
 import { ProductPurchaseForm } from "@/components/transparencia/product-purchase-form";
 import { ExpenseOutflowsTable } from "@/components/transparencia/expense-outflows-table";
-import { Card, CardContent } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/format";
-import { Wallet, HandCoins, BanknoteArrowDown, TrendingUp, PiggyBank, Construction } from "lucide-react";
+import { Wallet, HandCoins, BanknoteArrowDown, TrendingUp, PiggyBank } from "lucide-react";
+
+const EXPENSE_SELECT =
+  "id, valor, data_hora, local_destinado, responsavel_retirada, tag, observacoes, criado_por:profiles!expense_outflows_criado_por_id_fkey(full_name)";
 
 export default async function TransparenciaPage() {
   const { profile } = await requireUser();
+  const supabase = await createClient();
 
   const canManage = profile.role === "admin" || profile.role === "ordenador_despesa";
 
-  // Ainda em produção pra usuário comum — só admin/ordenador de despesa vê a
-  // tela de verdade por enquanto.
+  // Usuário comum: só saldo/arrecadado (2 cards centralizados) e o extrato
+  // de saídas — sem lançamentos, sem lucro previsto/real.
   if (!canManage) {
+    const [{ data: summaryRows }, { data: expenses }] = await Promise.all([
+      supabase.rpc("get_transparency_summary"),
+      supabase.from("expense_outflows").select(EXPENSE_SELECT).order("data_hora", { ascending: false }),
+    ]);
+
+    const summary = summaryRows?.[0] ?? { available_balance: 0, total_collected: 0 };
+
+    const stats: KpiItem[] = [
+      {
+        label: "Saldo em caixa disponível",
+        value: formatCurrency(Number(summary.available_balance ?? 0)),
+        icon: Wallet,
+      },
+      {
+        label: "Total arrecadado",
+        value: formatCurrency(Number(summary.total_collected ?? 0)),
+        icon: HandCoins,
+      },
+    ];
+
     return (
       <div className="space-y-6">
         <div>
@@ -24,32 +47,22 @@ export default async function TransparenciaPage() {
             Saldo em caixa e prestação de contas de todas as saídas registradas na loja honesta.
           </p>
         </div>
-        <Card>
-          <CardContent className="flex flex-col items-center gap-3 py-16 text-center">
-            <span className="flex h-12 w-12 items-center justify-center rounded-full bg-accent">
-              <Construction className="h-6 w-6 text-gold" />
-            </span>
-            <p className="font-semibold">Em produção</p>
-            <p className="max-w-sm text-sm text-muted-foreground">
-              Essa página ainda está sendo finalizada. Em breve todo mundo vai poder ver o saldo em
-              caixa e o extrato de prestação de contas por aqui.
-            </p>
-          </CardContent>
-        </Card>
+
+        <div className="mx-auto max-w-lg">
+          <KpiStrip items={stats} />
+        </div>
+
+        <div>
+          <h2 className="mb-3 text-lg font-bold">Extrato de prestação de contas</h2>
+          <ExpenseOutflowsTable expenses={expenses ?? []} />
+        </div>
       </div>
     );
   }
 
-  const supabase = await createClient();
-
   const [{ data: summaryRows }, { data: expenses }, { data: products }] = await Promise.all([
     supabase.rpc("get_transparency_summary"),
-    supabase
-      .from("expense_outflows")
-      .select(
-        "id, valor, data_hora, local_destinado, responsavel_retirada, observacoes, criado_por:profiles!expense_outflows_criado_por_id_fkey(full_name)"
-      )
-      .order("data_hora", { ascending: false }),
+    supabase.from("expense_outflows").select(EXPENSE_SELECT).order("data_hora", { ascending: false }),
     supabase
       .from("products")
       .select("id, name, category, image_url")
