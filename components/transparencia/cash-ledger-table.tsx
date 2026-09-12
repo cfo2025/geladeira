@@ -6,6 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ExpenseTagBadge } from "@/components/status-badge";
+import { ExpenseActions } from "@/components/transparencia/expense-actions";
 import { formatCurrency, formatDateTimeFull } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { ExpenseTag } from "@/lib/database.types";
@@ -46,6 +47,7 @@ type LedgerRow =
       title: string;
       subtitle: string | null;
       observacoes: string | null;
+      original: ExpenseRow;
     };
 
 const PAGE_SIZE = 10;
@@ -80,6 +82,7 @@ export function CashLedgerTable({
       title: e.local_destinado,
       subtitle: `Responsável: ${e.responsavel_retirada}${e.criado_por ? ` · Homologado por ${e.criado_por.full_name}` : ""}`,
       observacoes: e.observacoes,
+      original: e,
     }));
     return [...entradas, ...saidas].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }, [expenses, payments]);
@@ -126,6 +129,7 @@ export function CashLedgerTable({
               <TableHead className="text-right">Valor</TableHead>
               <TableHead>Descrição</TableHead>
               <TableHead>Observações</TableHead>
+              <TableHead className="text-right">Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -182,11 +186,14 @@ export function CashLedgerTable({
                 >
                   {row.kind === "saida" ? (row.observacoes ?? "—") : "—"}
                 </TableCell>
+                <TableCell className="text-right">
+                  {row.kind === "saida" ? <ExpenseActions expense={row.original} /> : null}
+                </TableCell>
               </TableRow>
             ))}
             {pageRows.length === 0 && (
               <TableRow>
-                <TableCell colSpan={5} className="text-center text-muted-foreground">
+                <TableCell colSpan={6} className="text-center text-muted-foreground">
                   {query ? "Nenhum lançamento encontrado." : "Nenhum lançamento registrado ainda."}
                 </TableCell>
               </TableRow>
