@@ -537,6 +537,21 @@ export interface Database {
         };
         Returns: ProductPurchasesRow;
       };
+      update_expense_outflow: {
+        Args: {
+          p_id: string;
+          p_valor: number;
+          p_local_destinado: string;
+          p_responsavel_retirada: string;
+          p_tag: ExpenseTag;
+          p_observacoes?: string | null;
+        };
+        Returns: ExpenseOutflowsRow;
+      };
+      delete_expense_outflow: {
+        Args: { p_id: string };
+        Returns: undefined;
+      };
     };
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;

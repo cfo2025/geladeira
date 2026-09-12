@@ -15,6 +15,7 @@ import {
   PackagePlus,
   ArrowLeftRight,
   Trash2,
+  Pencil,
   BadgePercent,
   Eraser,
   FileQuestion,
@@ -57,6 +58,11 @@ function str(details: Details, key: string): string | undefined {
 function num(details: Details, key: string): number | undefined {
   const value = details?.[key];
   return typeof value === "number" ? value : undefined;
+}
+
+function obj(details: Details, key: string): Details {
+  const value = details?.[key];
+  return value && typeof value === "object" ? (value as Details) : null;
 }
 
 export function getLogPresentation(
@@ -266,6 +272,44 @@ export function getLogPresentation(
           ...(valor !== undefined ? [{ label: "Valor", value: formatCurrency(valor) }] : []),
           ...(tag ? [{ label: "Tipo", value: EXPENSE_TAG_LABELS[tag] ?? tag }] : []),
           ...(responsavel ? [{ label: "Responsável pela retirada", value: responsavel }] : []),
+        ],
+      };
+    }
+    case "expense_updated": {
+      const before = obj(details, "before");
+      const after = obj(details, "after");
+      const valorBefore = num(before, "valor");
+      const valorAfter = num(after, "valor");
+      const local = str(after, "local_destinado");
+      const tag = str(after, "tag");
+      const valorChanged = valorBefore !== undefined && valorAfter !== undefined && valorBefore !== valorAfter;
+      return {
+        icon: Pencil,
+        tone: "blue",
+        title: "Saída de caixa editada",
+        description: `${actorName} editou uma saída de caixa${local ? ` ("${local}")` : ""}.`,
+        chips: [
+          ...(valorChanged
+            ? [{ label: "Valor", value: `${formatCurrency(valorBefore!)} → ${formatCurrency(valorAfter!)}` }]
+            : valorAfter !== undefined
+              ? [{ label: "Valor", value: formatCurrency(valorAfter) }]
+              : []),
+          ...(tag ? [{ label: "Tipo", value: EXPENSE_TAG_LABELS[tag] ?? tag }] : []),
+        ],
+      };
+    }
+    case "expense_deleted": {
+      const valor = num(details, "valor");
+      const local = str(details, "local_destinado");
+      const tag = str(details, "tag");
+      return {
+        icon: Trash2,
+        tone: "red",
+        title: "Saída de caixa excluída",
+        description: `${actorName} excluiu uma saída de caixa${local ? ` ("${local}")` : ""}.`,
+        chips: [
+          ...(valor !== undefined ? [{ label: "Valor", value: formatCurrency(valor) }] : []),
+          ...(tag ? [{ label: "Tipo", value: EXPENSE_TAG_LABELS[tag] ?? tag }] : []),
         ],
       };
     }
