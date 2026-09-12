@@ -159,6 +159,12 @@ type ProductPurchasesRow = {
   created_at: string;
 };
 
+type AppSettingsRow = {
+  key: string;
+  value: Json;
+  updated_at: string;
+};
+
 export interface Database {
   public: {
     Tables: {
@@ -399,6 +405,12 @@ export interface Database {
             referencedColumns: ["id"];
           },
         ];
+      };
+      app_settings: {
+        Row: AppSettingsRow;
+        Insert: AppSettingsRow;
+        Update: Partial<AppSettingsRow>;
+        Relationships: [];
       };
     };
     Views: Record<string, never>;
