@@ -134,12 +134,15 @@ type AuditLogsRow = {
   created_at: string;
 };
 
+export type ExpenseTag = "empenho" | "bonus" | "descaminho";
+
 type ExpenseOutflowsRow = {
   id: string;
   valor: number;
   data_hora: string;
   local_destinado: string;
   responsavel_retirada: string;
+  tag: ExpenseTag;
   criado_por_id: string;
   observacoes: string | null;
   created_at: string;
@@ -509,6 +512,7 @@ export interface Database {
           p_valor: number;
           p_local_destinado: string;
           p_responsavel_retirada: string;
+          p_tag: ExpenseTag;
           p_observacoes?: string | null;
         };
         Returns: ExpenseOutflowsRow;

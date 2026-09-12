@@ -66,3 +66,9 @@ export const CANCELLATION_STATUS_LABELS: Record<string, string> = {
   approved: "Aprovada",
   rejected: "Rejeitada",
 };
+
+export const EXPENSE_TAG_LABELS: Record<string, string> = {
+  empenho: "Empenho",
+  bonus: "Bônus",
+  descaminho: "Descaminho",
+};

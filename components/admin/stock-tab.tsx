@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Image from "next/image";
-import { Package } from "lucide-react";
+import { Package, TriangleAlert } from "lucide-react";
 import { LocationCard } from "@/components/loja/location-card";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -110,6 +110,8 @@ export function StockTab({
               const inv = inventoryByKey.get(`${locationId}:${product.id}`);
               const quantity = inv?.quantity ?? 0;
               const totalStock = totalStockByProduct.get(product.id) ?? 0;
+              const effectivePrice = product.promo_price ?? product.price;
+              const sellingBelowCost = product.cost_price > 0 && effectivePrice < product.cost_price;
               return (
                 <TableRow key={product.id}>
                   <TableCell>
@@ -149,6 +151,15 @@ export function StockTab({
                         <p className="text-xs font-medium text-green-600 dark:text-green-400">
                           Promoção: {formatCurrency(product.promo_price)} (
                           {Math.round((1 - product.promo_price / product.price) * 100)}% off)
+                        </p>
+                      )}
+                      {sellingBelowCost && (
+                        <p
+                          className="flex items-center gap-1 text-xs font-medium text-destructive"
+                          title={`Custo médio: ${formatCurrency(product.cost_price)}`}
+                        >
+                          <TriangleAlert className="h-3 w-3 shrink-0" />
+                          Vendendo abaixo do custo
                         </p>
                       )}
                     </div>

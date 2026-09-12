@@ -3,7 +3,7 @@
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
-import { requireExpenseOrderer, requireAdmin } from "@/lib/session";
+import { requireExpenseOrderer } from "@/lib/session";
 
 export type ActionResult = { error?: string; success?: boolean };
 
@@ -11,6 +11,7 @@ const expenseSchema = z.object({
   valor: z.coerce.number().positive("Informe um valor válido"),
   localDestinado: z.string().min(2, "Informe o local/finalidade da despesa").max(200),
   responsavelRetirada: z.string().min(2, "Informe o responsável pela retirada").max(120),
+  tag: z.enum(["empenho", "bonus", "descaminho"], { message: "Selecione o tipo de saída" }),
   observacoes: z.string().max(500).optional(),
 });
 
@@ -28,6 +29,7 @@ export async function createExpenseOutflow(
     valor: formData.get("valor"),
     localDestinado: formData.get("localDestinado"),
     responsavelRetirada: formData.get("responsavelRetirada"),
+    tag: formData.get("tag"),
     observacoes: formData.get("observacoes") || undefined,
   });
   if (!parsed.success) return { error: parsed.error.issues[0]?.message };
@@ -37,6 +39,7 @@ export async function createExpenseOutflow(
     p_valor: parsed.data.valor,
     p_local_destinado: parsed.data.localDestinado,
     p_responsavel_retirada: parsed.data.responsavelRetirada,
+    p_tag: parsed.data.tag,
     p_observacoes: parsed.data.observacoes ?? null,
   });
   if (error) return { error: error.message };
@@ -53,15 +56,16 @@ const purchaseSchema = z.object({
   observacoes: z.string().max(500).optional(),
 });
 
-/** Registra uma compra de produto (só custo/margem — não repõe estoque nem
- *  desconta do saldo em caixa; isso continua sendo feito à parte em "Repor
- *  estoque" e "Lançar despesa", respectivamente). Recalcula o custo médio
- *  ponderado do produto, usado no lucro previsto/real. Só admin. */
+/** Registra uma compra de produto: soma no estoque (repõe automaticamente
+ *  no único local ativo) e recalcula o custo médio ponderado do produto,
+ *  usado no lucro previsto/real. Não desconta do saldo em caixa — se o
+ *  dinheiro realmente saiu do caixa pra pagar, lança também em "Lançar
+ *  despesa". Admin ou ordenador de despesa. */
 export async function registerProductPurchase(
   _prevState: ActionResult,
   formData: FormData
 ): Promise<ActionResult> {
-  await requireAdmin();
+  await requireExpenseOrderer();
 
   const parsed = purchaseSchema.safeParse({
     productId: formData.get("productId"),
@@ -82,5 +86,7 @@ export async function registerProductPurchase(
 
   revalidatePath("/transparencia");
   revalidatePath("/admin/estoque");
+  revalidatePath("/loja");
+  revalidatePath("/dashboard");
   return { success: true };
 }
