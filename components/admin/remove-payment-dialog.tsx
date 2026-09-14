@@ -58,8 +58,7 @@ export function RemovePaymentDialog({
           </DialogTitle>
           <DialogDescription>
             Isso apaga o pagamento de {amount !== null ? formatCurrency(amount) : "—"} permanentemente e
-            recalcula o saldo devedor de {userName}. Fica registrado nos Logs. Esta ação não pode ser
-            desfeita.
+            recalcula o saldo devedor de {userName}.
           </DialogDescription>
         </DialogHeader>
         <form action={formAction} className="space-y-4">
