@@ -6,6 +6,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PaymentStatusBadge } from "@/components/status-badge";
+import { RectifyPaymentDialog } from "@/components/admin/rectify-payment-dialog";
+import { RemovePaymentDialog } from "@/components/admin/remove-payment-dialog";
 import { formatCurrency, formatDateTime } from "@/lib/format";
 import { dateInputValueBrasilia } from "@/lib/br-time";
 import type { PaymentStatus } from "@/lib/database.types";
@@ -82,6 +84,7 @@ export function PaymentsHistoryTable({ payments }: { payments: PaymentRow[] }) {
               <TableHead className="text-right">Conferido</TableHead>
               <TableHead>Aprovado por</TableHead>
               <TableHead className="text-center">Status</TableHead>
+              <TableHead className="text-right">Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -99,11 +102,25 @@ export function PaymentsHistoryTable({ payments }: { payments: PaymentRow[] }) {
                     <PaymentStatusBadge status={p.status} />
                   </div>
                 </TableCell>
+                <TableCell className="text-right">
+                  <div className="flex justify-end gap-1">
+                    <RectifyPaymentDialog
+                      paymentId={p.id}
+                      userName={p.profile?.full_name ?? "usuário"}
+                      currentAmount={p.admin_typed_amount}
+                    />
+                    <RemovePaymentDialog
+                      paymentId={p.id}
+                      userName={p.profile?.full_name ?? "usuário"}
+                      amount={p.admin_typed_amount}
+                    />
+                  </div>
+                </TableCell>
               </TableRow>
             ))}
             {pagePayments.length === 0 && (
               <TableRow>
-                <TableCell colSpan={6} className="text-center text-muted-foreground">
+                <TableCell colSpan={7} className="text-center text-muted-foreground">
                   {query || date ? "Nenhum pagamento encontrado." : "Nenhum pagamento revisado ainda."}
                 </TableCell>
               </TableRow>

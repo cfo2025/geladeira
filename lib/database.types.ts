@@ -478,6 +478,18 @@ export interface Database {
         Args: { p_payment_id: string };
         Returns: undefined;
       };
+      rectify_payment: {
+        Args: {
+          p_payment_id: string;
+          p_admin_typed_amount: number;
+          p_notes: string;
+        };
+        Returns: PaymentsRow;
+      };
+      remove_payment: {
+        Args: { p_payment_id: string; p_notes: string };
+        Returns: undefined;
+      };
       create_stock_audit: {
         Args: { p_location_id: string; p_notes: string | null; p_items: Json };
         Returns: string;

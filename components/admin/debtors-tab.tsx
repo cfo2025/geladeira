@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { KpiStrip, type KpiItem } from "@/components/kpi-strip";
 import { formatCurrency, formatDateTime } from "@/lib/format";
+import { cn } from "@/lib/utils";
 
 export type DebtorRow = {
   user_id: string;
@@ -78,7 +79,7 @@ export function DebtorsTab({
       <div className="space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 className="text-sm font-semibold tracking-wide text-muted-foreground uppercase">
-            Quem deve mais
+            Saldo dos usuários
           </h2>
           <div className="relative w-full max-w-sm">
             <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -116,15 +117,23 @@ export function DebtorsTab({
                   )}
                 </div>
 
-                <p
-                  className={
-                    d.balance > 0
-                      ? "text-lg font-bold tabular-nums text-destructive"
-                      : "text-lg font-bold tabular-nums text-muted-foreground"
-                  }
-                >
-                  {formatCurrency(d.balance)}
-                </p>
+                <div>
+                  <p
+                    className={cn(
+                      "text-lg font-bold tabular-nums",
+                      d.balance > 0 && "text-destructive",
+                      d.balance < 0 && "text-green-600 dark:text-green-400",
+                      d.balance === 0 && "text-muted-foreground"
+                    )}
+                  >
+                    {d.balance < 0 ? `+${formatCurrency(Math.abs(d.balance))}` : formatCurrency(d.balance)}
+                  </p>
+                  {d.balance < 0 && (
+                    <p className="text-[10px] font-medium tracking-wide text-green-600 uppercase dark:text-green-400">
+                      Crédito
+                    </p>
+                  )}
+                </div>
 
                 {d.has_pending_payment && (
                   <Badge className="border-transparent bg-amber-100 px-1.5 py-0 text-[10px] text-amber-700 dark:bg-amber-500/15 dark:text-amber-400">
