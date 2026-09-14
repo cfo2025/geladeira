@@ -56,7 +56,7 @@ export function LocationsTab({
                   <EditLocationDialog id={loc.id} name={loc.name} description={loc.description} />
                   <ConfirmDeleteDialog
                     title="Excluir local"
-                    description={`Isso remove "${loc.name}" definitivamente. Esta ação não pode ser desfeita.`}
+                    description={`Isso remove "${loc.name}" definitivamente.`}
                     action={() => deleteLocation(loc.id)}
                     disabled={stock > 0 || !canHardDelete}
                     disabledReason={

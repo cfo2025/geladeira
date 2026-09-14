@@ -28,8 +28,9 @@ export function ExpenseActions({ expense }: { expense: ExpenseRow }) {
       <ExpenseEditDialog expense={expense} />
       <ConfirmDeleteDialog
         title="Excluir saída de caixa"
-        description={`Isso remove permanentemente o lançamento de "${expense.local_destinado}" (${formatCurrency(expense.valor)}). Fica registrado nos Logs. Esta ação não pode ser desfeita.`}
+        description={`Isso remove permanentemente o lançamento de "${expense.local_destinado}" (${formatCurrency(expense.valor)}) e recalcula o saldo em caixa.`}
         action={() => deleteExpenseOutflow(expense.id)}
+        logged
       />
     </div>
   );

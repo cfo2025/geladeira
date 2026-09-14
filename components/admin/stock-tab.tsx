@@ -219,7 +219,7 @@ export function StockTab({
                       <ProductActiveSwitch id={product.id} isActive={product.is_active ?? true} />
                       <ConfirmDeleteDialog
                         title="Excluir produto"
-                        description={`Isso remove "${product.name}" do catálogo (todas as geladeiras). Esta ação não pode ser desfeita.`}
+                        description={`Isso remove "${product.name}" do catálogo (todas as geladeiras).`}
                         action={() => deleteProduct(product.id)}
                         disabled={totalStock > 0}
                         disabledReason="Zere o estoque em todas as geladeiras para excluir este produto"
