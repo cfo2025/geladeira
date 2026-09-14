@@ -153,6 +153,37 @@ export function getLogPresentation(
         chips: amount !== undefined ? [{ label: "Valor conferido", value: formatCurrency(amount) }] : [],
       };
     }
+    case "payment_rectified": {
+      const before = num(details, "before_amount");
+      const after = num(details, "after_amount");
+      const notes = str(details, "notes");
+      return {
+        icon: Pencil,
+        tone: "blue",
+        title: "Pagamento retificado",
+        description: `${actorName} retificou o valor conferido do pagamento de ${targetName}.`,
+        chips: [
+          ...(before !== undefined && after !== undefined
+            ? [{ label: "Valor", value: `${formatCurrency(before)} → ${formatCurrency(after)}` }]
+            : []),
+          ...(notes ? [{ label: "Motivo", value: notes }] : []),
+        ],
+      };
+    }
+    case "payment_removed": {
+      const amount = num(details, "admin_typed_amount");
+      const notes = str(details, "notes");
+      return {
+        icon: Trash2,
+        tone: "red",
+        title: "Pagamento removido",
+        description: `${actorName} removeu um pagamento de ${targetName}.`,
+        chips: [
+          ...(amount !== undefined ? [{ label: "Valor", value: formatCurrency(amount) }] : []),
+          ...(notes ? [{ label: "Motivo", value: notes }] : []),
+        ],
+      };
+    }
     case "stock_audit_created": {
       const auditId = str(details, "audit_id");
       return {

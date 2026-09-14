@@ -65,3 +65,68 @@ export async function reviewPayment(
   revalidatePath("/admin/pagamentos");
   return { success: true };
 }
+
+const rectifySchema = z.object({
+  paymentId: z.string().uuid(),
+  adminTypedAmount: z.coerce.number().min(0, "Valor inválido"),
+  notes: z.string().min(3, "Explique o motivo da retificação").max(1000),
+});
+
+/** Corrige o valor conferido de um pagamento já revisado (ex: aprovado com
+ *  valor errado). Gera um log de auditoria dedicado ("retificação"), com o
+ *  valor antes/depois e o motivo. */
+export async function rectifyPayment(
+  _prevState: ActionResult,
+  formData: FormData
+): Promise<ActionResult> {
+  await requireAdmin();
+
+  const parsed = rectifySchema.safeParse({
+    paymentId: formData.get("paymentId"),
+    adminTypedAmount: formData.get("adminTypedAmount"),
+    notes: formData.get("notes"),
+  });
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message };
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("rectify_payment", {
+    p_payment_id: parsed.data.paymentId,
+    p_admin_typed_amount: parsed.data.adminTypedAmount,
+    p_notes: parsed.data.notes,
+  });
+  if (error) return { error: error.message };
+
+  revalidatePath("/admin/pagamentos");
+  return { success: true };
+}
+
+const removeSchema = z.object({
+  paymentId: z.string().uuid(),
+  notes: z.string().min(3, "Explique o motivo da remoção").max(1000),
+});
+
+/** Remove um pagamento já revisado (ex: aprovado por engano, Pix que nunca
+ *  chegou). Gera um log de auditoria dedicado ("retificação") com o
+ *  snapshot completo do pagamento, já que a linha some da tabela. */
+export async function removePayment(
+  _prevState: ActionResult,
+  formData: FormData
+): Promise<ActionResult> {
+  await requireAdmin();
+
+  const parsed = removeSchema.safeParse({
+    paymentId: formData.get("paymentId"),
+    notes: formData.get("notes"),
+  });
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message };
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("remove_payment", {
+    p_payment_id: parsed.data.paymentId,
+    p_notes: parsed.data.notes,
+  });
+  if (error) return { error: error.message };
+
+  revalidatePath("/admin/pagamentos");
+  return { success: true };
+}
