@@ -5,7 +5,6 @@ import { ExpenseForm } from "@/components/transparencia/expense-form";
 import { ProductPurchaseForm } from "@/components/transparencia/product-purchase-form";
 import { ExpenseOutflowsTable } from "@/components/transparencia/expense-outflows-table";
 import { CashLedgerTable } from "@/components/transparencia/cash-ledger-table";
-import { ProductPurchasesTable } from "@/components/transparencia/product-purchases-table";
 import { Card, CardContent } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/format";
 import { Wallet, HandCoins, BanknoteArrowDown, PiggyBank, Construction, Eye } from "lucide-react";
@@ -176,17 +175,12 @@ export default async function TransparenciaPage({
       <KpiStrip items={stats} />
 
       <div>
-        <h2 className="mb-3 text-lg font-bold">Extrato de entradas e saídas</h2>
-        <CashLedgerTable expenses={expenses ?? []} payments={payments ?? []} />
-      </div>
-
-      <div>
-        <h2 className="mb-3 text-lg font-bold">Histórico de compras de estoque</h2>
+        <h2 className="mb-3 text-lg font-bold">Extrato de entradas, saídas e compras</h2>
         <p className="mb-3 text-sm text-muted-foreground">
-          Compras registradas pra repor estoque e apurar custo médio. Não descontam do saldo em caixa
-          automaticamente — só entram no extrato acima se também forem lançadas como despesa.
+          Compras de estoque não descontam do saldo em caixa automaticamente — só afetam o saldo se
+          também forem lançadas como despesa.
         </p>
-        <ProductPurchasesTable purchases={purchases ?? []} />
+        <CashLedgerTable expenses={expenses ?? []} payments={payments ?? []} purchases={purchases ?? []} />
       </div>
     </div>
   );
