@@ -197,12 +197,10 @@ export function CashLedgerTable({
                       ? "text-green-600 dark:text-green-400"
                       : row.kind === "saida" && row.tag === "descaminho"
                         ? "text-destructive"
-                        : row.kind === "compra"
-                          ? "text-muted-foreground"
-                          : undefined
+                        : undefined
                   )}
                 >
-                  {row.kind === "entrada" ? "+" : row.kind === "compra" ? "" : "−"}
+                  {row.kind === "entrada" ? "+" : "−"}
                   {formatCurrency(row.valor)}
                 </TableCell>
                 <TableCell>

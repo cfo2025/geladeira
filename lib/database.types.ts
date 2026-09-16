@@ -524,10 +524,9 @@ export interface Database {
       get_transparency_summary: {
         Args: Record<string, never>;
         Returns: {
-          total_collected: number;
-          total_outflows: number;
           available_balance: number;
-          realized_profit: number;
+          total_empenhado: number;
+          projected_profit: number | null;
         }[];
       };
       create_expense_outflow: {
