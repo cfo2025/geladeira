@@ -149,3 +149,60 @@ export async function registerProductPurchase(
   revalidatePath("/dashboard");
   return { success: true };
 }
+
+const updatePurchaseSchema = z.object({
+  id: z.string().uuid(),
+  quantity: z.coerce.number().int().min(1, "Informe uma quantidade maior que zero"),
+  unitCost: z.coerce.number().positive("Informe o valor pago por unidade"),
+  observacoes: z.string().max(500).optional(),
+});
+
+/** Edita uma compra de produto já registrada — ajusta o delta de estoque no
+ *  local ativo e recalcula o custo médio ponderado do produto. */
+export async function updateProductPurchase(
+  _prevState: ActionResult,
+  formData: FormData
+): Promise<ActionResult> {
+  await requireExpenseOrderer();
+
+  const parsed = updatePurchaseSchema.safeParse({
+    id: formData.get("id"),
+    quantity: formData.get("quantity"),
+    unitCost: formData.get("unitCost"),
+    observacoes: formData.get("observacoes") || undefined,
+  });
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message };
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("update_product_purchase", {
+    p_id: parsed.data.id,
+    p_quantity: parsed.data.quantity,
+    p_unit_cost: parsed.data.unitCost,
+    p_observacoes: parsed.data.observacoes ?? null,
+  });
+  if (error) return { error: error.message };
+
+  revalidatePath("/transparencia");
+  revalidatePath("/admin/estoque");
+  revalidatePath("/loja");
+  revalidatePath("/dashboard");
+  revalidatePath("/admin/logs");
+  return { success: true };
+}
+
+/** Exclui uma compra de produto — tira do estoque de volta (bloqueia se
+ *  parte já foi retirada/transferida) e recalcula o custo médio. */
+export async function deleteProductPurchase(id: string): Promise<ActionResult> {
+  await requireExpenseOrderer();
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("delete_product_purchase", { p_id: id });
+  if (error) return { error: error.message };
+
+  revalidatePath("/transparencia");
+  revalidatePath("/admin/estoque");
+  revalidatePath("/loja");
+  revalidatePath("/dashboard");
+  revalidatePath("/admin/logs");
+  return { success: true };
+}

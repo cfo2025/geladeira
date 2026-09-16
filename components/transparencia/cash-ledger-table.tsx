@@ -1,12 +1,13 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Search, ChevronLeft, ChevronRight, BanknoteArrowDown, HandCoins } from "lucide-react";
+import { Search, ChevronLeft, ChevronRight, BanknoteArrowDown, HandCoins, ShoppingCart } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ExpenseTagBadge } from "@/components/status-badge";
 import { ExpenseActions } from "@/components/transparencia/expense-actions";
+import { ProductPurchaseActions } from "@/components/transparencia/product-purchase-actions";
 import { formatCurrency, formatDateTimeFull } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { ExpenseTag } from "@/lib/database.types";
@@ -29,6 +30,16 @@ type PaymentRow = {
   user: { full_name: string } | null;
 };
 
+type PurchaseRow = {
+  id: string;
+  quantity: number;
+  unit_cost: number;
+  data_hora: string;
+  observacoes: string | null;
+  product: { name: string } | null;
+  criado_por: { full_name: string } | null;
+};
+
 type LedgerRow =
   | {
       kind: "entrada";
@@ -48,6 +59,16 @@ type LedgerRow =
       subtitle: string | null;
       observacoes: string | null;
       original: ExpenseRow;
+    }
+  | {
+      kind: "compra";
+      id: string;
+      date: string;
+      valor: number;
+      title: string;
+      subtitle: string | null;
+      observacoes: string | null;
+      original: PurchaseRow;
     };
 
 const PAGE_SIZE = 10;
@@ -55,9 +76,11 @@ const PAGE_SIZE = 10;
 export function CashLedgerTable({
   expenses,
   payments,
+  purchases,
 }: {
   expenses: ExpenseRow[];
   payments: PaymentRow[];
+  purchases: PurchaseRow[];
 }) {
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(0);
@@ -84,8 +107,20 @@ export function CashLedgerTable({
       observacoes: e.observacoes,
       original: e,
     }));
-    return [...entradas, ...saidas].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-  }, [expenses, payments]);
+    const compras: LedgerRow[] = purchases.map((p) => ({
+      kind: "compra",
+      id: p.id,
+      date: p.data_hora,
+      valor: p.unit_cost * p.quantity,
+      title: p.product?.name ?? "Produto",
+      subtitle: `${p.quantity}x a ${formatCurrency(p.unit_cost)}${p.criado_por ? ` · Registrado por ${p.criado_por.full_name}` : ""}`,
+      observacoes: p.observacoes,
+      original: p,
+    }));
+    return [...entradas, ...saidas, ...compras].sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
+  }, [expenses, payments, purchases]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -94,7 +129,7 @@ export function CashLedgerTable({
       (r) =>
         r.title.toLowerCase().includes(q) ||
         (r.subtitle ?? "").toLowerCase().includes(q) ||
-        (r.kind === "saida" && (r.observacoes ?? "").toLowerCase().includes(q))
+        ((r.kind === "saida" || r.kind === "compra") && (r.observacoes ?? "").toLowerCase().includes(q))
     );
   }, [rows, query]);
 
@@ -147,6 +182,10 @@ export function CashLedgerTable({
                     <Badge className="border-transparent bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-400">
                       Entrada
                     </Badge>
+                  ) : row.kind === "compra" ? (
+                    <Badge className="border-transparent bg-violet-100 text-violet-700 dark:bg-violet-500/15 dark:text-violet-400">
+                      Compra de estoque
+                    </Badge>
                   ) : (
                     <ExpenseTagBadge tag={row.tag} />
                   )}
@@ -156,18 +195,22 @@ export function CashLedgerTable({
                     "text-right font-medium tabular-nums whitespace-nowrap",
                     row.kind === "entrada"
                       ? "text-green-600 dark:text-green-400"
-                      : row.tag === "descaminho"
+                      : row.kind === "saida" && row.tag === "descaminho"
                         ? "text-destructive"
-                        : undefined
+                        : row.kind === "compra"
+                          ? "text-muted-foreground"
+                          : undefined
                   )}
                 >
-                  {row.kind === "entrada" ? "+" : "−"}
+                  {row.kind === "entrada" ? "+" : row.kind === "compra" ? "" : "−"}
                   {formatCurrency(row.valor)}
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center gap-2">
                     {row.kind === "entrada" ? (
                       <HandCoins className="h-3.5 w-3.5 shrink-0 text-muted-foreground/60" />
+                    ) : row.kind === "compra" ? (
+                      <ShoppingCart className="h-3.5 w-3.5 shrink-0 text-muted-foreground/60" />
                     ) : (
                       <BanknoteArrowDown className="h-3.5 w-3.5 shrink-0 text-muted-foreground/60" />
                     )}
@@ -180,7 +223,11 @@ export function CashLedgerTable({
                   </div>
                 </TableCell>
                 <TableCell className="text-right">
-                  {row.kind === "saida" ? <ExpenseActions expense={row.original} /> : null}
+                  {row.kind === "saida" ? (
+                    <ExpenseActions expense={row.original} />
+                  ) : row.kind === "compra" ? (
+                    <ProductPurchaseActions purchase={row.original} />
+                  ) : null}
                 </TableCell>
               </TableRow>
             ))}

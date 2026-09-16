@@ -358,6 +358,49 @@ export function getLogPresentation(
         ],
       };
     }
+    case "product_purchase_updated": {
+      const before = obj(details, "before");
+      const after = obj(details, "after");
+      const quantityBefore = num(before, "quantity");
+      const quantityAfter = num(after, "quantity");
+      const costBefore = num(before, "unit_cost");
+      const costAfter = num(after, "unit_cost");
+      const quantityChanged =
+        quantityBefore !== undefined && quantityAfter !== undefined && quantityBefore !== quantityAfter;
+      const costChanged = costBefore !== undefined && costAfter !== undefined && costBefore !== costAfter;
+      return {
+        icon: Pencil,
+        tone: "blue",
+        title: "Compra de produto editada",
+        description: `${actorName} editou uma compra de ${productName(str(details, "product_id"))}.`,
+        chips: [
+          ...(quantityChanged
+            ? [{ label: "Quantidade", value: `${quantityBefore} → ${quantityAfter}` }]
+            : quantityAfter !== undefined
+              ? [{ label: "Quantidade", value: String(quantityAfter) }]
+              : []),
+          ...(costChanged
+            ? [{ label: "Custo unitário", value: `${formatCurrency(costBefore!)} → ${formatCurrency(costAfter!)}` }]
+            : costAfter !== undefined
+              ? [{ label: "Custo unitário", value: formatCurrency(costAfter) }]
+              : []),
+        ],
+      };
+    }
+    case "product_purchase_deleted": {
+      const quantity = num(details, "quantity");
+      const unitCost = num(details, "unit_cost");
+      return {
+        icon: Trash2,
+        tone: "red",
+        title: "Compra de produto excluída",
+        description: `${actorName} excluiu uma compra de ${productName(str(details, "product_id"))}.`,
+        chips: [
+          ...(quantity !== undefined ? [{ label: "Quantidade", value: String(quantity) }] : []),
+          ...(unitCost !== undefined ? [{ label: "Custo unitário", value: formatCurrency(unitCost) }] : []),
+        ],
+      };
+    }
     case "promo_cleared":
       return {
         icon: BadgePercent,

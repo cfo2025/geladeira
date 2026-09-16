@@ -564,6 +564,19 @@ export interface Database {
         Args: { p_id: string };
         Returns: undefined;
       };
+      update_product_purchase: {
+        Args: {
+          p_id: string;
+          p_quantity: number;
+          p_unit_cost: number;
+          p_observacoes?: string | null;
+        };
+        Returns: ProductPurchasesRow;
+      };
+      delete_product_purchase: {
+        Args: { p_id: string };
+        Returns: undefined;
+      };
     };
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;
