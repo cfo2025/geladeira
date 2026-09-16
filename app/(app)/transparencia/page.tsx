@@ -5,6 +5,7 @@ import { ExpenseForm } from "@/components/transparencia/expense-form";
 import { ProductPurchaseForm } from "@/components/transparencia/product-purchase-form";
 import { ExpenseOutflowsTable } from "@/components/transparencia/expense-outflows-table";
 import { CashLedgerTable } from "@/components/transparencia/cash-ledger-table";
+import { ProductPurchasesTable } from "@/components/transparencia/product-purchases-table";
 import { Card, CardContent } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/format";
 import { Wallet, HandCoins, BanknoteArrowDown, PiggyBank, Construction, Eye } from "lucide-react";
@@ -105,7 +106,7 @@ export default async function TransparenciaPage({
     );
   }
 
-  const [{ data: summaryRows }, { data: expenses }, { data: products }, { data: payments }] =
+  const [{ data: summaryRows }, { data: expenses }, { data: products }, { data: payments }, { data: purchases }] =
     await Promise.all([
       supabase.rpc("get_transparency_summary"),
       supabase.from("expense_outflows").select(EXPENSE_SELECT).order("data_hora", { ascending: false }),
@@ -119,6 +120,12 @@ export default async function TransparenciaPage({
         .select("id, admin_typed_amount, reviewed_at, user:profiles!payments_user_id_fkey(full_name)")
         .eq("status", "approved")
         .order("reviewed_at", { ascending: false }),
+      supabase
+        .from("product_purchases")
+        .select(
+          "id, quantity, unit_cost, data_hora, observacoes, product:products(name), criado_por:profiles!product_purchases_criado_por_id_fkey(full_name)"
+        )
+        .order("data_hora", { ascending: false }),
     ]);
 
   const summary = summaryRows?.[0] ?? {
@@ -171,6 +178,15 @@ export default async function TransparenciaPage({
       <div>
         <h2 className="mb-3 text-lg font-bold">Extrato de entradas e saídas</h2>
         <CashLedgerTable expenses={expenses ?? []} payments={payments ?? []} />
+      </div>
+
+      <div>
+        <h2 className="mb-3 text-lg font-bold">Histórico de compras de estoque</h2>
+        <p className="mb-3 text-sm text-muted-foreground">
+          Compras registradas pra repor estoque e apurar custo médio. Não descontam do saldo em caixa
+          automaticamente — só entram no extrato acima se também forem lançadas como despesa.
+        </p>
+        <ProductPurchasesTable purchases={purchases ?? []} />
       </div>
     </div>
   );
