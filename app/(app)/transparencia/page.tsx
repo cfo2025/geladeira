@@ -7,7 +7,7 @@ import { ExpenseOutflowsTable } from "@/components/transparencia/expense-outflow
 import { CashLedgerTable } from "@/components/transparencia/cash-ledger-table";
 import { Card, CardContent } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/format";
-import { Wallet, HandCoins, BanknoteArrowDown, PiggyBank, Construction, Eye } from "lucide-react";
+import { Wallet, BanknoteArrowDown, PiggyBank, Construction, Eye } from "lucide-react";
 
 const EXPENSE_SELECT =
   "id, valor, data_hora, local_destinado, responsavel_retirada, tag, observacoes, criado_por:profiles!expense_outflows_criado_por_id_fkey(full_name)";
@@ -62,22 +62,17 @@ export default async function TransparenciaPage({
       supabase.from("expense_outflows").select(EXPENSE_SELECT).order("data_hora", { ascending: false }),
     ]);
 
-    const summary = summaryRows?.[0] ?? { available_balance: 0, total_collected: 0, total_outflows: 0 };
+    const summary = summaryRows?.[0] ?? { available_balance: 0, total_empenhado: 0, projected_profit: null };
 
     const stats: KpiItem[] = [
       {
-        label: "Saldo em caixa disponível",
+        label: "Saldo em Caixa Disponível",
         value: formatCurrency(Number(summary.available_balance ?? 0)),
         icon: Wallet,
       },
       {
-        label: "Total arrecadado",
-        value: formatCurrency(Number(summary.total_collected ?? 0)),
-        icon: HandCoins,
-      },
-      {
-        label: "Total investido / gasto",
-        value: formatCurrency(Number(summary.total_outflows ?? 0)),
+        label: "Total Gasto/Empenhado",
+        value: formatCurrency(Number(summary.total_empenhado ?? 0)),
         icon: BanknoteArrowDown,
       },
     ];
@@ -128,31 +123,25 @@ export default async function TransparenciaPage({
     ]);
 
   const summary = summaryRows?.[0] ?? {
-    total_collected: 0,
-    total_outflows: 0,
     available_balance: 0,
-    realized_profit: 0,
+    total_empenhado: 0,
+    projected_profit: 0,
   };
 
   const stats: KpiItem[] = [
     {
-      label: "Saldo em caixa disponível",
+      label: "Saldo em Caixa Disponível",
       value: formatCurrency(Number(summary.available_balance ?? 0)),
       icon: Wallet,
     },
     {
-      label: "Total arrecadado",
-      value: formatCurrency(Number(summary.total_collected ?? 0)),
-      icon: HandCoins,
-    },
-    {
-      label: "Total investido / gasto",
-      value: formatCurrency(Number(summary.total_outflows ?? 0)),
+      label: "Total Empenhado",
+      value: formatCurrency(Number(summary.total_empenhado ?? 0)),
       icon: BanknoteArrowDown,
     },
     {
-      label: "Lucro real",
-      value: formatCurrency(Number(summary.realized_profit ?? 0)),
+      label: "Lucro Previsto",
+      value: formatCurrency(Number(summary.projected_profit ?? 0)),
       icon: PiggyBank,
     },
   ];
@@ -176,10 +165,6 @@ export default async function TransparenciaPage({
 
       <div>
         <h2 className="mb-3 text-lg font-bold">Extrato de entradas, saídas e compras</h2>
-        <p className="mb-3 text-sm text-muted-foreground">
-          Compras de estoque não descontam do saldo em caixa automaticamente — só afetam o saldo se
-          também forem lançadas como despesa.
-        </p>
         <CashLedgerTable expenses={expenses ?? []} payments={payments ?? []} purchases={purchases ?? []} />
       </div>
     </div>
