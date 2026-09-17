@@ -1,7 +1,9 @@
+import { requireAdmin } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
 import { CatalogTabs } from "@/components/admin/catalog-tabs";
 
 export default async function AdminEstoquePage() {
+  await requireAdmin();
   const supabase = await createClient();
 
   const [{ data: locations }, { data: products }, { data: inventory }, { data: withdrawalLocations }, { data: auditLocations }] =
