@@ -401,6 +401,21 @@ export function getLogPresentation(
         ],
       };
     }
+    case "product_purchases_imported": {
+      const count = num(details, "count");
+      const totalValue = num(details, "total_value");
+      const source = str(details, "source");
+      return {
+        icon: ClipboardList,
+        tone: "blue",
+        title: "Histórico de compras importado",
+        description: `${actorName} importou um histórico de compras de produto${source ? ` a partir de "${source}"` : ""}.`,
+        chips: [
+          ...(count !== undefined ? [{ label: "Lançamentos", value: String(count) }] : []),
+          ...(totalValue !== undefined ? [{ label: "Valor total", value: formatCurrency(totalValue) }] : []),
+        ],
+      };
+    }
     case "promo_cleared":
       return {
         icon: BadgePercent,
