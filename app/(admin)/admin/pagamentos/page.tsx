@@ -1,8 +1,11 @@
+import { requireExpenseOrderer } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
 import { PagamentosTabs } from "@/components/admin/pagamentos-tabs";
 import { startOfMonthBrasilia } from "@/lib/br-time";
 
 export default async function AdminPagamentosPage() {
+  const { profile } = await requireExpenseOrderer();
+  const canReview = profile.role === "admin";
   const supabase = await createClient();
 
   const startOfMonth = startOfMonthBrasilia();
@@ -49,6 +52,7 @@ export default async function AdminPagamentosPage() {
         paidAllTime={paidAllTime}
         pending={pending}
         reviewed={reviewed}
+        canReview={canReview}
       />
     </div>
   );

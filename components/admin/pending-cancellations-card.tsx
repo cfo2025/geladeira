@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { CancellationReviewButtons } from "@/components/admin/cancellation-review-buttons";
 import { formatDateTime } from "@/lib/format";
 import { Undo2, Inbox } from "lucide-react";
@@ -11,7 +12,13 @@ type PendingCancellation = {
   withdrawal: { product: { name: string } | null } | null;
 };
 
-export function PendingCancellationsCard({ requests }: { requests: PendingCancellation[] }) {
+export function PendingCancellationsCard({
+  requests,
+  canReview,
+}: {
+  requests: PendingCancellation[];
+  canReview: boolean;
+}) {
   return (
     <Card className="h-fit">
       <CardHeader>
@@ -43,7 +50,13 @@ export function PendingCancellationsCard({ requests }: { requests: PendingCancel
               <p className="mt-1.5 text-sm">{r.withdrawal?.product?.name}</p>
               {r.reason && <p className="mt-1 text-xs text-muted-foreground">{r.reason}</p>}
               <div className="mt-3">
-                <CancellationReviewButtons requestId={r.id} />
+                {canReview ? (
+                  <CancellationReviewButtons requestId={r.id} />
+                ) : (
+                  <Badge variant="secondary" className="w-full justify-center py-1.5">
+                    Aguardando revisão
+                  </Badge>
+                )}
               </div>
             </div>
           ))

@@ -27,9 +27,11 @@ const PAGE_SIZE = 8;
 export function DivergencesTable({
   divergences,
   locations,
+  canManage,
 }: {
   divergences: DivergenceRow[];
   locations: { id: string; name: string }[];
+  canManage: boolean;
 }) {
   const [query, setQuery] = useState("");
   const [locationFilter, setLocationFilter] = useState("all");
@@ -137,16 +139,18 @@ export function DivergencesTable({
                     >
                       <Eye className="h-3.5 w-3.5" />
                     </Button>
-                    <Button
-                      variant="outline"
-                      size="icon-sm"
-                      disabled={pendingId === row.id}
-                      onClick={() => handleApply(row.id)}
-                      title="Zerar divergência (aplica a contagem física ao estoque)"
-                      aria-label="Zerar divergência"
-                    >
-                      <Eraser className="h-3.5 w-3.5" />
-                    </Button>
+                    {canManage && (
+                      <Button
+                        variant="outline"
+                        size="icon-sm"
+                        disabled={pendingId === row.id}
+                        onClick={() => handleApply(row.id)}
+                        title="Zerar divergência (aplica a contagem física ao estoque)"
+                        aria-label="Zerar divergência"
+                      >
+                        <Eraser className="h-3.5 w-3.5" />
+                      </Button>
+                    )}
                   </div>
                 </TableCell>
               </TableRow>

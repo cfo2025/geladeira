@@ -1,3 +1,4 @@
+import { requireExpenseOrderer } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
 import { PendingCancellationsCard } from "@/components/admin/pending-cancellations-card";
 import { NewAuditDialog } from "@/components/admin/new-audit-dialog";
@@ -5,6 +6,8 @@ import { DivergencesTable } from "@/components/admin/divergences-table";
 import { WithdrawalsHistoryTable, type ActivityRow } from "@/components/admin/withdrawals-history-table";
 
 export default async function AdminRetiradasPage() {
+  const { profile } = await requireExpenseOrderer();
+  const canManage = profile.role === "admin";
   const supabase = await createClient();
 
   const [
@@ -109,16 +112,18 @@ export default async function AdminRetiradasPage() {
             <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
               Divergências de balanço
             </h2>
-            <NewAuditDialog
-              locations={(locations ?? []).filter((l) => l.is_active)}
-              inventory={inventoryItems}
-            />
+            {canManage && (
+              <NewAuditDialog
+                locations={(locations ?? []).filter((l) => l.is_active)}
+                inventory={inventoryItems}
+              />
+            )}
           </div>
-          <DivergencesTable divergences={divergences} locations={locations ?? []} />
+          <DivergencesTable divergences={divergences} locations={locations ?? []} canManage={canManage} />
         </div>
 
         <div className="w-full shrink-0 md:w-80 lg:w-96">
-          <PendingCancellationsCard requests={pendingRequests} />
+          <PendingCancellationsCard requests={pendingRequests} canReview={canManage} />
         </div>
       </div>
 

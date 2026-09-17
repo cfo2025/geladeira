@@ -1,8 +1,10 @@
+import { requireAdmin } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
 import { LogsTable } from "@/components/admin/logs-table";
 import type { AuditDiffItem } from "@/lib/log-presentation";
 
 export default async function AdminLogsPage() {
+  await requireAdmin();
   const supabase = await createClient();
 
   const [{ data: logs }, { data: products }, { data: locations }, { data: auditItems }] = await Promise.all([

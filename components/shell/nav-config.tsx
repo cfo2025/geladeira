@@ -11,8 +11,15 @@ import {
   PackageMinus,
   ScrollText,
 } from "lucide-react";
+import type { UserRole } from "@/lib/database.types";
 
-export type NavItem = { href: string; label: string; icon: LucideIcon };
+export type NavItem = {
+  href: string;
+  label: string;
+  icon: LucideIcon;
+  /** Quem vê esse item no menu Administração. Sem isso, é só admin. */
+  roles?: UserRole[];
+};
 
 export const userNavItems: NavItem[] = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -29,10 +36,10 @@ export const transparenciaNavItem: NavItem = {
 };
 
 export const adminNavItems: NavItem[] = [
-  { href: "/admin", label: "Painel", icon: LayoutGrid },
-  { href: "/admin/estoque", label: "Estoque", icon: Boxes },
-  { href: "/admin/usuarios", label: "Usuários", icon: Users },
-  { href: "/admin/pagamentos", label: "Pagamentos", icon: Wallet },
-  { href: "/admin/retiradas", label: "Retiradas", icon: PackageMinus },
-  { href: "/admin/logs", label: "Logs", icon: ScrollText },
+  { href: "/admin", label: "Painel", icon: LayoutGrid, roles: ["admin"] },
+  { href: "/admin/estoque", label: "Estoque", icon: Boxes, roles: ["admin"] },
+  { href: "/admin/usuarios", label: "Usuários", icon: Users, roles: ["admin"] },
+  { href: "/admin/pagamentos", label: "Pagamentos", icon: Wallet, roles: ["admin", "ordenador_despesa"] },
+  { href: "/admin/retiradas", label: "Retiradas", icon: PackageMinus, roles: ["admin", "ordenador_despesa"] },
+  { href: "/admin/logs", label: "Logs", icon: ScrollText, roles: ["admin"] },
 ];
