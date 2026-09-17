@@ -35,6 +35,7 @@ export function PagamentosTabs({
   paidAllTime,
   pending,
   reviewed,
+  canReview,
 }: {
   debtors: DebtorRow[];
   pendingTotal: number;
@@ -43,6 +44,7 @@ export function PagamentosTabs({
   paidAllTime: number;
   pending: PendingPayment[];
   reviewed: ReviewedPayment[];
+  canReview: boolean;
 }) {
   const [tab, setTab] = useState("devedores");
 
@@ -81,11 +83,11 @@ export function PagamentosTabs({
             <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
               Histórico
             </h2>
-            <PaymentsHistoryTable payments={reviewed} />
+            <PaymentsHistoryTable payments={reviewed} canReview={canReview} />
           </div>
 
           <div className="w-full shrink-0 md:w-80 lg:w-96">
-            <PendingPaymentsCard payments={pending} />
+            <PendingPaymentsCard payments={pending} canReview={canReview} />
           </div>
         </div>
       </TabsContent>

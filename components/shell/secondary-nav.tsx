@@ -21,6 +21,7 @@ function isActive(pathname: string, href: string) {
 export function SecondaryNav({ role }: { role: UserRole }) {
   const pathname = usePathname();
   const inAdminArea = pathname.startsWith("/admin");
+  const visibleAdminItems = adminNavItems.filter((item) => !item.roles || item.roles.includes(role));
 
   return (
     <div className="sticky top-16 z-20 border-b bg-background/95 backdrop-blur">
@@ -65,7 +66,7 @@ export function SecondaryNav({ role }: { role: UserRole }) {
           );
         })()}
 
-        {role === "admin" && (
+        {visibleAdminItems.length > 0 && (
           <>
             <span className="mx-1.5 h-4 w-px shrink-0 bg-border" />
             <DropdownMenu>
@@ -87,7 +88,7 @@ export function SecondaryNav({ role }: { role: UserRole }) {
                 <ChevronDown className="h-3.5 w-3.5 opacity-60" />
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="w-52">
-                {adminNavItems.map((item) => {
+                {visibleAdminItems.map((item) => {
                   const active = isActive(pathname, item.href);
                   const Icon = item.icon;
                   return (

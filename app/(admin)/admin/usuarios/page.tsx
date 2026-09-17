@@ -1,7 +1,9 @@
+import { requireAdmin } from "@/lib/session";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { UsersTable } from "@/components/admin/users-table";
 
 export default async function AdminUsuariosPage() {
+  await requireAdmin();
   const admin = createAdminClient();
 
   const [{ data: authUsers }, { data: profiles }] = await Promise.all([

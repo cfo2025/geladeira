@@ -1,9 +1,11 @@
 import Link from "next/link";
+import { requireAdmin } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatCurrency } from "@/lib/format";
 
 export default async function AdminDashboardPage() {
+  await requireAdmin();
   const supabase = await createClient();
 
   const [

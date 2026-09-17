@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { ReviewPaymentDialog } from "@/components/admin/review-payment-dialog";
 import { formatCurrency, formatDateTime } from "@/lib/format";
 import { HandCoins, Inbox } from "lucide-react";
@@ -12,7 +13,13 @@ type PendingPayment = {
   profile: { full_name: string } | null;
 };
 
-export function PendingPaymentsCard({ payments }: { payments: PendingPayment[] }) {
+export function PendingPaymentsCard({
+  payments,
+  canReview,
+}: {
+  payments: PendingPayment[];
+  canReview: boolean;
+}) {
   return (
     <Card className="h-fit">
       <CardHeader>
@@ -57,12 +64,18 @@ export function PendingPaymentsCard({ payments }: { payments: PendingPayment[] }
                 </div>
               </div>
               <div className="mt-3">
-                <ReviewPaymentDialog
-                  paymentId={p.id}
-                  userName={p.profile?.full_name ?? ""}
-                  expectedAmount={p.expected_amount}
-                  userDeclaredAmount={p.user_declared_amount}
-                />
+                {canReview ? (
+                  <ReviewPaymentDialog
+                    paymentId={p.id}
+                    userName={p.profile?.full_name ?? ""}
+                    expectedAmount={p.expected_amount}
+                    userDeclaredAmount={p.user_declared_amount}
+                  />
+                ) : (
+                  <Badge variant="secondary" className="w-full justify-center py-1.5">
+                    Aguardando aprovação
+                  </Badge>
+                )}
               </div>
             </div>
           ))

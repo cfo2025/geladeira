@@ -24,7 +24,13 @@ type PaymentRow = {
 
 const PAGE_SIZE = 10;
 
-export function PaymentsHistoryTable({ payments }: { payments: PaymentRow[] }) {
+export function PaymentsHistoryTable({
+  payments,
+  canReview,
+}: {
+  payments: PaymentRow[];
+  canReview: boolean;
+}) {
   const [query, setQuery] = useState("");
   const [date, setDate] = useState("");
   const [page, setPage] = useState(0);
@@ -103,18 +109,20 @@ export function PaymentsHistoryTable({ payments }: { payments: PaymentRow[] }) {
                   </div>
                 </TableCell>
                 <TableCell className="text-right">
-                  <div className="flex justify-end gap-1">
-                    <RectifyPaymentDialog
-                      paymentId={p.id}
-                      userName={p.profile?.full_name ?? "usuário"}
-                      currentAmount={p.admin_typed_amount}
-                    />
-                    <RemovePaymentDialog
-                      paymentId={p.id}
-                      userName={p.profile?.full_name ?? "usuário"}
-                      amount={p.admin_typed_amount}
-                    />
-                  </div>
+                  {canReview && (
+                    <div className="flex justify-end gap-1">
+                      <RectifyPaymentDialog
+                        paymentId={p.id}
+                        userName={p.profile?.full_name ?? "usuário"}
+                        currentAmount={p.admin_typed_amount}
+                      />
+                      <RemovePaymentDialog
+                        paymentId={p.id}
+                        userName={p.profile?.full_name ?? "usuário"}
+                        amount={p.admin_typed_amount}
+                      />
+                    </div>
+                  )}
                 </TableCell>
               </TableRow>
             ))}

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { requireExpenseOrderer } from "@/lib/session";
 import { createClient } from "@/lib/supabase/server";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -13,6 +14,8 @@ export default async function AuditoriaDetalhePage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const { profile } = await requireExpenseOrderer();
+  const canManage = profile.role === "admin";
   const { id } = await params;
   const supabase = await createClient();
 
@@ -62,7 +65,7 @@ export default async function AuditoriaDetalhePage({
           >
             <FileDown className="mr-1 h-4 w-4" /> Baixar PDF
           </Button>
-          {hasPendingDifferences && <ApplyAuditButton auditId={id} />}
+          {canManage && hasPendingDifferences && <ApplyAuditButton auditId={id} />}
         </div>
       </div>
 
