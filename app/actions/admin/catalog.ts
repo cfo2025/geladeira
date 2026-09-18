@@ -392,6 +392,42 @@ export async function restockInventory(
   return { success: true };
 }
 
+const adjustSchema = z.object({
+  locationId: z.string().uuid(),
+  productId: z.string().uuid(),
+  newQuantity: z.number().int().min(0, "A quantidade não pode ser negativa"),
+  reason: z.string().trim().min(3, "Informe o motivo do ajuste").max(500),
+});
+
+/** Ajuste manual do estoque atual (define a nova quantidade total). Fica
+ *  registrado em Logs em destaque, com antes/depois e motivo. */
+export async function adjustInventoryManual(input: {
+  locationId: string;
+  productId: string;
+  newQuantity: number;
+  reason: string;
+}): Promise<ActionResult> {
+  await requireAdmin();
+
+  const parsed = adjustSchema.safeParse(input);
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message };
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("adjust_inventory_manual", {
+    p_location_id: parsed.data.locationId,
+    p_product_id: parsed.data.productId,
+    p_new_quantity: parsed.data.newQuantity,
+    p_reason: parsed.data.reason,
+  });
+  if (error) return { error: error.message };
+
+  revalidatePath("/admin/estoque");
+  revalidatePath("/admin/logs");
+  revalidatePath("/loja");
+  revalidatePath("/dashboard");
+  return { success: true };
+}
+
 const transferSchema = z.object({
   fromLocationId: z.string().uuid(),
   toLocationId: z.string().uuid(),

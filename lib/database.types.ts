@@ -502,6 +502,15 @@ export interface Database {
         Args: { p_item_id: string };
         Returns: undefined;
       };
+      adjust_inventory_manual: {
+        Args: {
+          p_location_id: string;
+          p_product_id: string;
+          p_new_quantity: number;
+          p_reason: string;
+        };
+        Returns: undefined;
+      };
       restock_inventory: {
         Args: {
           p_location_id: string;

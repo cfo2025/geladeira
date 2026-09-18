@@ -21,6 +21,7 @@ import {
   FileQuestion,
   Eye,
   EyeOff,
+  TriangleAlert,
 } from "lucide-react";
 import { formatCurrency } from "@/lib/format";
 import { DEACTIVATION_REASON_LABELS, EXPENSE_TAG_LABELS, PAYMENT_STATUS_LABELS } from "@/lib/format";
@@ -216,6 +217,27 @@ export function getLogPresentation(
         description: `${actorName} aplicou o ajuste de um item do balanço ao estoque.`,
         chips: [],
       };
+    case "stock_manual_adjustment": {
+      const before = num(details, "before");
+      const after = num(details, "after");
+      const difference = num(details, "difference");
+      const reason = str(details, "reason");
+      return {
+        icon: TriangleAlert,
+        tone: "amber",
+        title: "Ajuste manual de estoque",
+        description: `${actorName} ajustou manualmente o estoque de ${productName(str(details, "product_id"))} em ${locationName(str(details, "location_id"))}.`,
+        chips: [
+          ...(before !== undefined && after !== undefined
+            ? [{ label: "Estoque", value: `${before} → ${after}` }]
+            : []),
+          ...(difference !== undefined
+            ? [{ label: "Diferença", value: difference > 0 ? `+${difference}` : String(difference) }]
+            : []),
+          ...(reason ? [{ label: "Motivo", value: reason }] : []),
+        ],
+      };
+    }
     case "stock_restock": {
       const quantity = num(details, "quantity");
       const notes = str(details, "notes");
