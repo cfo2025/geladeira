@@ -80,7 +80,18 @@ export function StockTab({
 
   const selectedLocation = locations.find((l) => l.id === locationId);
 
-  const activeProducts = useMemo(() => products.filter((p) => p.is_active), [products]);
+  // Ativos: do que tem mais estoque (na geladeira selecionada) pro que tem menos.
+  const activeProducts = useMemo(
+    () =>
+      products
+        .filter((p) => p.is_active)
+        .sort((a, b) => {
+          const qa = inventoryByKey.get(`${locationId}:${a.id}`)?.quantity ?? 0;
+          const qb = inventoryByKey.get(`${locationId}:${b.id}`)?.quantity ?? 0;
+          return qb - qa || a.name.localeCompare(b.name);
+        }),
+    [products, inventoryByKey, locationId]
+  );
   const inactiveProducts = useMemo(() => products.filter((p) => !p.is_active), [products]);
   const baseList = statusTab === "ativos" ? activeProducts : inactiveProducts;
 
@@ -281,6 +292,9 @@ export function StockTab({
                             name={product.name}
                             category={product.category}
                             imageUrl={product.image_url}
+                            locationId={locationId}
+                            locationName={selectedLocation?.name ?? ""}
+                            currentQuantity={quantity}
                           />
                           <ProductActiveSwitch id={product.id} isActive={product.is_active ?? true} />
                           <ConfirmDeleteDialog
