@@ -135,6 +135,9 @@ export function AdjustStockDialog({
             </div>
 
             <DialogFooter>
+              <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+                Cancelar
+              </Button>
               <Button type="button" disabled={!canReview} onClick={() => setConfirming(true)}>
                 Revisar ajuste
               </Button>
